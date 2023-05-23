@@ -24,6 +24,7 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -45,6 +46,11 @@ public class HomePageView extends VerticalLayout implements AfterNavigationObser
     private Div cityListDiv = new Div();
     private Select<Integer> pageSelect = new Select<>();
     private Div paginationDiv = new Div();
+    private Button nextButton = new Button("Next");
+    private Button prevButton = new Button("Previous");
+
+    private List<Integer> pageRange = new ArrayList<>();
+    private Integer currentPage = 1;
 
     public HomePageView(RestTemplate restTemplate, SecurityService securityService,
                         UserFavouritePlaceService userFavouritePlaceService, LocationService locationService) {
@@ -72,8 +78,11 @@ public class HomePageView extends VerticalLayout implements AfterNavigationObser
         cityListDiv.getElement().setAttribute("style", "max-height: 450px; overflow-x:scroll");
         add(cityListDiv);
 
-        paginationDiv.add(pageSelect);
+        HorizontalLayout paginationHorizontalLayout = new HorizontalLayout(pageSelect, prevButton, nextButton);
+        paginationHorizontalLayout.setAlignItems(Alignment.END);
+        paginationDiv.add(paginationHorizontalLayout);
         this.addPaginationSelectListener();
+        this.addPaginationButtonClickListener();
     }
 
     private HorizontalLayout createCard(CityGeoCoding cityGeoCoding) {
@@ -110,7 +119,7 @@ public class HomePageView extends VerticalLayout implements AfterNavigationObser
         likeIcon.addClickListener(iconClickEvent -> {
             if (this.securityService.isLoggedIn()) {
                 String msg = this.userFavouritePlaceService.makePlaceFavourite(cityGeoCoding);
-                Notification.show(msg);
+                Notification.show(msg, 5000, Notification.Position.TOP_CENTER);
             }
             else {
                 likeIcon.getUI().ifPresent(ui -> {
@@ -174,19 +183,44 @@ public class HomePageView extends VerticalLayout implements AfterNavigationObser
     private void createPagination(Integer total) {
         int perPage = 10;
         int totalPage = (int) Math.ceil(((double)total / perPage));
-        List<Integer> range = IntStream.range(1, totalPage+1).boxed().collect(Collectors.toList());
+        this.pageRange = IntStream.range(1, totalPage+1).boxed().collect(Collectors.toList());
 
         pageSelect.setLabel("Pages");
-        pageSelect.setItems(range);
-        pageSelect.setValue(1);
+        pageSelect.setItems(this.pageRange);
+        pageSelect.setValue(this.currentPage);
     }
 
     private void addPaginationSelectListener() {
         this.pageSelect.addValueChangeListener(e -> {
             Integer page = e.getValue();
             if (page != null) {
+                this.currentPage = page;
                 this.addCitListDiv(this.locationService.getLocationByCityNamePage(page));
             }
         });
+    }
+
+    private void addPaginationButtonClickListener() {
+        this.nextButton.addClickListener(e -> {
+            if (this.canNavigate(this.currentPage + 1)) {
+                pageSelect.setValue(this.currentPage + 1);
+            }
+        });
+
+        this.prevButton.addClickListener(e -> {
+            if (this.canNavigate(this.currentPage - 1)) {
+                pageSelect.setValue(this.currentPage -1);
+            }
+        });
+    }
+
+    private Boolean canNavigate(int page) {
+        if (this.pageRange.size() > 0) {
+            Integer min = this.pageRange.get(0);
+            Integer max = this.pageRange.get(pageRange.size() - 1);
+
+            return page >= min && page <= max;
+        }
+        return false;
     }
 }
