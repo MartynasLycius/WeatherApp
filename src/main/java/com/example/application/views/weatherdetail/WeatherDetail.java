@@ -1,8 +1,10 @@
 package com.example.application.views.weatherdetail;
 
+import com.example.application.dto.DailyForecast;
 import com.example.application.dto.ForecastResponse;
+import com.example.application.dto.HourlyForecast;
+import com.example.application.services.WeatherForecastService;
 import com.example.application.views.MainLayout;
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
@@ -12,19 +14,17 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @PermitAll
 @PageTitle("Weather Forecasts")
-@Route(value = "weather-detail/:cityName?/", layout = MainLayout.class)
+@Route(value = "weather-detail/", layout = MainLayout.class)
 public class WeatherDetail extends VerticalLayout implements BeforeEnterObserver, AfterNavigationObserver {
+    private WeatherForecastService weatherForecastService;
+    private RestTemplate restTemplate;
 
     private H2 mainTitle = new H2();
     private H3 hourlyForecastTitle = new H3("Hourly Forecasts");
@@ -33,11 +33,12 @@ public class WeatherDetail extends VerticalLayout implements BeforeEnterObserver
     private Div hourlyForecastsDiv = new Div();
     private Div currentWeatherDiv = new Div();
 
-    RestTemplate restTemplate;
+    private ForecastResponse forecastResponse;
 
     @Autowired
-    WeatherDetail(RestTemplate restTemplate) {
+    WeatherDetail(RestTemplate restTemplate, WeatherForecastService weatherForecastService) {
         this.restTemplate = restTemplate;
+        this.weatherForecastService = weatherForecastService;
 
         addClassName("card-list-view");
         setSizeFull();
@@ -84,27 +85,6 @@ public class WeatherDetail extends VerticalLayout implements BeforeEnterObserver
     }
 
     @Override
-    public void onAttach(AttachEvent event) {
-//        mainTitle.setText("Weather Forecasts For: " + this.cityName);
-//
-//        //RestTemplate restTemplate = new RestTemplate();
-//        String url
-//                = "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m";
-//        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-//
-//        ObjectMapper mapper = new ObjectMapper();
-//        JsonNode root = null;
-//        try {
-//            root = mapper.readTree(response.getBody());
-//            //this.getCity(this.cityName);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-//        JsonNode name = root.path("current_weather");
-//        add(this.createCard());
-    }
-
-    @Override
     public void afterNavigation(AfterNavigationEvent event) {
         Location location = event.getLocation();
         QueryParameters queryParameters = location.getQueryParameters();
@@ -130,42 +110,29 @@ public class WeatherDetail extends VerticalLayout implements BeforeEnterObserver
         mainTitle.setText("Weather Forecasts For: " + cityName);
 
         if (latitude != null && longitude != null && tz != null) {
-            String url
-                    = "https://api.open-meteo.com/v1/forecast?" +
-                    "latitude=" + latitude + "&longitude=" + longitude + "&" +
-                    "hourly=temperature_2m,rain,windspeed_10m&" +
-                    "daily=temperature_2m_max,temperature_2m_min,rain_sum,windspeed_10m_max&" +
-                    "current_weather=true&timezone=" + tz + "";
-            ResponseEntity<ForecastResponse> response = restTemplate.getForEntity(url, ForecastResponse.class);
-
-            ForecastResponse forecastResponse = response.getBody();
+            this.forecastResponse = this.weatherForecastService.getWeatherForecastForLocation(latitude, longitude, tz);
             currentWeatherDiv.add(this.createCard(forecastResponse));
-            addDailyForecasts(forecastResponse);
+            addDailyForecasts();
         }
     }
 
-    private void addDailyForecasts(ForecastResponse forecastResponse) {
-        dailyForecastsDiv.removeAll();
-        ArrayList<String> time = forecastResponse.daily.time;
-        ArrayList<Double> temperature_2m_min = forecastResponse.daily.temperature_2m_min;
-        ArrayList<Double> temperature_2m_max = forecastResponse.daily.temperature_2m_max;
-        ArrayList<Double> rain_sum = forecastResponse.daily.rain_sum;
-        ArrayList<Double> windspeed_10m_max = forecastResponse.daily.windspeed_10m_max;
+    private void addDailyForecasts() {
+        List<DailyForecast> dailyForeCasts = this.weatherForecastService.getDailyForeCast(this.forecastResponse);
 
-        for (int i = 0; i < time.size(); i++) {
+        dailyForecastsDiv.removeAll();
+        for (DailyForecast dailyForecast : dailyForeCasts) {
             dailyForecastsDiv.add(dailyForecastsCard(
-                    forecastResponse,
-                    time.get(i),
-                    temperature_2m_min.get(i),
-                    temperature_2m_max.get(i),
-                    rain_sum.get(i),
-                    windspeed_10m_max.get(i)
+                    dailyForecast.getDate(),
+                    dailyForecast.getMinTemperature(),
+                    dailyForecast.getMinTemperature(),
+                    dailyForecast.getRainSum(),
+                    dailyForecast.getMaxWindSpeed()
                     )
             );
         }
     }
 
-    private HorizontalLayout dailyForecastsCard(ForecastResponse forecastResponse, String date, Double tempMin, Double tempMax, Double rain, Double windSpeed) {
+    private HorizontalLayout dailyForecastsCard(String date, Double tempMin, Double tempMax, Double rain, Double windSpeed) {
         HorizontalLayout card = new HorizontalLayout();
         card.addClassName("card");
         card.setSpacing(false);
@@ -212,7 +179,7 @@ public class WeatherDetail extends VerticalLayout implements BeforeEnterObserver
         maxWindSpeed.add(new Span("Maximum Wind Speed"), new Span(windSpeed + "km/h"));
 
         card.addClickListener(event -> {
-           this.showHourlyForecasts(forecastResponse, date);
+           this.showHourlyForecasts(date);
         });
 
         description.add(
@@ -225,34 +192,25 @@ public class WeatherDetail extends VerticalLayout implements BeforeEnterObserver
         return card;
     }
 
-    private void showHourlyForecasts(ForecastResponse forecastResponse, String date) {
+    private void showHourlyForecasts(String date) {
+        List<HourlyForecast> hourlyForeCasts = this.weatherForecastService.getHourlyForeCast(this.forecastResponse, date);
+
         hourlyForecastsDiv.removeAll();
-
-        ArrayList<String> hourlyTimes = forecastResponse.hourly.time;
-        ArrayList<Double> temperature_2m = forecastResponse.hourly.temperature_2m;
-        ArrayList<Double> windspeed_10m = forecastResponse.hourly.windspeed_10m;
-        ArrayList<Double> rain = forecastResponse.hourly.rain;
-
-        List<Integer> timeIndices = IntStream.range(0, hourlyTimes.size())
-                .filter(i -> hourlyTimes.get(i).startsWith(date))
-                .mapToObj(i -> i)
-                .collect(Collectors.toList());
-
         this.hourlyForecastTitle.setText("Hourly Forecasts for " + date);
-        for (Integer idx : timeIndices) {
+
+        for (HourlyForecast hourlyForecast : hourlyForeCasts) {
             hourlyForecastsDiv.add(
                     hourlyForecastsCard(
-                            date,
-                            hourlyTimes.get(idx),
-                            temperature_2m.get(idx),
-                            rain.get(idx),
-                            windspeed_10m.get(idx)
+                            hourlyForecast.getHour(),
+                            hourlyForecast.getTemperature(),
+                            hourlyForecast.getRain(),
+                            hourlyForecast.getWindSpeed()
                     )
             );
         }
     }
 
-    private HorizontalLayout hourlyForecastsCard(String date, String time, Double temp, Double rain, Double windSpeed) {
+    private HorizontalLayout hourlyForecastsCard(String time, Double temp, Double rain, Double windSpeed) {
         HorizontalLayout card = new HorizontalLayout();
         card.addClassName("card");
         card.setSpacing(false);

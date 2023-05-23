@@ -43,7 +43,7 @@ public class MainLayout extends AppLayout {
 
         String u = securityService.getLoginUserUsername();
         if (u != null) {
-            Button logout = new Button("Log out " + u, e -> securityService.logout());
+            Button logout = new Button("Log out ", e -> securityService.logout());
             addToNavbar(true, toggle, viewTitle, logout);
         }
         else {
