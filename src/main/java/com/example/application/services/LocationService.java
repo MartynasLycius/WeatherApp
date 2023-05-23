@@ -19,7 +19,7 @@ public class LocationService {
 
     public LocationService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.cityGeoCodingList =  new ArrayList<>();
+        this.cityGeoCodingList = new ArrayList<>();
         this.cityGeoCodingListCount = 0;
     }
 
@@ -31,7 +31,10 @@ public class LocationService {
 
         GeoCodingResponse geoCodingResponse = response.getBody();
 
-        if (geoCodingResponse != null && geoCodingResponse.results != null) {
+        if (geoCodingResponse == null || geoCodingResponse.results == null) {
+            this.cityGeoCodingList.clear();
+        }
+        else {
             this.cityGeoCodingList = geoCodingResponse.results;
         }
         this.cityGeoCodingListCount = this.cityGeoCodingList.size();

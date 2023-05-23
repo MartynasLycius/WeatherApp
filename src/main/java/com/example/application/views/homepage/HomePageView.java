@@ -9,6 +9,7 @@ import com.example.application.views.weatherdetail.WeatherDetail;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -156,6 +157,11 @@ public class HomePageView extends VerticalLayout implements AfterNavigationObser
             add(paginationDiv);
             createPagination(this.locationService.getTotal());
         }
+        else {
+            remove(paginationDiv);
+            this.addCitListDiv(this.locationService.getLocationByCityNamePage(1));
+            cityListDiv.add(new H5("Result Not Found"));
+        }
     }
 
     private void addCitListDiv(List<CityGeoCoding> cityGeoCodingList) {
@@ -167,7 +173,7 @@ public class HomePageView extends VerticalLayout implements AfterNavigationObser
 
     private void createPagination(Integer total) {
         int perPage = 10;
-        int totalPage = (int) Math.ceil(total / perPage);
+        int totalPage = (int) Math.ceil(((double)total / perPage));
         List<Integer> range = IntStream.range(1, totalPage+1).boxed().collect(Collectors.toList());
 
         pageSelect.setLabel("Pages");
