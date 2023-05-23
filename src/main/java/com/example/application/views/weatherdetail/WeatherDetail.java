@@ -277,11 +277,11 @@ public class WeatherDetail extends VerticalLayout implements BeforeEnterObserver
 
         Span temperature = new Span("Temperature");
         temperature.addClassName("temperature");
-        Span date = new Span(forecastResponse.current_weather.temperature + "°C");
+        Span date = new Span(forecastResponse.getCurrent_weather().getTemperature() + "°C");
         date.addClassName("date");
         header.add(temperature, date);
 
-        Span windSpeed = new Span("Wind Speed: " + forecastResponse.current_weather.windspeed + "km/h");
+        Span windSpeed = new Span("Wind Speed: " + forecastResponse.getCurrent_weather().getWindspeed() + "km/h");
         windSpeed.addClassName("windSpeed");
 
         description.add(header, windSpeed);

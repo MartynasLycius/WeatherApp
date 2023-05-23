@@ -56,22 +56,22 @@ public class UserFavouritePlaceService {
         AppUser appUser = this.getCurrentAppUser();
         if (appUser != null) {
             try {
-                UserFavouritePlace userFavouritePlace = this.userFavouritePlaceRepository.findByPlaceId((long) cityGeoCoding.id);
+                UserFavouritePlace userFavouritePlace = this.userFavouritePlaceRepository.findByPlaceId((long) cityGeoCoding.getId());
 
                 if (userFavouritePlace == null) {
                     String palaceInfoString = new ObjectMapper().writeValueAsString(cityGeoCoding);
 
                     userFavouritePlace = new UserFavouritePlace();
-                    userFavouritePlace.setPlaceId((long) cityGeoCoding.id);
+                    userFavouritePlace.setPlaceId((long) cityGeoCoding.getId());
                     userFavouritePlace.setPlaceInfo(palaceInfoString);
                     userFavouritePlace.setUser(appUser);
 
                     this.userFavouritePlaceRepository.save(userFavouritePlace);
-                    return cityGeoCoding.name + " Is Addd as Favourite Place";
+                    return cityGeoCoding.getName() + " Is Addd as Favourite Place";
                 }
                 else {
                     this.userFavouritePlaceRepository.delete(userFavouritePlace);
-                    return cityGeoCoding.name + " Is Remove From Favourite Place";
+                    return cityGeoCoding.getName() + " Is Remove From Favourite Place";
                 }
             }
             catch (JsonProcessingException e) {

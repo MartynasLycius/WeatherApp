@@ -35,11 +35,11 @@ public class WeatherForecastService {
     }
 
     public List<DailyForecast> getDailyForeCast(ForecastResponse forecastResponse) {
-        ArrayList<String> time = forecastResponse.daily.time;
-        ArrayList<Double> temperature_2m_min = forecastResponse.daily.temperature_2m_min;
-        ArrayList<Double> temperature_2m_max = forecastResponse.daily.temperature_2m_max;
-        ArrayList<Double> rain_sum = forecastResponse.daily.rain_sum;
-        ArrayList<Double> windspeed_10m_max = forecastResponse.daily.windspeed_10m_max;
+        ArrayList<String> time = forecastResponse.getDaily().getTime();
+        ArrayList<Double> temperature_2m_min = forecastResponse.getDaily().getTemperature_2m_min();
+        ArrayList<Double> temperature_2m_max = forecastResponse.getDaily().getTemperature_2m_max();
+        ArrayList<Double> rain_sum = forecastResponse.getDaily().getRain_sum();
+        ArrayList<Double> windspeed_10m_max = forecastResponse.getDaily().getWindspeed_10m_max();
 
         List<DailyForecast> dailyForecasts = new ArrayList<>();
 
@@ -58,10 +58,10 @@ public class WeatherForecastService {
     }
 
     public List<HourlyForecast> getHourlyForeCast(ForecastResponse forecastResponse, String date) {
-        ArrayList<String> hourlyTimes = forecastResponse.hourly.time;
-        ArrayList<Double> temperature_2m = forecastResponse.hourly.temperature_2m;
-        ArrayList<Double> windspeed_10m = forecastResponse.hourly.windspeed_10m;
-        ArrayList<Double> rain = forecastResponse.hourly.rain;
+        ArrayList<String> hourlyTimes = forecastResponse.getHourly().getTime();
+        ArrayList<Double> temperature_2m = forecastResponse.getHourly().getTemperature_2m();
+        ArrayList<Double> windspeed_10m = forecastResponse.getHourly().getWindspeed_10m();
+        ArrayList<Double> rain = forecastResponse.getHourly().getRain();
 
         List<Integer> timeIndices = IntStream.range(0, hourlyTimes.size())
                 .filter(i -> hourlyTimes.get(i).startsWith(date))

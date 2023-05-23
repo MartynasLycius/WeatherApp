@@ -59,9 +59,9 @@ public class FavouritePlaceView extends VerticalLayout implements AfterNavigatio
         header.setSpacing(false);
         header.getThemeList().add("spacing-s");
 
-        Span name = new Span(cityGeoCoding.name);
+        Span name = new Span(cityGeoCoding.getName());
         name.addClassName("name");
-        Span date = new Span(cityGeoCoding.country);
+        Span date = new Span(cityGeoCoding.getCountry());
         date.addClassName("date");
         header.add(name, date);
 
@@ -90,10 +90,10 @@ public class FavouritePlaceView extends VerticalLayout implements AfterNavigatio
         header.addClickListener(event -> {
             header.getUI().ifPresent(ui -> {
                 QueryParameters params = QueryParameters.simple(Map.of(
-                        "city", cityGeoCoding.name,
-                        "lon", String.valueOf(cityGeoCoding.longitude),
-                        "lat", String.valueOf(cityGeoCoding.latitude),
-                        "tz", String.valueOf(cityGeoCoding.timezone)
+                        "city", cityGeoCoding.getName(),
+                        "lon", String.valueOf(cityGeoCoding.getLongitude()),
+                        "lat", String.valueOf(cityGeoCoding.getLatitude()),
+                        "tz", String.valueOf(cityGeoCoding.getTimezone())
                 ));
                 ui.navigate(WeatherDetail.class, params);
             });

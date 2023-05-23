@@ -31,11 +31,11 @@ public class LocationService {
 
         GeoCodingResponse geoCodingResponse = response.getBody();
 
-        if (geoCodingResponse == null || geoCodingResponse.results == null) {
+        if (geoCodingResponse == null || geoCodingResponse.getResults() == null) {
             this.cityGeoCodingList.clear();
         }
         else {
-            this.cityGeoCodingList = geoCodingResponse.results;
+            this.cityGeoCodingList = geoCodingResponse.getResults();
         }
         this.cityGeoCodingListCount = this.cityGeoCodingList.size();
     }
