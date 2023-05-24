@@ -69,3 +69,21 @@
   font-size: var(--lumo-font-size-xs);
   margin-right: var(--lumo-space-l);
 }
+.location-item .header {
+  padding: 15px 0;
+}
+
+.location-item .header .name:hover {
+  color: blue;
+  cursor: pointer;
+}
+
+.location-item .header .date:hover {
+  color: blue;
+  cursor: pointer;
+}
+
+.daily-forcast-item:hover {
+  background: #f6f6f6;
+  cursor: pointer;
+}

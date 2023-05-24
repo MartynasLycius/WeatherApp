@@ -50,7 +50,7 @@ public class FavouritePlaceView extends VerticalLayout implements AfterNavigatio
         card.getThemeList().add("spacing-s");
 
         VerticalLayout description = new VerticalLayout();
-        description.addClassName("description");
+        description.addClassName("location-item");
         description.setSpacing(false);
         description.setPadding(false);
 

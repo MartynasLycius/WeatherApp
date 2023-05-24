@@ -136,7 +136,7 @@ public class WeatherDetail extends VerticalLayout implements BeforeEnterObserver
 
     private HorizontalLayout dailyForecastsCard(String date, Double tempMin, Double tempMax, Double rain, Double windSpeed) {
         HorizontalLayout card = new HorizontalLayout();
-        card.addClassName("card");
+        card.addClassNames("card", "daily-forcast-item");
         card.setSpacing(false);
         card.getThemeList().add("spacing-s");
 
@@ -214,7 +214,7 @@ public class WeatherDetail extends VerticalLayout implements BeforeEnterObserver
 
     private HorizontalLayout hourlyForecastsCard(String time, Double temp, Double rain, Double windSpeed) {
         HorizontalLayout card = new HorizontalLayout();
-        card.addClassName("card");
+        card.addClassNames("card", "daily-forcast-item");
         card.setSpacing(false);
         card.getThemeList().add("spacing-s");
 
