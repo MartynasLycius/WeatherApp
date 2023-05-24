@@ -111,8 +111,10 @@ public class WeatherDetail extends VerticalLayout implements BeforeEnterObserver
 
         if (latitude != null && longitude != null && tz != null) {
             this.forecastResponse = this.weatherForecastService.getWeatherForecastForLocation(latitude, longitude, tz);
-            currentWeatherDiv.add(this.createCard(forecastResponse));
-            addDailyForecasts();
+            if (this.forecastResponse != null) {
+                currentWeatherDiv.add(this.createCard(forecastResponse));
+                addDailyForecasts();
+            }
         }
     }
 

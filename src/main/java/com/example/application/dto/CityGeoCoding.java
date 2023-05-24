@@ -27,7 +27,10 @@ public class CityGeoCoding {
     public CityGeoCoding() {
     }
 
-    public CityGeoCoding(int id, String name, double latitude, double longitude, double elevation, String feature_code, String country_code, int admin1_id, int admin3_id, int admin4_id, String timezone, int population, ArrayList<String> postcodes, int country_id, String country, String admin1, String admin3, String admin4, int admin2_id, String admin2) {
+    public CityGeoCoding(int id, String name, double latitude, double longitude, double elevation, String feature_code,
+                         String country_code, int admin1_id, int admin3_id, int admin4_id, String timezone,
+                         int population, ArrayList<String> postcodes, int country_id, String country, String admin1,
+                         String admin3, String admin4, int admin2_id, String admin2) {
         this.id = id;
         this.name = name;
         this.latitude = latitude;

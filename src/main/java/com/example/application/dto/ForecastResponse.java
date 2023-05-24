@@ -17,7 +17,10 @@ public class ForecastResponse {
     public ForecastResponse() {
     }
 
-    public ForecastResponse(double latitude, double longitude, double generationtime_ms, int utc_offset_seconds, String timezone, String timezone_abbreviation, double elevation, CurrentWeather current_weather, HourlyUnits hourly_units, Hourly hourly, DailyUnits daily_units, Daily daily) {
+    public ForecastResponse(double latitude, double longitude, double generationtime_ms, int utc_offset_seconds,
+                            String timezone, String timezone_abbreviation, double elevation,
+                            CurrentWeather current_weather, HourlyUnits hourly_units, Hourly hourly,
+                            DailyUnits daily_units, Daily daily) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.generationtime_ms = generationtime_ms;

@@ -12,7 +12,8 @@ public class Daily {
     public Daily() {
     }
 
-    public Daily(ArrayList<String> time, ArrayList<Double> temperature_2m_max, ArrayList<Double> temperature_2m_min, ArrayList<Double> rain_sum, ArrayList<Double> windspeed_10m_max) {
+    public Daily(ArrayList<String> time, ArrayList<Double> temperature_2m_max, ArrayList<Double> temperature_2m_min,
+                 ArrayList<Double> rain_sum, ArrayList<Double> windspeed_10m_max) {
         this.time = time;
         this.temperature_2m_max = temperature_2m_max;
         this.temperature_2m_min = temperature_2m_min;

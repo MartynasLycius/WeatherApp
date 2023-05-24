@@ -12,7 +12,8 @@ public class Hourly {
     public Hourly() {
     }
 
-    public Hourly(ArrayList<String> time, ArrayList<Double> temperature_2m, ArrayList<Integer> relativehumidity_2m, ArrayList<Double> windspeed_10m, ArrayList<Double> rain) {
+    public Hourly(ArrayList<String> time, ArrayList<Double> temperature_2m, ArrayList<Integer> relativehumidity_2m,
+                  ArrayList<Double> windspeed_10m, ArrayList<Double> rain) {
         this.time = time;
         this.temperature_2m = temperature_2m;
         this.relativehumidity_2m = relativehumidity_2m;

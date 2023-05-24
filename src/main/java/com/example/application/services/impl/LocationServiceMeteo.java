@@ -3,6 +3,7 @@ package com.example.application.services.impl;
 import com.example.application.dto.CityGeoCoding;
 import com.example.application.dto.GeoCodingResponse;
 import com.example.application.services.LocationService;
+import com.vaadin.flow.component.notification.Notification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,20 +26,27 @@ public class LocationServiceMeteo implements LocationService {
 
     @Override
     public void loadLocationData(String searchCity) {
-        String url = "https://geocoding-api.open-meteo.com/v1/search?name="
-                + searchCity + "&count=100&language=en&format=json";
+        try {
+            String url = "https://geocoding-api.open-meteo.com/v1/search?name="
+                    + searchCity + "&count=100&language=en&format=json";
 
-        ResponseEntity<GeoCodingResponse> response = this.restTemplate.getForEntity(url, GeoCodingResponse.class);
+            ResponseEntity<GeoCodingResponse> response = this.restTemplate.getForEntity(url, GeoCodingResponse.class);
 
-        GeoCodingResponse geoCodingResponse = response.getBody();
+            GeoCodingResponse geoCodingResponse = response.getBody();
 
-        if (geoCodingResponse == null || geoCodingResponse.getResults() == null) {
+            if (geoCodingResponse == null || geoCodingResponse.getResults() == null) {
+                this.cityGeoCodingList.clear();
+            }
+            else {
+                this.cityGeoCodingList = geoCodingResponse.getResults();
+            }
+            this.cityGeoCodingListCount = this.cityGeoCodingList.size();
+        }
+        catch (Throwable throwable) {
+            Notification.show("Network Error", 5000, Notification.Position.TOP_CENTER);
             this.cityGeoCodingList.clear();
+            this.cityGeoCodingListCount = 0;
         }
-        else {
-            this.cityGeoCodingList = geoCodingResponse.getResults();
-        }
-        this.cityGeoCodingListCount = this.cityGeoCodingList.size();
     }
 
     @Override
