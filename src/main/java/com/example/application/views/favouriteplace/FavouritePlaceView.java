@@ -1,7 +1,7 @@
 package com.example.application.views.favouriteplace;
 
 import com.example.application.dto.CityGeoCoding;
-import com.example.application.services.SecurityService;
+import com.example.application.security.SecurityService;
 import com.example.application.services.UserFavouritePlaceService;
 import com.example.application.views.MainLayout;
 import com.example.application.views.weatherdetail.WeatherDetail;

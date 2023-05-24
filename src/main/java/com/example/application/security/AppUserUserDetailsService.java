@@ -1,6 +1,7 @@
-package com.example.application.services;
+package com.example.application.security;
 
 import com.example.application.data.entity.AppUser;
+import com.example.application.services.AppUserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.provisioning.UserDetailsManager;

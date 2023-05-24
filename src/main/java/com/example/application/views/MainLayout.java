@@ -3,7 +3,7 @@ package com.example.application.views;
 
 import com.example.application.components.appnav.AppNav;
 import com.example.application.components.appnav.AppNavItem;
-import com.example.application.services.SecurityService;
+import com.example.application.security.SecurityService;
 import com.example.application.views.favouriteplace.FavouritePlaceView;
 import com.example.application.views.homepage.HomePageView;
 import com.vaadin.flow.component.applayout.AppLayout;
