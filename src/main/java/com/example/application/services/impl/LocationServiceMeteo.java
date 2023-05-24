@@ -3,11 +3,13 @@ package com.example.application.services.impl;
 import com.example.application.dto.CityGeoCoding;
 import com.example.application.dto.GeoCodingResponse;
 import com.example.application.services.LocationService;
+import com.example.application.utility.WeatherApiEndPoints;
 import com.vaadin.flow.component.notification.Notification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +29,7 @@ public class LocationServiceMeteo implements LocationService {
     @Override
     public void loadLocationData(String searchCity) {
         try {
-            String url = "https://geocoding-api.open-meteo.com/v1/search?name="
-                    + searchCity + "&count=100&language=en&format=json";
+            String url = WeatherApiEndPoints.METEO_GEOCODING_API_URL.formatted(searchCity);
 
             ResponseEntity<GeoCodingResponse> response = this.restTemplate.getForEntity(url, GeoCodingResponse.class);
 

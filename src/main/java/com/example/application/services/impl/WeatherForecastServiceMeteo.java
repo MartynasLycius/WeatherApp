@@ -4,6 +4,7 @@ import com.example.application.dto.DailyForecast;
 import com.example.application.dto.ForecastResponse;
 import com.example.application.dto.HourlyForecast;
 import com.example.application.services.WeatherForecastService;
+import com.example.application.utility.WeatherApiEndPoints;
 import com.vaadin.flow.component.notification.Notification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,12 +26,8 @@ public class WeatherForecastServiceMeteo implements WeatherForecastService {
     @Override
     public ForecastResponse getWeatherForecastForLocation(String latitude, String longitude, String tz) {
         try {
-            String url
-                    = "https://api.open-meteo.com/v1/forecast?" +
-                    "latitude=" + latitude + "&longitude=" + longitude + "&" +
-                    "hourly=temperature_2m,rain,windspeed_10m&" +
-                    "daily=temperature_2m_max,temperature_2m_min,rain_sum,windspeed_10m_max&" +
-                    "current_weather=true&timezone=" + tz + "";
+            String url = WeatherApiEndPoints.METEO_FORECAST_API_URL.formatted(latitude, longitude, tz);
+
             ResponseEntity<ForecastResponse> response = this.restTemplate.getForEntity(url, ForecastResponse.class);
 
             ForecastResponse forecastResponse = response.getBody();
