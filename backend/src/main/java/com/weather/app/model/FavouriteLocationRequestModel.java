@@ -5,13 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponseModel {
+@Builder
+public class FavouriteLocationRequestModel {
     private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
+    private Long locationId;
+    private String name;
+    private String country;
 }

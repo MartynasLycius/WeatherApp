@@ -30,8 +30,8 @@ public class AppExceptionsHandler {
     /**
      * setting ErrorMessage
      *
-     * @param date ""
-     * @param message
+     * @param date    type Date
+     * @param message type String
      * @author raihan
      */
     public void setErrorMessge(Date date, String message) {
@@ -44,8 +44,8 @@ public class AppExceptionsHandler {
     /**
      * handler for UsernameNotFoundException, AuthenticationException
      *
-     * @param ex
-     * @param request
+     * @param ex      type Exception
+     * @param request type HttpServletRequest
      * @return ResponseEntity<ErrorMessage>
      * @author raihan
      */
@@ -58,20 +58,28 @@ public class AppExceptionsHandler {
     }
 
 
-
-    @ExceptionHandler(value = {ExpiredJwtException.class,TokenInvalidException.class})
-    public ResponseEntity<ErrorMessage> handleTokenInvalidException(RuntimeException ex, HttpServletRequest request){
+    /**
+     * handler for ExpiredJwtException
+     *
+     * @param ex      type RuntimeException
+     * @param request type HttpServletRequest
+     * @return ErrorMessage
+     * @author raihan
+     */
+    @ExceptionHandler(value = {ExpiredJwtException.class, TokenInvalidException.class})
+    public ResponseEntity<ErrorMessage> handleTokenInvalidException(RuntimeException ex, HttpServletRequest request) {
         String message = ex.getMessage();
         String path = request.getRequestURI();
-        setErrorMessge(new Date(),message);
-        logUtils.printErrorLog(message,path,request.getUserPrincipal().getName());
-        return new ResponseEntity<>(errorMessage,HttpStatus.BAD_REQUEST);
+        setErrorMessge(new Date(), message);
+        logUtils.printErrorLog(message, path, request.getUserPrincipal().getName());
+        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
     }
+
     /**
      * Handler for Exception
      *
-     * @param ex
-     * @param request
+     * @param ex      type Exception
+     * @param request type HttpServletRequest
      * @return Object
      * @author raihan
      */

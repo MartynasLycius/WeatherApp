@@ -1,5 +1,6 @@
 package com.weather.app.controller;
 
+import com.weather.app.constants.Endpoints;
 import com.weather.app.model.UserRequestModel;
 import com.weather.app.model.UserResponseModel;
 import com.weather.app.service.UserService;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * @author raihan
  */
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping(Endpoints.API_USER)
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -22,24 +23,23 @@ public class UserController {
     /**
      * api for user registration
      *
-     * @param userRequestModel
-     * @return
-     * @throws Exception
+     * @param userRequestModel request body
+     * @return UserResponseModel as responseEntity
      * @author raihan
      */
-    @PostMapping("/register")
-    public UserResponseModel registerUser(@RequestBody UserRequestModel userRequestModel) throws Exception {
-        return userService.registerUser(userRequestModel);
+    @PostMapping(Endpoints.API_USER_REGISTER)
+    public ResponseEntity<UserResponseModel> registerUser(@RequestBody UserRequestModel userRequestModel) throws Exception {
+        return new ResponseEntity<>(userService.registerUser(userRequestModel), HttpStatus.CREATED);
     }
 
     /**
      * api for getting user info by id
      *
-     * @param id
+     * @param id is specific user id
      * @return UserResponseModel
      * @author raihan
      */
-    @GetMapping("/{id}")
+    @GetMapping(Endpoints.API_GET_USER_BY_ID)
     public ResponseEntity<UserResponseModel> getUser(@PathVariable Long id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }

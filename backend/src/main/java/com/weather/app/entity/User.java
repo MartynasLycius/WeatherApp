@@ -3,6 +3,8 @@ package com.weather.app.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -18,4 +20,6 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<FavouriteLocation> favouriteLocations;
 }

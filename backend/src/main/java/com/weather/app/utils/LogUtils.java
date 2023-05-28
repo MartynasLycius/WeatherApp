@@ -14,8 +14,8 @@ public class LogUtils {
     /**
      * printing log without user
      *
-     * @param message
-     * @param path
+     * @param message type String
+     * @param path    type String
      * @author riahan
      */
     public void printErrorLog(String message, String path) {
@@ -25,20 +25,22 @@ public class LogUtils {
 
     /**
      * printing info log
-     * @param message
-     * @param path
+     *
+     * @param message type String
+     * @param path    type String
      * @author raihan
      */
-    public void printLog(String message, String path){
-        log.info("info: {}",message);
-        log.info("Path: {}",path);
+    public void printLog(String message, String path) {
+        log.info("info: {}", message);
+        log.info("Path: {}", path);
     }
+
     /**
      * printing log with user
      *
-     * @param message
-     * @param path
-     * @param user
+     * @param message type String
+     * @param path    type String
+     * @param user    type string
      * @author raihan
      */
     public void printErrorLog(String message, String path, String user) {
