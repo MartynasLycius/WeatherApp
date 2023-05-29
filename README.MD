@@ -27,3 +27,21 @@ All the other specific requirements are up to you
 * Use best practises
 * Use naming conventions
 * Show understanding of software development concepts
+
+## Deploying using Docker
+
+To build the Dockerized version of the project, run
+
+```
+docker-compose build
+```
+
+Once the Docker image is correctly built, you can test it locally using
+
+```
+docker-compose up -d
+
+in single command
+
+docker-compose up --build -d
+```
