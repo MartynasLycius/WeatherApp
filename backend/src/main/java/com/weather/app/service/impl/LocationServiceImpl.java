@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -59,17 +60,13 @@ public class LocationServiceImpl implements LocationService {
     public ResponseEntity<List<FavouriteLocation>> setFavoriteLocation(FavouriteLocationRequestModel favoriteLocation, Long userId) {
         ModelMapper modelMapper = new ModelMapper();
         FavouriteLocation favouriteLocationEntity = modelMapper.map(favoriteLocation, FavouriteLocation.class);
-        Optional<FavouriteLocation> favouriteLocationOptional = favouriteLocationRepository.findByLocationId(favoriteLocation.getLocationId());
-        if (favouriteLocationOptional.isPresent())
-            return new ResponseEntity<>(List.of(favouriteLocationOptional.get()), HttpStatus.OK);
+        User user = userRepository.findById(userId).orElseThrow();
+        List<FavouriteLocation> favouriteLocations = user.getFavouriteLocations();
+        boolean flag= favouriteLocations.stream().anyMatch(favouriteLocation -> Objects.equals(favouriteLocation.getLocationId(), favouriteLocationEntity.getLocationId()));
+        if (flag)
+            return new ResponseEntity<>(favouriteLocations, HttpStatus.OK);
         else {
-            Optional<User> userOptional = userRepository.findById(userId);
-            if (userOptional.isEmpty()) {
-                throw new UsernameNotFoundException(ErrorMessages.NO_RECORD_FOUND_BY_ID + userId);
-            }
             FavouriteLocation savedFavouriteLocation = favouriteLocationRepository.save(favouriteLocationEntity);
-            User user = userOptional.get();
-            List<FavouriteLocation> favouriteLocations = user.getFavouriteLocations();
             favouriteLocations.add(savedFavouriteLocation);
             user.setFavouriteLocations(favouriteLocations);
             userRepository.save(user);
@@ -99,17 +96,16 @@ public class LocationServiceImpl implements LocationService {
     /**
      * method for getting favourite location
      *
-     * @param locationId type Long
+     * @param userId type Long
      * @return FavouriteLocation
      * @author raihan
      */
     @Override
-    public ResponseEntity<FavouriteLocation> getFavouriteLocation(Long locationId) {
-
-        Optional<FavouriteLocation> favouriteLocationOptional = favouriteLocationRepository.findByLocationId(locationId);
-        if (favouriteLocationOptional.isEmpty())
-            throw new LocationNotFoundException(ErrorMessages.NO_RECORD_FOUND_BY_ID + locationId);
-        return new ResponseEntity<>(favouriteLocationOptional.get(), HttpStatus.OK);
+    public ResponseEntity<List<FavouriteLocation>> getFavouriteLocation(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty()) throw new UsernameNotFoundException(ErrorMessages.NO_RECORD_FOUND_BY_ID+userId);
+        List<FavouriteLocation> favouriteLocations = user.get().getFavouriteLocations();
+        return new ResponseEntity<>(favouriteLocations, HttpStatus.OK);
     }
 
     /**

@@ -51,13 +51,13 @@ public class LocationController {
     /**
      * api for getting favouriteLocation by id
      *
-     * @param locationId type Long
+     * @param userId type Long
      * @return FavouriteLocation
      * @author raihan
      */
     @GetMapping(Endpoints.API_GET_FAVOURITE_LOCATION)
-    public ResponseEntity<FavouriteLocation> getFavouriteLocation(@PathVariable Long locationId) {
-        return locationService.getFavouriteLocation(locationId);
+    public ResponseEntity<List<FavouriteLocation>> getFavouriteLocation(@PathVariable Long userId) {
+        return locationService.getFavouriteLocation(userId);
     }
 
     /**

@@ -15,5 +15,5 @@ public class Endpoints {
     public static final String API_HOURLY_FORECAST = "/hourly";
     public static final String API_GET_USER_BY_ID = "/{id}";
     public static final String API_LOCATION_BY_ID = "/byId/{locationId}";
-    public static final String API_GET_FAVOURITE_LOCATION = "/favourite/get/{locationId}";
+    public static final String API_GET_FAVOURITE_LOCATION = "/favourite/get/{userId}";
 }

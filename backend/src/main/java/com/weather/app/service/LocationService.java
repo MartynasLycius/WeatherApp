@@ -15,5 +15,5 @@ public interface LocationService {
 
     ResponseEntity<LocationModel> getLocationById(String locationId);
 
-    ResponseEntity<FavouriteLocation> getFavouriteLocation(Long locationId);
+    ResponseEntity<List<FavouriteLocation>> getFavouriteLocation(Long locationId);
 }

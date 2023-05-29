@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class FavouriteLocationRequestModel {
     private Long id;
     private Long locationId;
-    private String name;
+    private String location;
     private String country;
 }
