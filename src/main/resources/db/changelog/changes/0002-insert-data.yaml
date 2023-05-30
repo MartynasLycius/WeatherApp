@@ -1,0 +1,68 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-user-data-if-not-exists
+      author: MD KAMRUL HASAN
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM application_user WHERE id = '1'
+      changes:
+        - insert:
+            tableName: application_user
+            columns:
+              - column:
+                  name: username
+                  value: user
+              - column:
+                  name: name
+                  value: first user
+              - column:
+                  name: hashed_password
+                  value: $2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW
+              - column:
+                  name: email
+                  value: user@email.com
+        - insert:
+            tableName: application_user
+            columns:
+              - column:
+                  name: username
+                  value: admin
+              - column:
+                  name: name
+                  value: admin user
+              - column:
+                  name: hashed_password
+                  value: $2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW
+              - column:
+                  name: email
+                  value: admin@email.com
+
+  - changeSet:
+      id: insert-role-data-if-not-exists
+      author: MD KAMRUL HASAN
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM user_role WHERE id = '1'
+      changes:
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: role
+                  value: USER
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: role
+                  value: ADMIN

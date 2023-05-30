@@ -9,6 +9,8 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: test@123
       POSTGRES_DB: weather_app_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
   app:
     build:
       context: .
@@ -25,3 +27,7 @@ services:
       - spring.datasource.url=jdbc:postgresql://db:5432/weather_app_db
       - spring.datasource.username=root
       - spring.datasource.password=test@123
+
+
+volumes:
+  db_data:

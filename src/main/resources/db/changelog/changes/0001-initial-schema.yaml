@@ -1,0 +1,110 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: MD Kamrul Hasan
+      changes:
+        - createTable:
+            tableName: application_user
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: hashed_password
+                  type: varchar(255)
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+        - createTable:
+            tableName: user_role
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_user_role_user_id
+                    referencedTableName: application_user
+                    referencedColumnNames: id
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(255)
+        - createTable:
+            tableName: location
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: external_id
+                  type: bigint
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: latitude
+                  type: decimal(9,6)
+              - column:
+                  name: longitude
+                  type: decimal(9,6)
+              - column:
+                  name: address
+                  type: varchar(511)
+              - column:
+                  name: country
+                  type: varchar(255)
+              - column:
+                  name: country_code
+                  type: varchar(255)
+        - createTable:
+            tableName: user_fav_location
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_user_fav_location_user_id
+                    referencedTableName: application_user
+                    referencedColumnNames: id
+                    nullable: false
+              - column:
+                  name: location_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_user_fav_location_location_id
+                    referencedTableName: location
+                    referencedColumnNames: id
+                    nullable: false
