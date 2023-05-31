@@ -1,12 +1,13 @@
 package com.proit.application.security;
 
 import com.proit.application.data.entity.User;
-import com.proit.application.data.service.UserRepository;
+import com.proit.application.data.repository.UserRepository;
 import com.vaadin.flow.spring.security.AuthenticationContext;
-import java.util.Optional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Component
 public class AuthenticatedUser {
