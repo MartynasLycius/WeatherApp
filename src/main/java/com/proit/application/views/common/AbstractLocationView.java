@@ -12,6 +12,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.LitRenderer;
+import com.vaadin.flow.data.renderer.Renderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
 import java.util.List;
@@ -98,4 +100,20 @@ public abstract class AbstractLocationView extends VerticalLayout {
 
     protected abstract void configureGridColumns();
     protected abstract void onGridFilterTextFieldValueChange(String value);
+
+    public static Renderer<LocationDto> createLocationDetailsRenderer() {
+        return LitRenderer.<LocationDto> of(
+                        "<vaadin-horizontal-layout style=\"align-items: center;\" theme=\"spacing\">"
+                                + "<span class=\"fi fi-${item.countryCode}\" title=\"${item.country}\"></span>"
+                                + "  <vaadin-vertical-layout style=\"line-height: var(--lumo-line-height-m);\">"
+                                + "    <span> ${item.address} </span>"
+                                + "    <span style=\"font-size: var(--lumo-font-size-s); color: var(--lumo-secondary-text-color);\">"
+                                + "      ${item.country}" + "    </span>"
+                                + "  </vaadin-vertical-layout>"
+                                + "</vaadin-horizontal-layout>"
+                )
+                .withProperty("countryCode", locationDto -> locationDto.getCountryCode().toLowerCase())
+                .withProperty("country", LocationDto::getCountry)
+                .withProperty("address", LocationDto::getAddress);
+    }
 }

@@ -90,22 +90,17 @@ public class SearchLocationView extends AbstractLocationView {
     protected void configureGridColumns() {
         grid.addClassName("location-grid");
 
-        grid.setColumns("name", "country", "address");
-        Renderer<LocationDto> iconRenderer = new ComponentRenderer<>(locationDto -> {
-            if (locationDto.isFavourite()) {
-                return new Div();
-            }
+        grid.addColumn("name")
+                .setSortable(false);
+        grid.addColumn(createLocationDetailsRenderer())
+                .setHeader("Location Details")
+                .setKey("country")
+                .setAutoWidth(true)
+                .setSortProperty("country")
+                .setSortable(false)
+                .setFlexGrow(1);
 
-            Icon iconComponent = new Icon(VaadinIcon.STAR);
-
-            iconComponent.getElement().addEventListener("click", event -> {})
-                    .addEventData("event.stopPropagation()");
-            iconComponent.addClickListener(iconClickEvent -> iconClickListener(iconClickEvent, locationDto));
-
-            return iconComponent;
-        });
-
-        grid.addColumn(iconRenderer)
+        grid.addColumn(getFavIconRenderer())
                 .setHeader("Favorite");
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
@@ -136,5 +131,21 @@ public class SearchLocationView extends AbstractLocationView {
 
     protected void onGridFilterTextFieldValueChange(String value) {
         dataView.refreshAll();
+    }
+
+    private Renderer<LocationDto> getFavIconRenderer() {
+        return new ComponentRenderer<>(locationDto -> {
+            if (locationDto.isFavourite()) {
+                return new Div();
+            }
+
+            Icon iconComponent = new Icon(VaadinIcon.STAR);
+
+            iconComponent.getElement().addEventListener("click", event -> {})
+                    .addEventData("event.stopPropagation()");
+            iconComponent.addClickListener(iconClickEvent -> iconClickListener(iconClickEvent, locationDto));
+
+            return iconComponent;
+        });
     }
 }

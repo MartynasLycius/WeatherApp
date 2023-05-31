@@ -16,8 +16,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.SortDirection;
-import com.vaadin.flow.data.renderer.LitRenderer;
-import com.vaadin.flow.data.renderer.Renderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
@@ -68,12 +66,14 @@ public class FavoriteLocationsView extends AbstractLocationView {
     protected void configureGridColumns() {
         grid.addClassName("favorite-locations-grid");
 
+        grid.addColumn("name");
         grid.addColumn(createLocationDetailsRenderer())
                 .setHeader("Location Details")
-                .setKey("name")
+                .setKey("country")
                 .setAutoWidth(true)
+                .setSortProperty("country")
+                .setSortable(true)
                 .setFlexGrow(1);
-        grid.addColumn("country");
         grid.addComponentColumn(this::createDeleteButton)
                 .setHeader("Actions")
                 .setFlexGrow(0);
@@ -102,23 +102,6 @@ public class FavoriteLocationsView extends AbstractLocationView {
         return deleteButton;
     }
 
-    private static Renderer<LocationDto> createLocationDetailsRenderer() {
-        return LitRenderer.<LocationDto> of(
-                "<vaadin-horizontal-layout style=\"align-items: center;\" theme=\"spacing\">"
-                        + "<span class=\"fi fi-${item.countryCode}\" title=\"${item.country}\"></span>"
-                        + "  <vaadin-vertical-layout style=\"line-height: var(--lumo-line-height-m);\">"
-                        + "    <span> ${item.name} </span>"
-                        + "    <span style=\"font-size: var(--lumo-font-size-s); color: var(--lumo-secondary-text-color);\">"
-                        + "      ${item.address}" + "    </span>"
-                        + "  </vaadin-vertical-layout>"
-                        + "</vaadin-horizontal-layout>"
-            )
-                .withProperty("countryCode", locationDto -> locationDto.getCountryCode().toLowerCase())
-                .withProperty("country", LocationDto::getCountry)
-                .withProperty("name", LocationDto::getName)
-                .withProperty("address", LocationDto::getAddress);
-    }
-
     private void removeFromFavorite(LocationDto locationDto) {
         userFavLocationService.removeFromFavoriteLocation(locationDto.getId());
 
@@ -143,14 +126,11 @@ public class FavoriteLocationsView extends AbstractLocationView {
         previousButton.addClickListener(e -> navigateToPage(currentPage - 1));
         nextButton.addClickListener(e -> navigateToPage(currentPage + 1));
 
-        // Disable the previous button if on the first page
-        previousButton.setEnabled(currentPage > 0);
-
-        // Disable the next button if on the last page
         Pageable pageable = PageRequest.of(currentPage, PAGE_SIZE, Sort.by("name").ascending());
         Page<LocationDto> page = locationService.getAllFavoriteLocationOfCurrentUser(pageable, gridFilterTextField.getValue());
         boolean isLastPage = page.getNumber() >= page.getTotalPages() - 1;
         nextButton.setEnabled(!isLastPage);
+        previousButton.setEnabled(currentPage > 0);
 
         return new HorizontalLayout(previousButton, nextButton);
     }
@@ -180,6 +160,6 @@ public class FavoriteLocationsView extends AbstractLocationView {
                 })
                 .toArray(Sort.Order[]::new);
 
-        return orders.length > 0 ? orders : new Sort.Order[]{new Sort.Order(Sort.Direction.ASC, "country")};
+        return orders.length > 0 ? orders : new Sort.Order[]{new Sort.Order(Sort.Direction.ASC, "name")};
     }
 }
