@@ -1,4 +1,4 @@
-package com.proit.application.data.service;
+package com.proit.application.data.repository;
 
 import com.proit.application.data.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
