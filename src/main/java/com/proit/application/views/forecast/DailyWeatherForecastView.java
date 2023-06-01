@@ -1,5 +1,7 @@
 package com.proit.application.views.forecast;
 
+import com.proit.application.data.dto.DailyDto;
+import com.proit.application.data.dto.DailyFullDataDto;
 import com.proit.application.data.dto.LocationDto;
 import com.proit.application.data.dto.WeatherDataDto;
 import com.proit.application.utils.DateTimeUtil;
@@ -8,12 +10,20 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.renderer.LitRenderer;
+import com.vaadin.flow.data.renderer.Renderer;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class DailyWeatherForecastView extends VerticalLayout {
@@ -56,17 +66,71 @@ public class DailyWeatherForecastView extends VerticalLayout {
     }
 
     private void populateWeatherForecast(WeatherDataDto weatherData) {
-        Div container = prepareForecastContainer(weatherData);
+        Div headerDiv = new Div();
+        H2 h2 = new H2();
+        h2.setText(String.format("Weather forecast for %d days", weatherData.getDaily().getTime().size()));
+        h2.setWidthFull();
+        headerDiv.add(h2);
+        headerDiv.addClassNames(LumoUtility.Background.BASE);
+        headerDiv.setWidthFull();
+        add(headerDiv);
 
-        Button closeBtn = prepareCloseButton();
+        List<DailyFullDataDto> fullDataDtos = convertWeatherDtoToDailyFullDataDto(weatherData);
+        Grid<DailyFullDataDto> grid = new Grid<>(DailyFullDataDto.class, false);
+        grid.addColumn(getDayAndDateRenderer())
+                .setHeader("Day");
+        grid.addColumn(getWeatherRenderer())
+                .setHeader("Weather");
+        grid.addColumn(dailyFullDataDto -> String.format("%s / %s %s", dailyFullDataDto.getTemperature2mMax(), dailyFullDataDto.getTemperature2mMin(), dailyFullDataDto.getTemperatureUnit()))
+                        .setHeader("Temperature");
+        grid.addColumn(dailyFullDataDto -> String.format("%s %s", dailyFullDataDto.getRainSum(), dailyFullDataDto.getRainUnit()))
+                        .setHeader("Rain");
 
-        VerticalLayout verticalLayout = new VerticalLayout(container, closeBtn);
-        verticalLayout.setAlignItems(Alignment.STRETCH);
-        verticalLayout.setFlexGrow(1, container);
-        verticalLayout.setSizeFull();
+        grid.getColumns().forEach(column -> {
+            column.setAutoWidth(true);
+            column.setSortable(false);
+        });
+        grid.setItems(fullDataDtos);
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
-        add(verticalLayout);
+        grid.addClassNames(
+                LumoUtility.Background.BASE
+        );
+        add(grid);
+        this.addClassNames(
+                LumoUtility.BoxShadow.LARGE
+        );
         log.debug("DailyWeatherForecastView populated with weather data.");
+    }
+
+    private static Renderer<DailyFullDataDto> getDayAndDateRenderer() {
+        return LitRenderer.<DailyFullDataDto>of(
+                "<vaadin-vertical-layout style=\"align-items: left;line-height: var(--lumo-line-height-s);\" theme=\"spacing\">"
+                        + "    <span style=\"font-size: var(--lumo-font-size-s); color: var(--lumo-secondary-text-color);\"> ${item.day} </span>"
+                        + "    <span> ${item.date} </span>"
+                        + "</vaadin-vertical-layout>"
+        )
+                .withProperty("day", dailyFullDataDto -> {
+                    return DateTimeUtil.convertDateStringToDayAndDateString(dailyFullDataDto.getDate()).split(",")[0];
+                })
+                .withProperty("date", dailyFullDataDto -> {
+                    return DateTimeUtil.convertDateStringToDayAndDateString(dailyFullDataDto.getDate()).split(",")[1];
+                });
+    }
+
+    private static Renderer<DailyFullDataDto> getWeatherRenderer() {
+        return LitRenderer.<DailyFullDataDto>of(
+                "<vaadin-vertical-layout style=\"align-items: center;line-height: var(--lumo-line-height-s);\" theme=\"spacing\">"
+                        + "  <i class=\"day-weather-icon ${item.icon}\"></i>"
+                        + "  <span> ${item.description} </span>"
+                        + "</vaadin-vertical-layout>"
+        )
+                .withProperty("icon", dailyFullDataDto -> {
+                    return WeatherCodeLookupUtil.getWeatherIcon(dailyFullDataDto.getWeatherCode());
+                })
+                .withProperty("description", dailyFullDataDto -> {
+                    return WeatherCodeLookupUtil.getWeatherMessage(dailyFullDataDto.getWeatherCode());
+                });
     }
 
     private Div prepareForecastContainer(WeatherDataDto weatherData) {
@@ -113,7 +177,7 @@ public class DailyWeatherForecastView extends VerticalLayout {
                 new Html("<i class=\"fa-solid fa-wind\"></i>"),
                 new Html(
                         String.format("<span>&nbsp;%s&nbsp;%s</span>",
-                                weatherData.getDaily().getWindspeed10mMax().get(dayIndex),
+                                weatherData.getDaily().getWindSpeed10mMax().get(dayIndex),
                                 weatherData.getDailyUnits().getWindSpeed10mMax()
                         )
                 )
@@ -232,5 +296,26 @@ public class DailyWeatherForecastView extends VerticalLayout {
         var modal = new HourlyWeatherForecastView(i, weatherData);
         modal.open();
         log.debug("Opened HourlyWeatherForecastView modal for day: {}", i);
+    }
+
+    private List<DailyFullDataDto> convertWeatherDtoToDailyFullDataDto(WeatherDataDto weatherDataDto) {
+        List<DailyFullDataDto> dailyFullDataDtoList = new ArrayList<>();
+        for (int i = 0; i < weatherDataDto.getDaily().getWeatherCode().size(); i++) {
+            DailyFullDataDto dailyFullDataDto = DailyFullDataDto.builder()
+                    .day(i + 1)
+                    .date(weatherDataDto.getDaily().getTime().get(i))
+                    .weatherCode(weatherDataDto.getDaily().getWeatherCode().get(i))
+                    .temperature2mMax(weatherDataDto.getDaily().getTemperature2mMax().get(i))
+                    .temperature2mMin(weatherDataDto.getDaily().getTemperature2mMin().get(i))
+                    .temperatureUnit(weatherDataDto.getDailyUnits().getTemperature2mMax())
+                    .rainSum(weatherDataDto.getDaily().getRainSum().get(i))
+                    .rainUnit(weatherDataDto.getDailyUnits().getRainSum())
+                    .windSpeed10mMax(weatherDataDto.getDaily().getWindSpeed10mMax().get(i))
+                    .windSpeedUnit(weatherDataDto.getDailyUnits().getWindSpeed10mMax())
+                    .build();
+            dailyFullDataDtoList.add(dailyFullDataDto);
+        }
+
+        return dailyFullDataDtoList;
     }
 }

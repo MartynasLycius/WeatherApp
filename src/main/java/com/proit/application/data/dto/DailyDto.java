@@ -27,7 +27,7 @@ public class DailyDto implements Serializable {
     private List<Integer> precipitationProbabilityMax;
 
     @JsonProperty("windspeed_10m_max")
-    private List<Double> windspeed10mMax;
+    private List<Double> windSpeed10mMax;
 
     @JsonProperty("rain_sum")
     private List<Double> rainSum;
