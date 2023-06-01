@@ -14,6 +14,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.LitRenderer;
@@ -66,23 +67,33 @@ public class DailyWeatherForecastView extends VerticalLayout {
     }
 
     private void populateWeatherForecast(WeatherDataDto weatherData) {
-        Div headerDiv = new Div();
         H2 h2 = new H2();
-        h2.setText(String.format("Weather forecast for %d days", weatherData.getDaily().getTime().size()));
+        h2.setText(String.format("Weather Forecast for %d Days", weatherData.getDaily().getTime().size()));
         h2.setWidthFull();
-        headerDiv.add(h2);
-        headerDiv.addClassNames(LumoUtility.Background.BASE);
-        headerDiv.setWidthFull();
-        add(headerDiv);
+
+        Button closeButton = new Button(new Icon("lumo", "cross"));
+        closeButton.addClassNames(
+                LumoUtility.BorderColor.ERROR
+        );
+        closeButton.addClickListener(e -> closeView());
+
+        HorizontalLayout header = new HorizontalLayout();
+        header.add(h2, closeButton);
+        header.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        header.setWidthFull();
+
+        add(header);
 
         List<DailyFullDataDto> fullDataDtos = convertWeatherDtoToDailyFullDataDto(weatherData);
         Grid<DailyFullDataDto> grid = new Grid<>(DailyFullDataDto.class, false);
         grid.addColumn(getDayAndDateRenderer())
                 .setHeader("Day");
         grid.addColumn(getWeatherRenderer())
-                .setHeader("Weather");
-        grid.addColumn(dailyFullDataDto -> String.format("%s / %s %s", dailyFullDataDto.getTemperature2mMax(), dailyFullDataDto.getTemperature2mMin(), dailyFullDataDto.getTemperatureUnit()))
+                .setHeader(createCenteredHeaderComponent("Weather"));
+        grid.addColumn(dailyFullDataDto -> String.format("%s | %s %s", dailyFullDataDto.getTemperature2mMax(), dailyFullDataDto.getTemperature2mMin(), dailyFullDataDto.getTemperatureUnit()))
                         .setHeader("Temperature");
+        grid.addColumn(dailyFullDataDto -> String.format("%s %s", dailyFullDataDto.getWindSpeed10mMax(), dailyFullDataDto.getWindSpeedUnit()))
+                        .setHeader("Wind");
         grid.addColumn(dailyFullDataDto -> String.format("%s %s", dailyFullDataDto.getRainSum(), dailyFullDataDto.getRainUnit()))
                         .setHeader("Rain");
 
@@ -97,6 +108,13 @@ public class DailyWeatherForecastView extends VerticalLayout {
                 LumoUtility.Background.BASE
         );
         add(grid);
+        grid.asSingleSelect().addValueChangeListener(e -> {
+            if (e.getValue() == null) {
+                return;
+            }
+
+            openModal(weatherData, e.getValue().getDay() - 1);
+        });
         this.addClassNames(
                 LumoUtility.BoxShadow.LARGE
         );
@@ -105,7 +123,7 @@ public class DailyWeatherForecastView extends VerticalLayout {
 
     private static Renderer<DailyFullDataDto> getDayAndDateRenderer() {
         return LitRenderer.<DailyFullDataDto>of(
-                "<vaadin-vertical-layout style=\"align-items: left;line-height: var(--lumo-line-height-s);\" theme=\"spacing\">"
+                "<vaadin-vertical-layout style=\"align-items: left;line-height: var(--lumo-line-height-s);\">"
                         + "    <span style=\"font-size: var(--lumo-font-size-s); color: var(--lumo-secondary-text-color);\"> ${item.day} </span>"
                         + "    <span> ${item.date} </span>"
                         + "</vaadin-vertical-layout>"
@@ -120,7 +138,7 @@ public class DailyWeatherForecastView extends VerticalLayout {
 
     private static Renderer<DailyFullDataDto> getWeatherRenderer() {
         return LitRenderer.<DailyFullDataDto>of(
-                "<vaadin-vertical-layout style=\"align-items: center;line-height: var(--lumo-line-height-s);\" theme=\"spacing\">"
+                "<vaadin-vertical-layout style=\"align-items: center;line-height: var(--lumo-line-height-s);\">"
                         + "  <i class=\"day-weather-icon ${item.icon}\"></i>"
                         + "  <span> ${item.description} </span>"
                         + "</vaadin-vertical-layout>"
@@ -131,59 +149,6 @@ public class DailyWeatherForecastView extends VerticalLayout {
                 .withProperty("description", dailyFullDataDto -> {
                     return WeatherCodeLookupUtil.getWeatherMessage(dailyFullDataDto.getWeatherCode());
                 });
-    }
-
-    private Div prepareForecastContainer(WeatherDataDto weatherData) {
-        var container = new Div();
-        container.addClassName("daily-weather-forecast-container");
-
-        for (int i = 0; i < 7; i++) {
-            var dayCard = new Div();
-            dayCard.addClassName("day-card");
-            int finalI = i;
-            dayCard.addClickListener(e -> openModal(weatherData, finalI));
-            var dayCardContent = prepareDayCardContent(weatherData, i);
-            dayCard.add(dayCardContent);
-            container.add(dayCard);
-        }
-
-        return container;
-    }
-
-    private Button prepareCloseButton() {
-        Button closeBtn = new Button("Close");
-        closeBtn.addClickListener(e -> closeView());
-        closeBtn.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        return closeBtn;
-    }
-
-    private Div prepareDayCardContent(WeatherDataDto weatherData, int dayIndex) {
-        var dayCardContent = new Div();
-        dayCardContent.addClassName("day-card-content");
-        dayCardContent.add(prepareDateSpan(weatherData, dayIndex));
-        dayCardContent.add(prepareWeatherIconAndDescLayout(weatherData, dayIndex));
-        dayCardContent.add(prepareSunriseSunsetSpan(weatherData, dayIndex));
-        dayCardContent.add(prepareMinMaxTempSpan(weatherData, dayIndex));
-        dayCardContent.add(preparePrecipitationSpan(weatherData, dayIndex));
-        dayCardContent.add(prepareWindSpeedSpan(weatherData, dayIndex));
-        return dayCardContent;
-    }
-
-    private Component prepareWindSpeedSpan(WeatherDataDto weatherData, int dayIndex) {
-        var windSpeedSpan = new Span();
-        windSpeedSpan.addClassName("white-text");
-        windSpeedSpan.setTitle("Wind Speed");
-        windSpeedSpan.add(
-                new Html("<i class=\"fa-solid fa-wind\"></i>"),
-                new Html(
-                        String.format("<span>&nbsp;%s&nbsp;%s</span>",
-                                weatherData.getDaily().getWindSpeed10mMax().get(dayIndex),
-                                weatherData.getDailyUnits().getWindSpeed10mMax()
-                        )
-                )
-        );
-
-        return windSpeedSpan;
     }
 
     private Component preparePrecipitationSpan(WeatherDataDto weatherData, int dayIndex) {
@@ -317,5 +282,12 @@ public class DailyWeatherForecastView extends VerticalLayout {
         }
 
         return dailyFullDataDtoList;
+    }
+
+    private Component createCenteredHeaderComponent(String text) {
+        Div headerComponent = new Div();
+        headerComponent.setText(text);
+        headerComponent.getStyle().set("text-align", "center");
+        return headerComponent;
     }
 }

@@ -63,7 +63,6 @@ public abstract class AbstractLocationView extends VerticalLayout {
         configureGridFilterTextField();
 
         var headerRow = grid.appendHeaderRow();
-//        headerRow.getCell(grid.getColumnByKey("name")).setComponent(gridFilterTextField);
         headerRow.getCell(grid.getColumnByKey("name"))
                 .setComponent(gridFilterTextField);
 
@@ -112,7 +111,10 @@ public abstract class AbstractLocationView extends VerticalLayout {
                                 + "  </vaadin-vertical-layout>"
                                 + "</vaadin-horizontal-layout>"
                 )
-                .withProperty("countryCode", locationDto -> locationDto.getCountryCode().toLowerCase())
+                .withProperty("countryCode", locationDto -> {
+                    var countryCode = locationDto.getCountryCode();
+                    return countryCode == null ? "" : countryCode.toLowerCase();
+                })
                 .withProperty("country", LocationDto::getCountry)
                 .withProperty("address", LocationDto::getAddress);
     }

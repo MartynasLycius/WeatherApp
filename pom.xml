@@ -2,7 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <!-- Project from https://start.vaadin.com/project/ebfe55db-9069-4e27-99bf-02c1a484aba7 -->
     <groupId>com.proit.application</groupId>
     <artifactId>weatherapp</artifactId>
     <name>weatherapp</name>

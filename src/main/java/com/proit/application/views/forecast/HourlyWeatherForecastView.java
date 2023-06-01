@@ -25,7 +25,7 @@ public class HourlyWeatherForecastView extends Dialog {
         int start = dayIndex * 24;
         List<Double> temperature_2m = weatherData.getHourly().getTemperature2m();
 
-        prepareChartView(weatherData, temperature_2m, start);
+        prepareChartView(weatherData, start);
 
         prepareHoursForeCast(weatherData, start, temperature_2m);
     }
@@ -99,9 +99,9 @@ public class HourlyWeatherForecastView extends Dialog {
         rainDiv.add(
                 new Html("<i class=\"fa-solid fa-umbrella\"></i>"),
                 new Html(
-                        String.format("<span>&nbsp;%d %s</span>",
-                                weatherData.getHourly().getPrecipitationProbability().get(i),
-                                weatherData.getHourlyUnits().getPrecipitationProbability()
+                        String.format("<span>&nbsp;%s %s</span>",
+                                weatherData.getHourly().getRain().get(i),
+                                weatherData.getHourlyUnits().getRain()
                         )
                 )
         );
@@ -140,13 +140,29 @@ public class HourlyWeatherForecastView extends Dialog {
         return timeDiv;
     }
 
-    private void prepareChartView(WeatherDataDto weatherData, List<Double> temperature_2m, int start) {
+    private void prepareChartView(WeatherDataDto weatherData, int start) {
+
         ChartView chartView = new ChartView(
                 weatherData.getHourly().getTime().subList(start, start + 24),
-                temperature_2m.subList(start, start + 24),
-                "Temperature (" + weatherData.getHourlyUnits().getTemperature2m() + ")"
+                getChartData(weatherData, start),
+                getChartLabels(weatherData)
         );
         add(chartView);
     }
 
+    private List<List<Double>> getChartData(WeatherDataDto weatherData, int start) {
+        return List.of(
+                weatherData.getHourly().getTemperature2m().subList(start, start + 24),
+                weatherData.getHourly().getRain().subList(start, start + 24),
+                weatherData.getHourly().getWindSpeed10m().subList(start, start + 24)
+        );
+    }
+
+    private List<String> getChartLabels(WeatherDataDto weatherData) {
+        return List.of(
+                String.format("Temperature (%s)", weatherData.getHourlyUnits().getTemperature2m()),
+                String.format("Rain (%s)", weatherData.getHourlyUnits().getRain()),
+                String.format("Wind (%s)", weatherData.getHourlyUnits().getWindSpeed10m())
+        );
+    }
 }

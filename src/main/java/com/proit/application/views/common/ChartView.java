@@ -12,13 +12,13 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class ChartView extends VerticalLayout {
-    private static final String BAR_COLOR = "rgba(130, 205, 255, 0.6)";
+    private static final String BAR_COLOR = "rgba(247, 163, 92, 0.6)";
     private static final String BORDER_COLOR = "rgba(35, 162, 247, 1)";
 
     private final Div chartDiv;
     private final String fullJsCode;
 
-    public ChartView(List<String> labels, List<Double> values, String commonLabel) {
+    public ChartView(List<String> labels, List<List<Double>> values, List<String> commonLabel) {
         chartDiv = new Div();
         fullJsCode = constructJsCode(labels, values, commonLabel);
 
@@ -26,22 +26,28 @@ public class ChartView extends VerticalLayout {
         chartDiv.getElement().setProperty("innerHTML", "<canvas id=\"myChart\"></canvas>" + script);
     }
 
-    private String constructJsCode(List<String> labels, List<Double> values, String commonLabel) {
+    private String constructJsCode(List<String> labels, List<List<Double>> values, List<String> seriesLabels) {
         String formattedLabels = formatLabels(labels);
-        String formattedValues = formatValues(values);
+        StringBuilder dataSets = new StringBuilder();
+        for (int i = 0; i < values.size(); i++) {
+            dataSets.append("{")
+                    .append("label: '").append(seriesLabels.get(i)).append("',")
+                    .append("data: [").append(formatValues(values.get(i))).append("],")
+//                    .append("backgroundColor: '").append(BAR_COLOR).append("',")
+//                    .append("borderColor: '").append(BORDER_COLOR).append("',")
+                    .append("borderWidth: 1")
+                    .append("}");
+            if (i < values.size() - 1) {
+                dataSets.append(",");
+            }
+        }
 
         return String.format("var ctx = document.getElementById('myChart').getContext('2d');" +
                 "var myChart = new Chart(ctx, {" +
-                "type: 'bar'," +
+                "type: 'line'," +
                 "data: {" +
                 "labels: [%s]," +
-                "datasets: [{" +
-                "label: '%s'," +
-                "data: [%s]," +
-                "backgroundColor: '%s'," +
-                "borderColor: '%s'," +
-                "borderWidth: 1" +
-                "}]" +
+                "datasets: [%s]" +
                 "}," +
                 "options: {" +
                 "scales: {" +
@@ -50,7 +56,7 @@ public class ChartView extends VerticalLayout {
                 "}" +
                 "}" +
                 "}" +
-                "});", formattedLabels, commonLabel, formattedValues, BAR_COLOR, BORDER_COLOR);
+                "});", formattedLabels, dataSets);
     }
 
     private String formatLabels(List<String> labels) {

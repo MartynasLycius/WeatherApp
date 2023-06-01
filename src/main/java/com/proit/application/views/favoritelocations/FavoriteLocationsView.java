@@ -110,7 +110,7 @@ public class FavoriteLocationsView extends AbstractLocationView {
         addData(pageable, filterValue);
 
         ViewNotificationUtils.showNotification(
-                String.format("Location %s(%s) successfully removed from your favorite list", locationDto.getName(), locationDto.getAddress()),
+                String.format("Location %s successfully removed from your favorite list", locationDto.getName()),
                 NotificationVariant.LUMO_PRIMARY
         );
     }
@@ -136,6 +136,10 @@ public class FavoriteLocationsView extends AbstractLocationView {
     }
 
     private void navigateToPage(int page) {
+        if (page < 0) {
+            return;
+        }
+
         currentPage = page;
 
         Pageable pageable = PageRequest.of(currentPage, PAGE_SIZE, Sort.by(getSortOrder(grid.getSortOrder())));

@@ -16,6 +16,8 @@ public class HourlyDto implements Serializable {
     @JsonProperty("apparent_temperature")
     private List<Double> apparentTemperature;
 
+    private List<Double> rain;
+
     @JsonProperty("windspeed_10m")
     private List<Double> windSpeed10m;
 
