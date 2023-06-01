@@ -31,4 +31,12 @@ public final class DateTimeUtil {
 
         return LocalDateTime.parse(dateTimeString).format(formatter);
     }
+
+    public static boolean isDateInBetweenTwoDates(String date, String startDate, String endDate) {
+        LocalDateTime dateTimeToCheck = LocalDateTime.parse(date);
+        LocalDateTime startDateTimeToCheck = LocalDateTime.parse(startDate);
+        LocalDateTime endDateTimeToCheck = LocalDateTime.parse(endDate);
+
+        return dateTimeToCheck.isAfter(startDateTimeToCheck) && dateTimeToCheck.isBefore(endDateTimeToCheck);
+    }
 }

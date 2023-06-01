@@ -3,6 +3,7 @@ package com.proit.application.views.forecast;
 import com.proit.application.data.dto.WeatherDataDto;
 import com.proit.application.utils.DateTimeUtil;
 import com.proit.application.utils.WeatherCodeLookupUtil;
+import com.proit.application.utils.WeatherIconUtil;
 import com.proit.application.views.common.ChartView;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
@@ -123,10 +124,18 @@ public class HourlyWeatherForecastView extends Dialog {
 
     @NotNull
     private static Html prepareWeatherIcon(WeatherDataDto weatherData, int i) {
+        int day = i == 0 ? 0 : i / 24;
+        String description = WeatherCodeLookupUtil.getWeatherMessage(weatherData.getHourly().getWeatherCode().get(i));
+
         return new Html(
-                String.format("<i title=\"%s\" class=\"hour-weather-icon %s\"></i>",
-                        WeatherCodeLookupUtil.getWeatherMessage(weatherData.getHourly().getWeatherCode().get(i)),
-                        WeatherCodeLookupUtil.getWeatherIcon(weatherData.getHourly().getWeatherCode().get(i))
+                String.format("<img alt=\"%s\" title=\"%s\" style=\"margin-top: -10px\" src=\"%s\"></img>",
+                        description, description,
+                        WeatherIconUtil.getWeatherIconBasedOnTime(
+                                weatherData.getHourly().getWeatherCode().get(i),
+                                weatherData.getHourly().getTime().get(i),
+                                weatherData.getDaily().getSunrise().get(day),
+                                weatherData.getDaily().getSunset().get(day)
+                        )
                 )
         );
     }

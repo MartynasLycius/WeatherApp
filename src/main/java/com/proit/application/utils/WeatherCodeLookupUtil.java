@@ -3,12 +3,13 @@ package com.proit.application.utils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
 public final class WeatherCodeLookupUtil {
     private static final Map<Integer, String> weatherCodesMessageMap;
-    private static final Map<Integer, String> weatherCodesIconMap;
+    private static final Map<Integer, List<String>> weatherCodesIconMap;
 
     static {
         weatherCodesMessageMap = createWeatherCodesMessageMap();
@@ -58,45 +59,45 @@ public final class WeatherCodeLookupUtil {
         return map;
     }
 
-    private static Map<Integer, String> createWeatherCodesIconMap() {
+    private static Map<Integer, List<String>> createWeatherCodesIconMap() {
         log.info("Creating weather codes icon map");
 
-        var map = new HashMap<Integer, String>();
-        map.put(0, "fa fa-solid fa-sun sunny");
-        map.put(1, "fa fa-solid fa-sun sunny");
-        map.put(2, "fa-solid fa-cloud-sun");
-        map.put(3, "fa-solid fa-cloud");
+        var map = new HashMap<Integer, List<String>>();
+        map.put(0, List.of("day.svg", "night.svg"));
+        map.put(1, List.of("cloudy-day-1.svg", "cloudy-night-1.svg"));
+        map.put(2, List.of("cloudy-day-2.svg", "cloudy-night-2.svg"));
+        map.put(3, List.of("cloudy.svg"));
 
-        map.put(45, "fa-solid fa-smog");
-        map.put(48, "fa-solid fa-smog");
+        map.put(45, List.of("cloudy.svg"));
+        map.put(48, List.of("cloudy.svg"));
 
-        map.put(51, "fa-solid fa-droplet");
-        map.put(53, "fa-solid fa-droplet");
-        map.put(55, "fa-solid fa-droplet");
-        map.put(56, "fa-solid fa-droplet");
-        map.put(57, "fa-solid fa-droplet");
+        map.put(51, List.of("rainy-4.svg"));
+        map.put(53, List.of("rainy-5.svg"));
+        map.put(55, List.of("rainy-5.svg"));
+        map.put(56, List.of("rainy-6.svg"));
+        map.put(57, List.of("rainy-7.svg"));
 
-        map.put(61, "fa-solid fa-cloud-rain");
-        map.put(63, "fa-solid fa-cloud-rain");
-        map.put(65, "fa-solid fa-cloud-rain");
-        map.put(66, "fa-solid fa-cloud-showers-heavy");
-        map.put(67, "fa-solid fa-cloud-showers-heavy");
+        map.put(61, List.of("rainy-4.svg"));
+        map.put(63, List.of("rainy-4.svg"));
+        map.put(65, List.of("rainy-5.svg"));
+        map.put(66, List.of("rainy-6.svg"));
+        map.put(67, List.of("rainy-7.svg"));
 
-        map.put(71, "fa-solid fa-snowflake");
-        map.put(73, "fa-solid fa-snowflake");
-        map.put(75, "fa-solid fa-snowflake");
-        map.put(77, "fa-solid fa-snowflake");
+        map.put(71, List.of("snowy-4.svg"));
+        map.put(73, List.of("snowy-4.svg"));
+        map.put(75, List.of("snowy-5.svg"));
+        map.put(77, List.of("snowy-6.svg"));
 
-        map.put(80, "fa-solid fa-cloud-showers-water");
-        map.put(81, "fa-solid fa-cloud-showers-water");
-        map.put(82, "fa-solid fa-cloud-showers-water");
+        map.put(80, List.of("rainy-6.svg"));
+        map.put(81, List.of("rainy-7.svg"));
+        map.put(82, List.of("rainy-7.svg"));
 
-        map.put(85, "fa-solid fa-solid fa-snowflake");
-        map.put(86, "fa-solid fa-solid fa-snowflake");
+        map.put(85, List.of("snowy-6.svg"));
+        map.put(86, List.of("snowy-7.svg"));
 
-        map.put(95, "fa-solid fa-cloud-bolt");
-        map.put(96, "fa-solid fa-cloud-bolt");
-        map.put(99, "fa-solid fa-cloud-bolt");
+        map.put(95, List.of("thunder.svg"));
+        map.put(96, List.of("thunder.svg"));
+        map.put(99, List.of("thunder.svg"));
 
         return map;
     }
@@ -107,8 +108,8 @@ public final class WeatherCodeLookupUtil {
         return weatherCodesMessageMap.get(weatherCode);
     }
 
-    public static String getWeatherIcon(int weatherCode) {
-        log.debug("Getting weather icon for weather code: {}", weatherCode);
+    public static List<String> getWeatherIconsForWeatherCode(int weatherCode) {
+        log.debug("Getting weather icons for weather code: {}", weatherCode);
 
         return weatherCodesIconMap.get(weatherCode);
     }

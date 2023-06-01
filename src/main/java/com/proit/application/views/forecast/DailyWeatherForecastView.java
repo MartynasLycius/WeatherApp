@@ -1,19 +1,16 @@
 package com.proit.application.views.forecast;
 
-import com.proit.application.data.dto.DailyDto;
 import com.proit.application.data.dto.DailyFullDataDto;
 import com.proit.application.data.dto.LocationDto;
 import com.proit.application.data.dto.WeatherDataDto;
 import com.proit.application.utils.DateTimeUtil;
 import com.proit.application.utils.WeatherCodeLookupUtil;
+import com.proit.application.utils.WeatherIconUtil;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -21,7 +18,6 @@ import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.renderer.Renderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,133 +124,19 @@ public class DailyWeatherForecastView extends VerticalLayout {
                         + "    <span> ${item.date} </span>"
                         + "</vaadin-vertical-layout>"
         )
-                .withProperty("day", dailyFullDataDto -> {
-                    return DateTimeUtil.convertDateStringToDayAndDateString(dailyFullDataDto.getDate()).split(",")[0];
-                })
-                .withProperty("date", dailyFullDataDto -> {
-                    return DateTimeUtil.convertDateStringToDayAndDateString(dailyFullDataDto.getDate()).split(",")[1];
-                });
+                .withProperty("day", dailyFullDataDto -> DateTimeUtil.convertDateStringToDayAndDateString(dailyFullDataDto.getDate()).split(",")[0])
+                .withProperty("date", dailyFullDataDto -> DateTimeUtil.convertDateStringToDayAndDateString(dailyFullDataDto.getDate()).split(",")[1]);
     }
 
     private static Renderer<DailyFullDataDto> getWeatherRenderer() {
         return LitRenderer.<DailyFullDataDto>of(
                 "<vaadin-vertical-layout style=\"align-items: center;line-height: var(--lumo-line-height-s);\">"
-                        + "  <i class=\"day-weather-icon ${item.icon}\"></i>"
-                        + "  <span> ${item.description} </span>"
+                        + "  <img style=\"margin-top: -10px\" src=\"${item.icon}\"></img>"
+                        + "  <span style=\"margin-top: -15px\"> ${item.description} </span>"
                         + "</vaadin-vertical-layout>"
         )
-                .withProperty("icon", dailyFullDataDto -> {
-                    return WeatherCodeLookupUtil.getWeatherIcon(dailyFullDataDto.getWeatherCode());
-                })
-                .withProperty("description", dailyFullDataDto -> {
-                    return WeatherCodeLookupUtil.getWeatherMessage(dailyFullDataDto.getWeatherCode());
-                });
-    }
-
-    private Component preparePrecipitationSpan(WeatherDataDto weatherData, int dayIndex) {
-        var precipitationSpan = new Span();
-        precipitationSpan.addClassName("white-text");
-        precipitationSpan.add(
-                new Html("<i class=\"fa-solid fa-umbrella\"></i>"),
-                new Html(
-                        String.format("<span title=\"Precipitation Probability\">&nbsp;%s&nbsp;%s&nbsp;&nbsp;</span>",
-                                weatherData.getDaily().getPrecipitationProbabilityMax().get(dayIndex),
-                                weatherData.getDailyUnits().getPrecipitationProbabilityMax()
-                        )
-                ),
-                new Html("<i class=\"fa-solid fa-cloud-rain\"></i>"),
-                new Html(
-                        String.format("<span title=\"Total Rain\">&nbsp;%s&nbsp;%s</span>",
-                                weatherData.getDaily().getRainSum().get(dayIndex),
-                                weatherData.getDailyUnits().getRainSum()
-                        )
-                )
-
-        );
-
-        return precipitationSpan;
-    }
-
-    private Component prepareMinMaxTempSpan(WeatherDataDto weatherData, int dayIndex) {
-        var minMaxTempSpan = new Span();
-        minMaxTempSpan.addClassName("white-text");
-        minMaxTempSpan.setTitle("Daily Minimum and Maximum Temperature");
-        minMaxTempSpan.add(
-                new Html("<i class=\"fa-solid fa-temperature-arrow-down\"></i>"),
-                new Html(
-                        String.format("<span>&nbsp;%s&nbsp;%s&nbsp;&nbsp;</span>",
-                                weatherData.getDaily().getTemperature2mMin().get(dayIndex),
-                                weatherData.getDailyUnits().getTemperature2mMin()
-                        )
-                ),
-                new Html("<i class=\"fa-solid fa-temperature-arrow-up\"></i>"),
-                new Html(
-                        String.format("<span>&nbsp;%s&nbsp;%s</span>",
-                                weatherData.getDaily().getTemperature2mMax().get(dayIndex),
-                                weatherData.getDailyUnits().getTemperature2mMax()
-                        )
-                )
-        );
-
-        return minMaxTempSpan;
-    }
-
-    private Component prepareSunriseSunsetSpan(WeatherDataDto weatherData, int dayIndex) {
-        var sunriseSunsetSpan = new Span();
-        sunriseSunsetSpan.addClassName("white-text");
-        sunriseSunsetSpan.setTitle("Sunrise / Sunset");
-        sunriseSunsetSpan.add(
-                new Html("<i class=\"wi wi-sunrise\"></i>"),
-                new Html(
-                        String.format("<span>&nbsp;&nbsp;%s&nbsp;&nbsp;</span>",
-                                DateTimeUtil.convertDateTimeStringToTimeAmPmString(weatherData.getDaily().getSunrise().get(dayIndex))
-                        )
-                ),
-                new Html("<i class=\"wi wi-sunset\"></i>"),
-                new Html(
-                        String.format("<span>&nbsp;&nbsp;%s</span>",
-                                DateTimeUtil.convertDateTimeStringToTimeAmPmString(weatherData.getDaily().getSunset().get(dayIndex))
-                        )
-                )
-        );
-
-        return sunriseSunsetSpan;
-    }
-
-    private Component prepareWeatherIconAndDescLayout(WeatherDataDto weatherData, int dayIndex) {
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
-        Html weatherIcon = prepareWeatherIcon(weatherData, dayIndex);
-
-        Span weatherDescription = prepareWeatherDescription(weatherData, dayIndex);
-
-        horizontalLayout.add(weatherIcon, weatherDescription);
-        horizontalLayout.setJustifyContentMode(JustifyContentMode.AROUND);
-        horizontalLayout.addClassName("mb-s");
-
-        return horizontalLayout;
-    }
-
-    @NotNull
-    private static Span prepareWeatherDescription(WeatherDataDto weatherData, int dayIndex) {
-        Span weatherDescription = new Span();
-        weatherDescription.addClassName("weather-description");
-        weatherDescription.setText(WeatherCodeLookupUtil.getWeatherMessage(weatherData.getDaily().getWeatherCode().get(dayIndex)));
-        return weatherDescription;
-    }
-
-    @NotNull
-    private static Html prepareWeatherIcon(WeatherDataDto weatherData, int dayIndex) {
-        Html weatherIcon = new Html(String.format("<i class=\"day-weather-icon %s\"></i>", WeatherCodeLookupUtil.getWeatherIcon(weatherData.getDaily().getWeatherCode().get(dayIndex))));
-        weatherIcon.getElement().setProperty("title", WeatherCodeLookupUtil.getWeatherMessage(weatherData.getDaily().getWeatherCode().get(dayIndex)));
-        return weatherIcon;
-    }
-
-    private Component prepareDateSpan(WeatherDataDto weatherData, int dayIndex) {
-        var daySpan = new Span();
-        daySpan.addClassName("date");
-        daySpan.setText(DateTimeUtil.convertDateStringToDayAndDateString(weatherData.getDaily().getTime().get(dayIndex)));
-
-        return daySpan;
+                .withProperty("icon", dailyFullDataDto -> WeatherIconUtil.getWeatherIcon(dailyFullDataDto.getWeatherCode()))
+                .withProperty("description", dailyFullDataDto -> WeatherCodeLookupUtil.getWeatherMessage(dailyFullDataDto.getWeatherCode()));
     }
 
     private void openModal(WeatherDataDto weatherData, int i) {

@@ -64,12 +64,6 @@ public class LocationService {
         return locationRepository.findByExternalId(externalId);
     }
 
-    public Location saveLocation(Location location) {
-        log.debug("saveLocation: location={}", location);
-
-        return locationRepository.save(location);
-    }
-
     public Location saveLocation(LocationDto location) {
         log.debug("saveLocation: location={}", location);
 

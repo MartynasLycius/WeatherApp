@@ -30,9 +30,6 @@ import java.time.ZoneId;
 import java.util.Optional;
 import java.util.TimeZone;
 
-/**
- * The main view is a top-level placeholder for other views.
- */
 public class MainLayout extends AppLayout {
 
     private H2 viewTitle;
@@ -70,10 +67,6 @@ public class MainLayout extends AppLayout {
     }
 
     private AppNav createNavigation() {
-        // AppNav is not an official component.
-        // For documentation, visit https://github.com/vaadin/vcf-nav#readme
-        // Starting with v24.1, AppNav will be replaced with the official
-        // SideNav component.
         AppNav nav = new AppNav();
 
         if (accessChecker.hasAccess(SearchLocationView.class)) {
@@ -108,9 +101,7 @@ public class MainLayout extends AppLayout {
             div.getElement().getStyle().set("align-items", "center");
             div.getElement().getStyle().set("gap", "var(--lumo-space-s)");
             userName.add(div);
-            userName.getSubMenu().addItem("Sign out", e -> {
-                authenticatedUser.logout();
-            });
+            userName.getSubMenu().addItem("Sign out", e -> authenticatedUser.logout());
 
             layout.add(userMenu);
         } else {

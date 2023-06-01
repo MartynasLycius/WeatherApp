@@ -12,8 +12,6 @@ import java.util.List;
 
 @Repository
 public interface UserFavLocationRepository extends JpaRepository<UserFavLocation, Long>, JpaSpecificationExecutor<UserFavLocation> {
-    List<UserFavLocation> findAllByUserId(long userid);
-
     @Query("SELECT ufl.locationId FROM UserFavLocation ufl WHERE ufl.userId = :userId")
     List<Long> findLocationIdsByUserId(@Param("userId") Long userId);
 

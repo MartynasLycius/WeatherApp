@@ -12,9 +12,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class ChartView extends VerticalLayout {
-    private static final String BAR_COLOR = "rgba(247, 163, 92, 0.6)";
-    private static final String BORDER_COLOR = "rgba(35, 162, 247, 1)";
-
     private final Div chartDiv;
     private final String fullJsCode;
 
@@ -33,8 +30,6 @@ public class ChartView extends VerticalLayout {
             dataSets.append("{")
                     .append("label: '").append(seriesLabels.get(i)).append("',")
                     .append("data: [").append(formatValues(values.get(i))).append("],")
-//                    .append("backgroundColor: '").append(BAR_COLOR).append("',")
-//                    .append("borderColor: '").append(BORDER_COLOR).append("',")
                     .append("borderWidth: 1")
                     .append("}");
             if (i < values.size() - 1) {
