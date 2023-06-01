@@ -1,29 +1,36 @@
-# Weather Application
+# Weather App
 
-This is the job interview task for software developer position
+This project shows Daily and Hourly basis weather forecast service.Call this service to get Updated forecast data 
 
-## What to do
-* Fork the repository
-* After work is done, make a pull request and notify me by email
+ https://api.open-meteo.com/v1/forecast
 
-## Task description
-You need to use the Weather API provided here https://open-meteo.com/en to make the weather application. 
-1. Call the API to get the locations by city name. Make the paging available with 10 items per page and a filter to filter by location name.
-2. When clicked on the location it should show the weather forecast for the location with the temperature, surface wind and rain hourly. The interface should let you first see the daily forecast and when clicked it then should show the forecast hourly for the day you selected.
-3. If you UI contains a chart it is a bonus. The interface should be convenient for user and rely on best usability and design practises
-4. Only logged on users should be able to see the weather forecasts.
-5. User should be able to mark the location favourite and have the favourite location list for quick access.
+## Running the application
 
-All the other specific requirements are up to you
+Code pull from repository.
+Project import as Maven Project in IDE.
+Start/Run database server.
+Import weather_app.sql in database from project/  folder (structure and data)
+Update following DB server credential in application.properties file (if needed)
 
-## Technical requirements
-* Use  Vaadin (https://vaadin.com/) framework for the frontend. For chart you may use some different framework
-* For backend use Java EE
-* Use any database (Postgres, Oracle, etc.)
-* Make a Maven project
+spring.datasource.username=root
+spring.datasource.password= 
 
-## Main points
-* Structure your code
-* Use best practises
-* Use naming conventions
-* Show understanding of software development concepts
+Build and Run the application 
+Application will run on browser at http://localhost:8080
+
+Login credential :
+
+user name : admin
+passoword : admin1234 
+
+## Project structure
+
+- `MainLayout.java` in `src/main/java` contains the navigation setup (i.e., the
+  side/top bar and the main menu). 
+- `model` package in `src/main/java/backend` contains entities of the application.
+- `repository` package in `src/main/java/backend` contains the repository interfaces of the application.
+- `service` package in `src/main/java/backend` contains the service classes of the application.
+- `views` package in `src/main/java` contains the server-side Java views of your application.
+- `views` folder in `frontend/` contains the client-side JavaScript views of your application.
+
+
