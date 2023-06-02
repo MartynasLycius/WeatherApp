@@ -21,6 +21,7 @@ import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import org.jetbrains.annotations.NotNull;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
 import java.util.Optional;
@@ -85,18 +86,7 @@ public class MainLayout extends AppLayout {
         if (maybeUser.isPresent()) {
             User user = maybeUser.get();
 
-            MenuBar userMenu = new MenuBar();
-            userMenu.setThemeName("tertiary-inline contrast");
-
-            MenuItem userName = userMenu.addItem("");
-            Div div = new Div();
-            div.add(user.getName());
-            div.add(new Icon("lumo", "dropdown"));
-            div.getElement().getStyle().set("display", "flex");
-            div.getElement().getStyle().set("align-items", "center");
-            div.getElement().getStyle().set("gap", "var(--lumo-space-s)");
-            userName.add(div);
-            userName.getSubMenu().addItem("Sign out", e -> authenticatedUser.logout());
+            MenuBar userMenu = getUserMenu(user);
 
             layout.add(userMenu);
         } else {
@@ -105,6 +95,29 @@ public class MainLayout extends AppLayout {
         }
 
         return layout;
+    }
+
+    @NotNull
+    private MenuBar getUserMenu(User user) {
+        MenuBar userMenu = new MenuBar();
+        userMenu.setThemeName("tertiary-inline contrast");
+
+        MenuItem userName = userMenu.addItem("");
+        userName.add(getNameDiv(user));
+        userName.getSubMenu().addItem("Sign out", e -> authenticatedUser.logout());
+        return userMenu;
+    }
+
+    @NotNull
+    private static Div getNameDiv(User user) {
+        Div div = new Div();
+        div.add(user.getName());
+        div.add(new Icon("lumo", "dropdown"));
+        div.addClassName(LumoUtility.Padding.MEDIUM);
+        div.getElement().getStyle().set("display", "flex");
+        div.getElement().getStyle().set("align-items", "center");
+        div.getElement().getStyle().set("gap", "var(--lumo-space-m)");
+        return div;
     }
 
     @Override

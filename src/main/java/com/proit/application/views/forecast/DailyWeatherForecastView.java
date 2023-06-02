@@ -8,6 +8,7 @@ import com.proit.application.utils.WeatherCodeLookupUtil;
 import com.proit.application.utils.WeatherIconUtil;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
@@ -18,6 +19,7 @@ import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.renderer.Renderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +54,7 @@ public class DailyWeatherForecastView extends VerticalLayout {
         if (visible) {
             removeAll();
             log.debug("Populating weather forecast...");
-            populateWeatherForecast(weatherData);
+            constructView(weatherData);
         }
     }
 
@@ -62,26 +64,42 @@ public class DailyWeatherForecastView extends VerticalLayout {
         log.debug("DailyWeatherForecastView closed.");
     }
 
-    private void populateWeatherForecast(WeatherDataDto weatherData) {
-        H2 h2 = new H2();
-        h2.setText(String.format("Weather Forecast for %d Days", weatherData.getDaily().getTime().size()));
-        h2.setWidthFull();
+    private void constructView(WeatherDataDto weatherData) {
+        add(getHeader(weatherData));
 
-        Button closeButton = new Button(new Icon("lumo", "cross"));
-        closeButton.addClassNames(
-                LumoUtility.BorderColor.ERROR
+        configureAndAddGrid(weatherData);
+        this.addClassNames(
+                LumoUtility.BoxShadow.LARGE
         );
-        closeButton.addClickListener(e -> closeView());
+        log.debug("DailyWeatherForecastView populated with weather data.");
+    }
 
-        HorizontalLayout header = new HorizontalLayout();
-        header.add(h2, closeButton);
-        header.setJustifyContentMode(JustifyContentMode.BETWEEN);
-        header.setWidthFull();
-
-        add(header);
-
+    private void configureAndAddGrid(WeatherDataDto weatherData) {
         List<DailyFullDataDto> fullDataDtos = convertWeatherDtoToDailyFullDataDto(weatherData);
+
         Grid<DailyFullDataDto> grid = new Grid<>(DailyFullDataDto.class, false);
+        configureGridColumns(grid);
+
+        grid.setItems(fullDataDtos);
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+
+        grid.addClassNames(
+                LumoUtility.Background.BASE
+        );
+
+        add(grid);
+
+        // Adding listener to grid to open modal with detailed weather data
+        grid.asSingleSelect().addValueChangeListener(e -> {
+            if (e.getValue() == null) {
+                return;
+            }
+
+            openModal(weatherData, e.getValue().getDay() - 1);
+        });
+    }
+
+    private void configureGridColumns(Grid<DailyFullDataDto> grid) {
         grid.addColumn(getDayAndDateRenderer())
                 .setHeader("Day");
         grid.addColumn(getWeatherRenderer())
@@ -97,24 +115,25 @@ public class DailyWeatherForecastView extends VerticalLayout {
             column.setAutoWidth(true);
             column.setSortable(false);
         });
-        grid.setItems(fullDataDtos);
-        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+    }
 
-        grid.addClassNames(
-                LumoUtility.Background.BASE
-        );
-        add(grid);
-        grid.asSingleSelect().addValueChangeListener(e -> {
-            if (e.getValue() == null) {
-                return;
-            }
+    @NotNull
+    private HorizontalLayout getHeader(WeatherDataDto weatherData) {
+        H2 h2 = new H2();
+        h2.setText(String.format("Weather Forecast for %d Days", weatherData.getDaily().getTime().size()));
 
-            openModal(weatherData, e.getValue().getDay() - 1);
-        });
-        this.addClassNames(
-                LumoUtility.BoxShadow.LARGE
+        Button closeButton = new Button(new Icon("lumo", "cross"));
+        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        closeButton.addClassNames(
+                LumoUtility.BorderColor.ERROR
         );
-        log.debug("DailyWeatherForecastView populated with weather data.");
+        closeButton.addClickListener(e -> closeView());
+
+        HorizontalLayout header = new HorizontalLayout();
+        header.add(h2, closeButton);
+        header.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        header.setWidthFull();
+        return header;
     }
 
     private static Renderer<DailyFullDataDto> getDayAndDateRenderer() {
@@ -147,6 +166,7 @@ public class DailyWeatherForecastView extends VerticalLayout {
 
     private List<DailyFullDataDto> convertWeatherDtoToDailyFullDataDto(WeatherDataDto weatherDataDto) {
         List<DailyFullDataDto> dailyFullDataDtoList = new ArrayList<>();
+
         for (int i = 0; i < weatherDataDto.getDaily().getWeatherCode().size(); i++) {
             DailyFullDataDto dailyFullDataDto = DailyFullDataDto.builder()
                     .day(i + 1)

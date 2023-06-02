@@ -6,6 +6,7 @@ import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,17 +26,7 @@ public class ChartView extends VerticalLayout {
 
     private String constructJsCode(List<String> labels, List<List<Double>> values, List<String> seriesLabels) {
         String formattedLabels = formatLabels(labels);
-        StringBuilder dataSets = new StringBuilder();
-        for (int i = 0; i < values.size(); i++) {
-            dataSets.append("{")
-                    .append("label: '").append(seriesLabels.get(i)).append("',")
-                    .append("data: [").append(formatValues(values.get(i))).append("],")
-                    .append("borderWidth: 1")
-                    .append("}");
-            if (i < values.size() - 1) {
-                dataSets.append(",");
-            }
-        }
+        StringBuilder dataSets = getPreparedDataSets(values, seriesLabels);
 
         return String.format("var ctx = document.getElementById('myChart').getContext('2d');" +
                 "var myChart = new Chart(ctx, {" +
@@ -81,6 +72,22 @@ public class ChartView extends VerticalLayout {
                 "});", formattedLabels, dataSets);
     }
 
+    @NotNull
+    private StringBuilder getPreparedDataSets(List<List<Double>> values, List<String> seriesLabels) {
+        StringBuilder dataSets = new StringBuilder();
+        for (int i = 0; i < values.size(); i++) {
+            dataSets.append("{")
+                    .append("label: '").append(seriesLabels.get(i)).append("',")
+                    .append("data: [").append(formatValues(values.get(i))).append("],")
+                    .append("borderWidth: 1")
+                    .append("}");
+            if (i < values.size() - 1) {
+                dataSets.append(",");
+            }
+        }
+        return dataSets;
+    }
+
     private String formatLabels(List<String> labels) {
         return labels.stream()
                 .map(DateTimeUtil::convertDateTimeStringToTimeAmPmString)
@@ -95,9 +102,9 @@ public class ChartView extends VerticalLayout {
 
     @Override
     protected void onAttach(AttachEvent attachEvent) {
-        super.onAttach(attachEvent);
-
         log.debug("Attaching chart to view");
+
+        super.onAttach(attachEvent);
 
         chartDiv.getElement().executeJs(fullJsCode);
         add(chartDiv);

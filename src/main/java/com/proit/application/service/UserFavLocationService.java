@@ -40,9 +40,8 @@ public class UserFavLocationService {
     }
 
     public void removeFromFavoriteLocation(long externalId, long userId) {
-        userFavLocationRepository.deleteByUserIdAndLocationId(userService.getCurrentUserId(), locationService.getLocationIdByExternalId(externalId));
+        userFavLocationRepository.deleteByUserIdAndLocationId(userId, locationService.getLocationIdByExternalId(externalId));
     }
-
 
     public void addNewUserFavoriteLocation(LocationDto location) {
         log.debug("addNewUserFavoriteLocation called with location={}", location);

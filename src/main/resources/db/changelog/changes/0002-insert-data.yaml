@@ -16,7 +16,7 @@ databaseChangeLog:
                   value: user
               - column:
                   name: name
-                  value: first user
+                  value: First User
               - column:
                   name: hashed_password
                   value: $2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW
@@ -31,7 +31,7 @@ databaseChangeLog:
                   value: admin
               - column:
                   name: name
-                  value: admin user
+                  value: Admin User
               - column:
                   name: hashed_password
                   value: $2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW
