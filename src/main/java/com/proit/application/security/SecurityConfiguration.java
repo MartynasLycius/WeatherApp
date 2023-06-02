@@ -14,6 +14,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 public class SecurityConfiguration extends VaadinWebSecurity {
 
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -26,8 +27,18 @@ public class SecurityConfiguration extends VaadinWebSecurity {
 
         // Icons from the line-awesome addon
         http.authorizeHttpRequests().requestMatchers(new AntPathRequestMatcher("/line-awesome/**/*.svg")).permitAll();
+
+        http.formLogin()
+                .loginPage("/login")
+                    .defaultSuccessUrl("/search", true)
+                        .permitAll()
+                        .and()
+                .logout()
+                        .logoutSuccessUrl("/login")
+                        .permitAll();
+
         super.configure(http);
+
         setLoginView(http, LoginView.class);
     }
-
 }
