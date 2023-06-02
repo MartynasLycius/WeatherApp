@@ -3,7 +3,6 @@ package com.proit.application.service;
 import com.proit.application.data.dto.LocationDto;
 import com.proit.application.data.dto.WeatherDataDto;
 import com.proit.application.restclient.WeatherRestClient;
-import com.proit.application.utils.UserUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +32,7 @@ public class WeatherDataService {
     public WeatherDataDto getWeatherData(double lat, double lang) {
         log.debug("getWeatherData: lat={}, lang={}", lat, lang);
 
-        return weatherRestClient.getWeatherData(lat, lang, UserUtil.getUserTimezone());
+        return weatherRestClient.getWeatherData(lat, lang);
     }
 
     private void markUserFavoriteLocations(List<LocationDto> list) {

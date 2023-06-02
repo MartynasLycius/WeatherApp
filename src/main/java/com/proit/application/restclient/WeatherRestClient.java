@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface WeatherRestClient {
     List<LocationDto> getLocations(String query);
-    WeatherDataDto getWeatherData(double lat, double lang, String timezone);
+    WeatherDataDto getWeatherData(double lat, double lang);
 }

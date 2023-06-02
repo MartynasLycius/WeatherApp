@@ -6,8 +6,6 @@ import com.proit.application.data.entity.User;
 import com.proit.application.security.AuthenticatedUser;
 import com.proit.application.views.favoritelocations.FavoriteLocationsView;
 import com.proit.application.views.searchlocation.SearchLocationView;
-import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.contextmenu.MenuItem;
@@ -21,14 +19,11 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
-import java.time.ZoneId;
 import java.util.Optional;
-import java.util.TimeZone;
 
 public class MainLayout extends AppLayout {
 
@@ -121,14 +116,5 @@ public class MainLayout extends AppLayout {
     private String getCurrentPageTitle() {
         PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
         return title == null ? "" : title.value();
-    }
-
-    @Override
-    protected void onAttach(AttachEvent attachEvent) {
-        UI.getCurrent().getPage().retrieveExtendedClientDetails(details -> {
-            TimeZone uiTimeZone = TimeZone.getTimeZone(details.getTimeZoneId());
-            VaadinSession session = VaadinSession.getCurrent();
-            session.setAttribute(ZoneId.class, uiTimeZone.toZoneId());
-        });
     }
 }

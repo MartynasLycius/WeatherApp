@@ -62,14 +62,14 @@ public class OpenMeteoClient implements WeatherRestClient {
     }
 
     @Override
-    public WeatherDataDto getWeatherData(double lat, double lang, String timezone) {
-        log.info("Fetching weather data for latitude: {}, longitude: {}, timezone: {}", lat, lang, timezone);
+    public WeatherDataDto getWeatherData(double lat, double lang) {
+        log.info("Fetching weather data for latitude: {}, longitude: {}", lat, lang);
 
-        String requestUrl = String.format(dailyWeatherForecastApiLink, openMeteoForecastBaseUrl, lat, lang, timezone);
+        String requestUrl = String.format(dailyWeatherForecastApiLink, openMeteoForecastBaseUrl, lat, lang);
         var request = buildRequest(requestUrl);
 
         try (Response response = httpClient.newCall(request).execute()) {
-            log.info("Successfully fetched weather data for latitude: {}, longitude: {}, timezone: {}", lat, lang, timezone);
+            log.info("Successfully fetched weather data for latitude: {}, longitude: {}", lat, lang);
 
             var responseBodyObj = response.body();
             return responseBodyObj != null ? parseWeatherData(responseBodyObj.string()) : null;
