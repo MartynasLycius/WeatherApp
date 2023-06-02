@@ -45,11 +45,38 @@ public class ChartView extends VerticalLayout {
                 "datasets: [%s]" +
                 "}," +
                 "options: {" +
-                "scales: {" +
-                "y: {" +
-                "beginAtZero: true" +
-                "}" +
-                "}" +
+                    "responsive: true," +
+                    "interaction: {" +
+                    "      mode: 'index'," +
+                    "      intersect: false" +
+                    "    }," +
+                    "    plugins: {" +
+                        "      tooltip: {" +
+                        "        mode: 'index'," +
+                        "        intersect: false" +
+                        "      }" +
+                        "    }," +
+                    "    hover: {" +
+                        "      mode: 'index'," +
+                        "      intersect: false" +
+                        "    }," +
+                    "scales: {" +
+                        "      x: {" +
+                        "        display: true," +
+                        "        title: {" +
+                        "          display: true," +
+                        "          text: 'Month'" +
+                        "        }" +
+                        "      }," +
+                        "      y: {" +
+                        "        display: true," +
+                        "        beginAtZero: true," +
+                        "        title: {" +
+                        "          display: true," +
+                        "          text: 'Value'" +
+                        "        }" +
+                        "      }" +
+                        "    }" +
                 "}" +
                 "});", formattedLabels, dataSets);
     }
