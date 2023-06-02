@@ -32,9 +32,7 @@ public class LocationService {
     public Page<LocationDto> getAllFavoriteLocationOfUser(Pageable pageable, String locationNameFilter, Long userId) {
         log.info("getAllFavoriteLocationOfCurrentUser: pageable={}, locationNameFilter={}, userId={}", pageable, locationNameFilter, userId);
 
-        Long currentUserId = userService.getCurrentUserId();
-
-        var locationIds = userFavLocationRepository.findLocationIdsByUserId(currentUserId);
+        var locationIds = userFavLocationRepository.findLocationIdsByUserId(userId);
 
         Specification<Location> specification = Specification.where(LocationSpecifications.withIdIn(locationIds));
 
