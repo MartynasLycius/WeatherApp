@@ -1,6 +1,15 @@
 # Weather App
 
-This project is a Spring Boot Vaadin application that utilizes the Maven package manager. It includes integration with PostgreSQL using Docker Compose. The application also uses Liquibase for managing database script versioning.
+In is a weather forecast application that allows users to search for weather information for any location. Users can also save their favorite locations for easy access.
+
+This project mainly usages Spring Boot and Vaadin. It also usages PostgreSQL database; and Liquibase for managing database script versioning.
+
+## Features
+- Search for any location
+- See 7-day weather forecast for any location
+- See hourly weather forecast for any location
+- Save favorite locations for easy access
+- Remove location from favorite list
 
 ## Prerequisites
 To run this project, ensure that you have the following installed:
@@ -9,8 +18,9 @@ To run this project, ensure that you have the following installed:
 - Docker Compose
 
 ## Running the Application
-1. Navigate to Project Directory
-2. Start the PostgreSQL, Redis and App using Docker Compose. Run the following command:
+1. 
+2. Navigate to Project Directory
+2. Start the PostgreSQL server and App using Docker Compose. Run the following command:
   ```
   docker-compose up
   ```
