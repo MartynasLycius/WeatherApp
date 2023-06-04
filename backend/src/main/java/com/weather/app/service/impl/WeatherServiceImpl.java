@@ -27,6 +27,7 @@ public class WeatherServiceImpl implements WeatherService {
      */
     @Override
     public ResponseEntity<DailyWeatherResponseModel> getDailyWeather(String timezone, String latitude, String longitude) {
+
         WebClient webClient = WebClient.create(Constants.WEATHER_BASE_URL);
         String uri = Constants.WEATHER_URI_DAILY.replaceAll(Constants.LATITUDE_PARAM, String.valueOf(latitude))
                 .replaceAll(Constants.LONGITUDE_PARAM, longitude)
