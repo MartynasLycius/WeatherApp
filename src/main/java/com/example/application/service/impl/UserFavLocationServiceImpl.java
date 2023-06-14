@@ -4,7 +4,6 @@ import com.example.application.data.dto.LocationDto;
 import com.example.application.data.entity.Location;
 import com.example.application.data.entity.UserFavLocation;
 import com.example.application.data.repository.UserFavLocationRepository;
-import com.example.application.data.specifications.LocationSpecifications;
 import com.example.application.service.LocationService;
 import com.example.application.service.UserFavLocationService;
 import com.example.application.service.UserService;
@@ -12,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,19 +36,12 @@ public class UserFavLocationServiceImpl implements UserFavLocationService {
     }
 
     public Page<LocationDto> getAllFavoriteLocationOfCurrentUser(Pageable pageable, String locationNameFilter) {
-        log.debug("getAllFavoriteLocationOfCurrentUser: pageable={}, locationNameFilter={}", pageable, locationNameFilter);
 
         Long currentUserId = userService.getCurrentUserId();
 
         var locationIds = userFavLocationRepository.findLocationIdsByUserId(currentUserId);
 
-        Specification<Location> specification = Specification.where(LocationSpecifications.withIdIn(locationIds));
-
-        if (locationNameFilter != null && !locationNameFilter.isEmpty()) {
-            specification = specification.and(LocationSpecifications.withName(locationNameFilter));
-        }
-
-        Page<Location> locations = locationService.findAll(specification, pageable);
+        Page<Location> locations = locationService.findAllByLocationIdIn(locationIds, pageable);
         return locations.map(locationService::mapLocationToLocationDto);
     }
 

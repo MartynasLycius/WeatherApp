@@ -4,7 +4,6 @@ import com.example.application.data.dto.LocationDto;
 import com.example.application.data.entity.Location;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.Set;
@@ -15,7 +14,7 @@ public interface LocationService {
 
     Long getIdByLocationId(Long locationId);
 
-    Page<Location> findAll(Specification<Location> specification, Pageable pageable);
+    Page<Location> findAllByLocationIdIn(List<Long> locationIds, Pageable pageable);
 
     LocationDto mapLocationToLocationDto(Location location);
 

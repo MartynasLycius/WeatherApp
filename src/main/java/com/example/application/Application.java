@@ -6,7 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-//@NpmPackage(value = "@fontsource/open-sans", version = "4.5.0")
 @Theme(value = "weatherapp")
 public class Application implements AppShellConfigurator {
 

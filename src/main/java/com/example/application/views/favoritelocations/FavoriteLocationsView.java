@@ -13,16 +13,13 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.renderer.Renderer;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
@@ -82,8 +79,6 @@ public class FavoriteLocationsView extends VerticalLayout {
     }
 
 
-
-
     protected Component getContent() {
         var content = new HorizontalLayout(grid, dailyWeatherForecastView);
         content.setWidthFull();
@@ -122,18 +117,8 @@ public class FavoriteLocationsView extends VerticalLayout {
             addData(pageable, filterValue);
         });
 
-        gridFilterTextField.setPlaceholder("Filter by name");
-        gridFilterTextField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
-        gridFilterTextField.setValueChangeMode(ValueChangeMode.EAGER);
-        gridFilterTextField.addValueChangeListener(e -> onGridFilterTextFieldValueChange(e.getValue()));
-
-        var headerRow = grid.appendHeaderRow();
-        headerRow.getCell(grid.getColumnByKey("name")).setComponent(gridFilterTextField);
-        headerRow.getCell(grid.getColumnByKey("name")).setComponent(gridFilterTextField);
-
         grid.asSingleSelect().addValueChangeListener(e -> openWeatherForecastViewFor(e.getValue()));
     }
-
 
 
     protected void openWeatherForecastViewFor(LocationDto location) {
@@ -156,12 +141,6 @@ public class FavoriteLocationsView extends VerticalLayout {
 
     protected void updateGridItems(List<LocationDto> locations) {
         dataView = grid.setItems(locations);
-    }
-
-    protected void onGridFilterTextFieldValueChange(String value) {
-        currentPage = 0;
-        Pageable pageable = PageRequest.of(currentPage, PAGE_SIZE, Sort.by("name").ascending());
-        addData(pageable, value);
     }
 
     private Button createDeleteButton(LocationDto locationDto) {
@@ -195,10 +174,7 @@ public class FavoriteLocationsView extends VerticalLayout {
         Pageable pageable = PageRequest.of(currentPage, PAGE_SIZE, Sort.by("name").ascending());
         addData(pageable, filterValue);
 
-        ViewNotificationUtils.showNotification(
-                String.format("Location %s(%s) successfully removed from your favorite list", locationDto.getName(), locationDto.getAddress()),
-                NotificationVariant.LUMO_PRIMARY
-        );
+        ViewNotificationUtils.showNotification("Location " + locationDto.getName() + " successfully removed from your favorite list");
     }
 
     private Component createPaginationButtons() {
