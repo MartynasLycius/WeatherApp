@@ -1,58 +1,14 @@
 package com.example.application.service;
 
-import com.example.application.data.entity.User;
-import com.example.application.data.repository.UserRepository;
-import com.vaadin.flow.spring.security.AuthenticationContext;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
-@Service
-@Slf4j
-@RequiredArgsConstructor
-public class UserService {
+public interface UserService {
 
-    private final UserRepository repository;
+    boolean isUserLoggedIn();
 
-    private final AuthenticationContext authenticationContext;
+    Long getCurrentUserId();
 
+    void logout();
 
-    public UserDetails getUserDetails() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails userDetails) {
-            return userDetails;
-        }
-
-        return null;
-    }
-
-    public boolean isUserLoggedIn() {
-        log.debug("isUserLoggedIn called");
-
-        return getUserDetails() != null;
-    }
-
-    public Long getCurrentUserId() {
-        log.debug("getCurrentUserId called");
-
-        UserDetails userDetails = getUserDetails();
-        if (userDetails == null) {
-            return null;
-        }
-
-        String username = userDetails.getUsername();
-
-        User user = repository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException("Invalid User"));
-
-        return user.getId();
-    }
-
-    public void logout() {
-        authenticationContext.logout();
-    }
-
+    UserDetails getUserDetails();
 }
