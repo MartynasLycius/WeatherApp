@@ -24,7 +24,7 @@ public class HourlyWeatherForecastView extends Dialog {
         int start = dayIndex * 24;
         List<Double> temperature_2m = weatherData.getHourly().getTemperature_2m();
 
-        prepareChartView(weatherData, temperature_2m, start);
+        prepareChartView(weatherData, start);
 
         prepareHoursForeCast(weatherData, start, temperature_2m);
     }
@@ -139,7 +139,7 @@ public class HourlyWeatherForecastView extends Dialog {
         return timeDiv;
     }
 
-    private void prepareChartView(WeatherForecastResponse weatherData, List<Double> temperature_2m, int start) {
+    private void prepareChartView(WeatherForecastResponse weatherData, int start) {
         ChartView chartView = new ChartView(
                 weatherData.getHourly().getTime().subList(start, start + 24),
                 getChartData(weatherData, start),

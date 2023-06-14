@@ -27,8 +27,6 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
-import java.util.List;
-
 import static com.example.application.views.favoritelocations.FavoriteLocationsView.createLocationDetailsRenderer;
 
 @PageTitle("Search Location")

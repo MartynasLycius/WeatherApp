@@ -1,7 +1,6 @@
 package com.example.application.views.favoritelocations;
 
 import com.example.application.data.dto.LocationDto;
-import com.example.application.service.LocationService;
 import com.example.application.service.UserFavLocationService;
 import com.example.application.service.UserService;
 import com.example.application.service.WeatherDataService;
@@ -51,7 +50,6 @@ public class FavoriteLocationsView extends VerticalLayout {
     protected final Grid<LocationDto> grid;
     protected GridListDataView<LocationDto> dataView;
     protected DailyWeatherForecastView dailyWeatherForecastView = new DailyWeatherForecastView();
-    ;
     protected final TextField gridFilterTextField;
 
     public FavoriteLocationsView(WeatherDataService weatherDataService, UserFavLocationService userFavLocationService, UserService userService) {

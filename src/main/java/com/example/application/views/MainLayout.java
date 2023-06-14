@@ -88,9 +88,7 @@ public class MainLayout extends AppLayout {
             div.add(userService.getUserDetails().getUsername());
             div.add(new Icon("lumo", "dropdown"));
             userName.add(div);
-            userName.getSubMenu().addItem("Sign out", e -> {
-                userService.logout();
-            });
+            userName.getSubMenu().addItem("Sign out", e -> userService.logout());
 
             layout.add(userMenu);
         } else {
