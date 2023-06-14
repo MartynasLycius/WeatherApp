@@ -1,0 +1,26 @@
+server:
+  port: 8081
+vaadin:
+  launch-browser: true
+  whitelisted-packages: com.vaadin,org.vaadin,dev.hilla,com.example.application
+
+
+spring:
+  jpa:
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+  profiles:
+    active: dev
+
+open:
+  meteo:
+    forecast:
+      base-url: https://api.open-meteo.com/v1
+    location:
+      base-url: https://geocoding-api.open-meteo.com/v1
+
+    api:
+      location-search: ${open.meteo.location.base-url}/search?name={0}&count=100&language=en&format=json
+      daily-forcast: ${open.meteo.forecast.base-url}/forecast?latitude={0}&longitude={1}&timezone={2}&hourly=temperature_2m,apparent_temperature,windspeed_10m,weathercode,precipitation_probability,rain&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,windspeed_10m_max,rain_sum

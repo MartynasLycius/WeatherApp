@@ -1,29 +1,40 @@
-# Weather Application
+# Weather App
 
-This is the job interview task for software developer position
+In is a weather forecast application that allows users to search for weather information for any location. Users can also save their favorite locations for future easy access.
 
-## What to do
-* Fork the repository
-* After work is done, make a pull request and notify me by email
+This project mainly usages Spring Boot, Vaadin and PostgreSQL database.
 
-## Task description
-You need to use the Weather API provided here https://open-meteo.com/en to make the weather application. 
-1. Call the API to get the locations by city name. Make the paging available with 10 items per page and a filter to filter by location name.
-2. When clicked on the location it should show the weather forecast for the location with the temperature, surface wind and rain hourly. The interface should let you first see the daily forecast and when clicked it then should show the forecast hourly for the day you selected.
-3. If you UI contains a chart it is a bonus. The interface should be convenient for user and rely on best usability and design practises
-4. Only logged on users should be able to see the weather forecasts.
-5. User should be able to mark the location favourite and have the favourite location list for quick access.
+## Features
+- Search for any location
+- filter by city name
+- 7 day weather forecast
+- Hourly forecast with chart view
+- Save favorite locations for future
+- Remove location from favorite list
 
-All the other specific requirements are up to you
+## Prerequisites
+To run this project, ensure that you have the following installed:
 
-## Technical requirements
-* Use  Vaadin (https://vaadin.com/) framework for the frontend. For chart you may use some different framework
-* For backend use Java EE
-* Use any database (Postgres, Oracle, etc.)
-* Make a Maven project
+- PostgreSQL
 
-## Main points
-* Structure your code
-* Use best practises
-* Use naming conventions
-* Show understanding of software development concepts
+## Running the Application
+1. Navigate to Project Directory
+2. Start the PostgreSQL server and add PostgeSql connection string (url, username and password) to application-dev.yml 
+3. Run the app and you can access the application using the following URL,
+```
+localhost:8080
+```
+
+# Default Users
+
+Here one default user is added and credentials are shared below 
+
+* User 1:
+  * Username: user1
+  * Password: password
+
+
+* User 2:
+  * Username: user2
+  * Password: password
+
