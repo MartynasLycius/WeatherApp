@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,9 +18,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
 
     private final AuthenticationContext authenticationContext;
+
+    private final PasswordEncoder passwordEncoder;
 
 
     public UserDetails getUserDetails() {
@@ -28,6 +31,19 @@ public class UserServiceImpl implements UserService {
             return userDetails;
         }
         return null;
+    }
+
+    public void addUser(Long id, String username, String password) {
+        User user = User.builder()
+                .id(id)
+                .name(username)
+                .enabled(true)
+                .password(passwordEncoder.encode(password))
+                .username(username)
+                .build();
+
+        if (!userRepository.existsById(user.getId()))
+            userRepository.save(user);
     }
 
     public boolean isUserLoggedIn() {
@@ -42,7 +58,7 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         String username = userDetails.getUsername();
-        User user = repository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException("Invalid User"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Invalid User"));
         return user.getId();
     }
 

@@ -1,6 +1,7 @@
 package com.example.application.views.login;
 
 import com.example.application.service.UserService;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -42,5 +43,12 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
         }
 
         setError(event.getLocation().getQueryParameters().getParameters().containsKey("error"));
+    }
+
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        userService.addUser(1L, "user1", "password");
+        userService.addUser(2L, "user2", "password");
+        super.onAttach(attachEvent);
     }
 }
