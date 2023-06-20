@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu:400,400i&display=swap&subset=latin-ext');
+
+body {
+    background-color: #e8dee1;
+}
+
+body, .buttonCheckWeather {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.buttonCheckWeather {
+    color: #2DE1C2;
+    border: 1px solid #FFFFFF;
+}
+
+.labelCityAndCountry {
+    font-size: 25px;
+}
+
+.labelWind, .labelLocation {
+    color: #2DE1C2;
+}
+
+.labelCityAndCountry, .labelTemperature, .labelPressure, .labelWindSpeed, .labelWindDegrees, .labelLocationLongitude, .labelLocationLatitude {
+    color: #FFFFFF;
+}
+
+.v-reconnect-dialog {
+    color: #FFF;
+    border: 1px solid #FFF;
+}
