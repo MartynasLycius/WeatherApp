@@ -1,0 +1,23 @@
+<dom-module id="text-field-theme" theme-for="vaadin-text-field">
+    <template>
+        <style>
+            [part="input-field"] {
+                font-family: 'Ubuntu', sans-serif;
+                border: 1px solid #FFFFFF;
+            }
+
+            [part="label"] {
+                font-family: 'Ubuntu', sans-serif;
+                color: #FFFFFF;
+            }
+
+            :host([focused]:not([readonly])) [part="label"] {
+                color: #2DE1C2;
+            }
+
+            [part="value"] {
+                color: #2DE1C2;
+            }
+        </style>
+    </template>
+</dom-module>
