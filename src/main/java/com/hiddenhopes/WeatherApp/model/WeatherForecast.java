@@ -1,4 +1,5 @@
 package com.hiddenhopes.WeatherApp.model;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
@@ -21,7 +22,7 @@ public class WeatherForecast {
     private WeeklyData daily;
 
     @JsonProperty("hourly_units")
-    private Map<String,String> hourlyUnits;
+    private Map<String, String> hourlyUnits;
     private HourlyData hourly;
 
     public double getLatitude() {

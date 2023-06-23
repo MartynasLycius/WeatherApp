@@ -1,8 +1,11 @@
 package com.hiddenhopes.WeatherApp.model;
+
 public class DailyData {
     private String time;
     private double temperature2mMax;
     private double temperature2mMin;
+    private double rainSum;
+    private double windspeed10mMax;
 
     public String getTime() {
         return time;
@@ -44,6 +47,5 @@ public class DailyData {
         this.windspeed10mMax = windspeed10mMax;
     }
 
-    private double rainSum;
-    private double windspeed10mMax;
+
 }

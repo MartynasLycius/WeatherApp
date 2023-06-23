@@ -3,6 +3,7 @@ package com.hiddenhopes.WeatherApp.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+
 public class Location implements Serializable {
 
     private long id;
@@ -24,6 +25,7 @@ public class Location implements Serializable {
 
     @JsonProperty("timezone")
     private String timezone;
+
     public long getId() {
         return id;
     }
