@@ -1,4 +1,4 @@
-package com.hiddenhopes.WeatherApp.model;
+package com.hiddenhopes.WeatherApp.dto;
 
 public class GeocodingApiResponse {
     private Location[] results;

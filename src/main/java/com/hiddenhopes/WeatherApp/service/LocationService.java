@@ -1,6 +1,6 @@
 package com.hiddenhopes.WeatherApp.service;
 
-import com.hiddenhopes.WeatherApp.model.Location;
+import com.hiddenhopes.WeatherApp.dto.Location;
 
 import java.util.List;
 

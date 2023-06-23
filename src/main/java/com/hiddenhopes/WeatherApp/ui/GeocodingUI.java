@@ -2,7 +2,7 @@ package com.hiddenhopes.WeatherApp.ui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hiddenhopes.WeatherApp.Constant;
-import com.hiddenhopes.WeatherApp.model.*;
+import com.hiddenhopes.WeatherApp.dto.*;
 import com.hiddenhopes.WeatherApp.service.LocationService;
 import com.vaadin.flow.component.HtmlComponent;
 import com.vaadin.flow.component.button.Button;
@@ -11,8 +11,12 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -23,6 +27,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Route("")
+@PageTitle("Geocoding")
+@PermitAll
 public class GeocodingUI extends VerticalLayout {
 
     private final LocationService geocodingService;
@@ -31,15 +37,11 @@ public class GeocodingUI extends VerticalLayout {
     private final Dialog dailyWeatherDialog;
     private final Dialog hourlyWeatherDialog;
     private final HtmlComponent dailyChart;
+    private final Button logoutButton;
 
     @Autowired
     public GeocodingUI(LocationService geocodingService) {
         this.geocodingService = geocodingService;
-        this.dailyWeatherDialog = createDialog("90%", "90%");
-        this.hourlyWeatherDialog = createDialog("90%", "90%");
-        this.dailyChart = new HtmlComponent("canvas");
-        dailyChart.setId("chartCanvas");
-        dailyChart.setHeight("400px");
 
         searchField = new TextField("Search");
         searchField.setPlaceholder("Enter location name");
@@ -58,7 +60,14 @@ public class GeocodingUI extends VerticalLayout {
             }
         });
 
-        add(searchField, grid);
+        dailyWeatherDialog = createDialog("90%", "90%");
+        hourlyWeatherDialog = createDialog("90%", "90%");
+        dailyChart = new HtmlComponent("canvas");
+        dailyChart.setId("chartCanvas");
+        dailyChart.setHeight("400px");
+        logoutButton = new Button("Logout", e -> logout());
+
+        add(searchField, grid, logoutButton);
         setWidth("100%");
         setHeight("100%");
 
@@ -235,5 +244,13 @@ public class GeocodingUI extends VerticalLayout {
                 "    }\n" +
                 "});";
         return chartScript;
+    }
+
+    private void logout() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            SecurityContextHolder.clearContext();
+            getUI().ifPresent(ui -> ui.navigate(LoginView.class));
+        }
     }
 }

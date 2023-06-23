@@ -1,7 +1,7 @@
 package com.hiddenhopes.WeatherApp.serviceImpl;
 
-import com.hiddenhopes.WeatherApp.model.GeocodingApiResponse;
-import com.hiddenhopes.WeatherApp.model.Location;
+import com.hiddenhopes.WeatherApp.dto.GeocodingApiResponse;
+import com.hiddenhopes.WeatherApp.dto.Location;
 import com.hiddenhopes.WeatherApp.service.LocationService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
