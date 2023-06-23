@@ -1,51 +1,40 @@
 package com.hiddenhopes.WeatherApp.ui;
 
-import com.hiddenhopes.WeatherApp.model.User;
-import com.hiddenhopes.WeatherApp.repository.UserRepository;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 @Route("login")
-@PageTitle("Login")
+@PageTitle("Login | Weather App")
 @AnonymousAllowed
-public class LoginView extends VerticalLayout {
+public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
-    private final UserRepository userRepository;
+    private final LoginForm login = new LoginForm();
 
-    @Autowired
-    public LoginView(UserRepository userRepository) {
-        this.userRepository = userRepository;
-
+    public LoginView() {
+        addClassName("login-view");
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
 
-        LoginForm loginForm = new LoginForm();
-        loginForm.setAction("login");
+        login.setAction("login");
 
-        // loginForm.addLoginListener(e -> authenticate(loginForm, e));
-
-        add(new H1("Weather App"), loginForm);
+        add(new H1("WEATHER APP"), login);
     }
 
-    private void authenticate(LoginForm loginForm, LoginForm.LoginEvent event) {
-        String username = event.getUsername();
-        String password = event.getPassword();
-
-        User user = userRepository.findByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
-            loginForm.setError(false);
-            loginForm.setEnabled(false);
-            getUI().ifPresent(ui -> ui.navigate(GeocodingUI.class));
-        } else {
-            loginForm.setError(true);
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        // inform the user about an authentication error
+        if (beforeEnterEvent.getLocation()
+                .getQueryParameters()
+                .getParameters()
+                .containsKey("error")) {
+            login.setError(true);
         }
     }
 }
