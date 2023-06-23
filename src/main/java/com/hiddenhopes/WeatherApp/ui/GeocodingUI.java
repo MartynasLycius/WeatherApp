@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hiddenhopes.WeatherApp.Constant;
 import com.hiddenhopes.WeatherApp.model.*;
 import com.hiddenhopes.WeatherApp.service.LocationService;
+import com.vaadin.flow.component.HtmlComponent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
@@ -25,13 +26,20 @@ import java.util.stream.Collectors;
 public class GeocodingUI extends VerticalLayout {
 
     private final LocationService geocodingService;
-
     private final Grid<Location> grid;
     private final TextField searchField;
+    private final Dialog dailyWeatherDialog;
+    private final Dialog hourlyWeatherDialog;
+    private final HtmlComponent dailyChart;
 
     @Autowired
     public GeocodingUI(LocationService geocodingService) {
         this.geocodingService = geocodingService;
+        this.dailyWeatherDialog = createDialog("90%", "90%");
+        this.hourlyWeatherDialog = createDialog("90%", "90%");
+        this.dailyChart = new HtmlComponent("canvas");
+        dailyChart.setId("chartCanvas");
+        dailyChart.setHeight("400px");
 
         searchField = new TextField("Search");
         searchField.setPlaceholder("Enter location name");
@@ -43,9 +51,9 @@ public class GeocodingUI extends VerticalLayout {
         grid.setSizeFull();
 
         // Register a selection listener on the grid
-        grid.addSelectionListener(event -> {
-            if (!event.getFirstSelectedItem().isEmpty()) {
-                Location selectedLocation = event.getFirstSelectedItem().get();
+        grid.asSingleSelect().addValueChangeListener(event -> {
+            if (event.getValue() != null) {
+                Location selectedLocation = event.getValue();
                 openLocationWeatherDetailsDailyPopup(selectedLocation);
             }
         });
@@ -76,121 +84,81 @@ public class GeocodingUI extends VerticalLayout {
     }
 
     private void openLocationWeatherDetailsDailyPopup(Location location) {
-        // Create a dialog
-        Dialog dailyWeatherDialog = new Dialog();
-        dailyWeatherDialog.setWidth("80%");
-        dailyWeatherDialog.setHeight("70%");
-
-        // Make the API call and get the response
         WeatherForecast weatherForecast = makeApiCall(location.getLatitude(), location.getLongitude(), Constant.DAILY_PARAMS);
         WeeklyData weeklyData = weatherForecast.getDaily();
-        // Create a grid to display the hourly weather data
         Grid<DailyData> dailyWeatherGrid = new Grid<>(DailyData.class);
         dailyWeatherGrid.setColumns("time", "temperature2mMax", "temperature2mMin", "rainSum", "windspeed10mMax");
-        dailyWeatherGrid.setItems(createWeatherDailyDataList(weeklyData.getTime(), weeklyData.getTemperature2mMax(), weeklyData.getTemperature2mMin(), weeklyData.getRainSum(), weeklyData.getWindspeed10mMax()));
-
-        // Register a selection listener on the grid
-        dailyWeatherGrid.addSelectionListener(event -> {
-            if (!event.getFirstSelectedItem().isEmpty()) {
-                DailyData selectedDay = event.getFirstSelectedItem().get();
+        List<DailyData> dailyDataList = createWeatherDailyDataList(weeklyData.getTime(), weeklyData.getTemperature2mMax(), weeklyData.getTemperature2mMin(), weeklyData.getRainSum(), weeklyData.getWindspeed10mMax());
+        dailyWeatherGrid.setItems(dailyDataList);
+        String chartScript = generateChart(dailyDataList);
+        dailyWeatherGrid.asSingleSelect().addValueChangeListener(event -> {
+            if (event.getValue() != null) {
+                DailyData selectedDay = event.getValue();
                 openLocationWeatherDetailsHourlyPopup(selectedDay.getTime(), location.getLatitude(), location.getLongitude());
+                dailyWeatherDialog.close();
             }
         });
 
-        // Add a close button to the dialog
-        Button closeButton = new Button("Close");
-        closeButton.getElement().getStyle().set("position", "absolute");
-        closeButton.getElement().getStyle().set("top", "0");
-        closeButton.getElement().getStyle().set("right", "0");
-        closeButton.addClickListener(event -> dailyWeatherDialog.close());
-
-        // Add the weather grid and close button to the dialog
-        VerticalLayout dialogContent = new VerticalLayout(dailyWeatherGrid, closeButton);
+        Button closeButton = createCloseButton(dailyWeatherDialog);
+        VerticalLayout dialogContent = new VerticalLayout(dailyWeatherGrid, closeButton, dailyChart);
+        dailyWeatherDialog.removeAll();
+        dailyWeatherDialog.getElement().executeJs(chartScript);
         dailyWeatherDialog.add(dialogContent);
-
-        // Open the dialog
         dailyWeatherDialog.open();
     }
 
     private void openLocationWeatherDetailsHourlyPopup(String date, double latitude, double longitude) {
-        // Create a dialog
-        Dialog hourlyWeatherDialog = new Dialog();
-        hourlyWeatherDialog.setWidth("60%");
-        hourlyWeatherDialog.setHeight("60%");
-
-        // Make the API call and get the response
         WeatherForecast weatherForecast = makeApiCall(latitude, longitude, Constant.HOURLY_PARAMS);
         HourlyData data = weatherForecast.getHourly();
-        // Create a grid to display the hourly weather data
         Grid<SingleHourData> hourlyWeatherGrid = new Grid<>(SingleHourData.class);
-        hourlyWeatherGrid.setColumns("time", "temperature2m", "rain", "windspeed10m");
         List<SingleHourData> hourlyDataList = createWeatherHourlyDataList(data.getTime(), data.getTemperature_2m(), data.getRain(), data.getWindspeed_10m());
         List<SingleHourData> filteredList = hourlyDataList.stream().filter(o -> o.getTime().startsWith(date)).collect(Collectors.toList());
         filteredList.forEach(e -> e.setTime(e.getTime().substring(11)));
+
+        hourlyWeatherGrid.setColumns("time", "temperature2m", "rain", "windspeed10m");
         hourlyWeatherGrid.setItems(filteredList);
 
-        // Add a close button to the dialog
-        Button closeButton = new Button("Close");
-        closeButton.getElement().getStyle().set("position", "absolute");
-        closeButton.getElement().getStyle().set("top", "0");
-        closeButton.getElement().getStyle().set("right", "0");
-        closeButton.addClickListener(event -> hourlyWeatherDialog.close());
-
-        // Add the weather grid and close button to the dialog
+        Button closeButton = createCloseButton(hourlyWeatherDialog);
         VerticalLayout dialogContent = new VerticalLayout(hourlyWeatherGrid, closeButton);
+        hourlyWeatherDialog.removeAll();
         hourlyWeatherDialog.add(dialogContent);
-
-        // Open the dialog
         hourlyWeatherDialog.open();
     }
 
     private WeatherForecast makeApiCall(double latitude, double longitude, String params) {
         try {
-            String apiUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longitude + params;
-            URL url = new URL(apiUrl);
+            URL url = new URL(Constant.API_URL + "latitude=" + latitude + "&longitude=" + longitude + params);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
                 StringBuilder response = new StringBuilder();
-                String inputLine;
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
                 }
-                in.close();
-
+                reader.close();
                 ObjectMapper objectMapper = new ObjectMapper();
-                WeatherForecast weatherForecast = objectMapper.readValue(response.toString(), WeatherForecast.class);
-
-                return weatherForecast;
-            } else {
-                // Handle error response
-                return null;
+                return objectMapper.readValue(response.toString(), WeatherForecast.class);
             }
         } catch (Exception e) {
-            // Handle exception
-            return null;
+            e.printStackTrace();
         }
+        return null;
     }
 
-    private List<DailyData> createWeatherDailyDataList(List<String> time, List<Double> temperature_2m_max, List<Double> temperature_2m_min,
-                                                       List<Double> rain, List<Double> windspeed_10m) {
+    private List<DailyData> createWeatherDailyDataList(List<String> time, List<Double> tempMax, List<Double> tempMin, List<Double> rainSum, List<Double> windSpeed) {
         List<DailyData> weatherDataList = new ArrayList<>();
-
-        int itemCount = Math.min(time.size(), Math.min(temperature_2m_max.size(), Math.min(temperature_2m_min.size(), Math.min(rain.size(), windspeed_10m.size()))));
-
-        for (int i = 0; i < itemCount; i++) {
-            DailyData weatherData = new DailyData();
-            weatherData.setTime(time.get(i));
-            weatherData.setTemperature2mMax(temperature_2m_max.get(i));
-            weatherData.setTemperature2mMin(temperature_2m_min.get(i));
-            weatherData.setRainSum(rain.get(i));
-            weatherData.setWindspeed10mMax(windspeed_10m.get(i));
-            weatherDataList.add(weatherData);
+        for (int i = 0; i < time.size(); i++) {
+            DailyData data = new DailyData();
+            data.setTime(time.get(i));
+            data.setTemperature2mMax(tempMax.get(i));
+            data.setTemperature2mMin(tempMin.get(i));
+            data.setRainSum(rainSum.get(i));
+            data.setWindspeed10mMax(windSpeed.get(i));
+            weatherDataList.add(data);
         }
-
         return weatherDataList;
     }
 
@@ -210,5 +178,62 @@ public class GeocodingUI extends VerticalLayout {
         }
 
         return hourDataList;
+    }
+
+    private Dialog createDialog(String width, String height) {
+        Dialog dialog = new Dialog();
+        dialog.setWidth(width);
+        dialog.setHeight(height);
+        return dialog;
+    }
+
+    private Button createCloseButton(Dialog dialog) {
+        Button closeButton = new Button("Close");
+        closeButton.getElement().getStyle().set("position", "absolute");
+        closeButton.getElement().getStyle().set("top", "0");
+        closeButton.getElement().getStyle().set("right", "0");
+        closeButton.addClickListener(event -> dialog.close());
+        return closeButton;
+    }
+
+    private String generateChart(List<DailyData> dailyDataList) {
+        StringBuilder labelsBuilder = new StringBuilder();
+        StringBuilder dataBuilder = new StringBuilder();
+
+        // Iterate over the dailyDataList and build the labels and data strings
+        for (DailyData dailyData : dailyDataList) {
+            if (labelsBuilder.length() > 0) {
+                labelsBuilder.append(",");
+                dataBuilder.append(",");
+            }
+            labelsBuilder.append("'").append(dailyData.getTime()).append("'");
+            dataBuilder.append(dailyData.getTemperature2mMax());
+        }
+
+        // Build the JavaScript code for creating the chart
+        String chartScript = "var ctx = document.getElementById('chartCanvas').getContext('2d');\n" +
+                "var chart = new Chart(ctx, {\n" +
+                "    type: 'bar',\n" +
+                "    data: {\n" +
+                "        labels: [" + labelsBuilder + "],\n" +
+                "        datasets: [{\n" +
+                "            label: 'Temperature (Max)',\n" +
+                "            data: [" + dataBuilder + "],\n" +
+                "            backgroundColor: 'rgba(75, 192, 192, 0.2)',\n" +
+                "            borderColor: 'rgba(75, 192, 192, 1)',\n" +
+                "            borderWidth: 1\n" +
+                "        }]\n" +
+                "    },\n" +
+                "    options: {\n" +
+                "        scales: {\n" +
+                "            yAxes: [{\n" +
+                "                ticks: {\n" +
+                "                    beginAtZero: true\n" +
+                "                }\n" +
+                "            }]\n" +
+                "        }\n" +
+                "    }\n" +
+                "});";
+        return chartScript;
     }
 }
