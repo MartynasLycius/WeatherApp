@@ -22,6 +22,9 @@ public class LocationServiceImpl implements LocationService {
         GeocodingApiResponse response = restTemplate.getForObject(apiUrl, GeocodingApiResponse.class);
 
         if (response != null && response.getResults() != null) {
+            Arrays.asList(response.getResults()).forEach(item -> {
+                item.setFavorite(item.getName().equals("Rajshahi"));
+            });
             return Arrays.asList(response.getResults());
         }
 

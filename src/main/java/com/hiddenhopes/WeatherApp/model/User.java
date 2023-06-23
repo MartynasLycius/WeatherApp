@@ -21,6 +21,9 @@ public class User {
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     private Set<String> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FavoriteLocation> favoriteLocations = new HashSet<>();
+
     // Constructors, getters, and setters
 
     public User() {
@@ -57,5 +60,27 @@ public class User {
 
     public void setRoles(Set<String> roles) {
         this.roles = roles;
+    }
+
+    public Set<FavoriteLocation> getFavoriteLocations() {
+        return favoriteLocations;
+    }
+
+    public void setFavoriteLocations(Set<FavoriteLocation> favoriteLocations) {
+        this.favoriteLocations = favoriteLocations;
+    }
+
+    public void addFavoriteLocation(FavoriteLocation favoriteLocation) {
+        favoriteLocations.add(favoriteLocation);
+        favoriteLocation.setUser(this);
+    }
+
+    public void removeFavoriteLocation(FavoriteLocation favoriteLocation) {
+        favoriteLocations.remove(favoriteLocation);
+        favoriteLocation.setUser(null);
+    }
+
+    public boolean isLocationFavorite(String locationName) {
+        return favoriteLocations.contains(locationName);
     }
 }

@@ -3,17 +3,26 @@ package com.hiddenhopes.WeatherApp.ui;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hiddenhopes.WeatherApp.Constant;
 import com.hiddenhopes.WeatherApp.dto.*;
+import com.hiddenhopes.WeatherApp.model.FavoriteLocation;
+import com.hiddenhopes.WeatherApp.model.User;
 import com.hiddenhopes.WeatherApp.service.LocationService;
+import com.hiddenhopes.WeatherApp.service.UserService;
 import com.vaadin.flow.component.HtmlComponent;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,34 +41,59 @@ import java.util.stream.Collectors;
 public class GeocodingUI extends VerticalLayout {
 
     private final LocationService geocodingService;
+    private final UserService userService;
     private final Grid<Location> grid;
+    private final H2 search;
     private final TextField searchField;
+    private final Button favoriteListButton;
     private final Dialog dailyWeatherDialog;
     private final Dialog hourlyWeatherDialog;
     private final HtmlComponent dailyChart;
     private final Button logoutButton;
 
     @Autowired
-    public GeocodingUI(LocationService geocodingService) {
+    public GeocodingUI(LocationService geocodingService, UserService userService) {
         this.geocodingService = geocodingService;
-
-        searchField = new TextField("Search");
+        this.userService = userService;
+        search = new H2("Search");
+        searchField = new TextField();
         searchField.setPlaceholder("Enter location name");
         searchField.setValueChangeMode(ValueChangeMode.LAZY);
         searchField.addValueChangeListener(event -> searchLocation(event.getValue()));
-
+        favoriteListButton = new Button("Show my favorite Locations", e -> searchFavoriteLocationList());
         grid = new Grid<>(Location.class);
         grid.setColumns("name", "latitude", "longitude");
+        grid.addComponentColumn(location -> {
+            Icon icon = VaadinIcon.STAR.create();
+            User user = userService.findByUsername(getUsername());
+            if (userService.isLocationFavorite(user.getId(), location.getLatitude(), location.getLongitude())) {
+                icon.setColor("orange");
+            }
+            icon.addClickListener(event -> {
+                FavoriteLocation favoriteLocation = new FavoriteLocation(location.getLatitude(), location.getLongitude());
+                favoriteLocation.setLocationName(location.getName());
+
+                if (icon.getColor() != null && icon.getColor().equals("orange")) {
+                    icon.setColor(null);
+                    userService.removeFavoriteLocationByCoordinates(getUsername(), favoriteLocation);
+                } else {
+                    userService.addFavoriteLocationByCoordinates(getUsername(), favoriteLocation);
+                    icon.setColor("orange");
+                }
+            });
+            return icon;
+        }).setHeader("Favorite").setKey("favorite").setWidth("100px").setFlexGrow(0);
         grid.setSizeFull();
 
         // Register a selection listener on the grid
-        grid.asSingleSelect().addValueChangeListener(event -> {
-            if (event.getValue() != null) {
-                Location selectedLocation = event.getValue();
+        grid.addItemDoubleClickListener(event -> {
+            if (event.getItem() != null) {
+                Location selectedLocation = event.getItem();
                 openLocationWeatherDetailsDailyPopup(selectedLocation);
             }
         });
-
+        HorizontalLayout searchLayout = new HorizontalLayout();
+        searchLayout.add(new Text("Search"), searchField, favoriteListButton);
         dailyWeatherDialog = createDialog("90%", "90%");
         hourlyWeatherDialog = createDialog("90%", "90%");
         dailyChart = new HtmlComponent("canvas");
@@ -67,7 +101,7 @@ public class GeocodingUI extends VerticalLayout {
         dailyChart.setHeight("400px");
         logoutButton = new Button("Logout", e -> logout());
 
-        add(searchField, grid, logoutButton);
+        add(searchLayout, grid, logoutButton);
         setWidth("100%");
         setHeight("100%");
 
@@ -83,12 +117,24 @@ public class GeocodingUI extends VerticalLayout {
     }
 
     private void refreshGrid(String name) {
-        List<Location> results;
-        if (name != null && !name.isEmpty()) {
+        List<Location> results = new ArrayList<>();
+        if (StringUtils.isNoneBlank(name)) {
             results = geocodingService.searchLocations(name);
-        } else {
-            results = geocodingService.searchLocations("your_location_name");
         }
+        grid.setItems(results);
+    }
+
+    private void searchFavoriteLocationList() {
+        User user = userService.findByUsername(getUsername());
+        List<FavoriteLocation> favoriteLocations = userService.getFavoriteLocations(user.getId());
+        List<Location> results = new ArrayList<>();
+        favoriteLocations.forEach(i -> {
+            Location location = new Location();
+            location.setName(i.getLocationName());
+            location.setLatitude(i.getLatitude());
+            location.setLongitude(i.getLongitude());
+            results.add(location);
+        });
         grid.setItems(results);
     }
 
@@ -252,5 +298,10 @@ public class GeocodingUI extends VerticalLayout {
             SecurityContextHolder.clearContext();
             getUI().ifPresent(ui -> ui.navigate(LoginView.class));
         }
+    }
+
+    private String getUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.getName();
     }
 }

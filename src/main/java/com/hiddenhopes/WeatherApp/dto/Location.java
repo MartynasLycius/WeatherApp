@@ -26,6 +26,8 @@ public class Location implements Serializable {
     @JsonProperty("timezone")
     private String timezone;
 
+    private Boolean favorite;
+
     public long getId() {
         return id;
     }
@@ -96,5 +98,13 @@ public class Location implements Serializable {
 
     public void setTimezone(String timezone) {
         this.timezone = timezone;
+    }
+
+    public Boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
     }
 }
