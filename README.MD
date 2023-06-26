@@ -1,29 +1,34 @@
-# Weather Application
+# Weather App
+## Requirement from : https://github.com/MartynasLycius/WeatherApp 
+### How to Run this project
 
-This is the job interview task for software developer position
+1. Clone the project from root by clicking code button.
+2. Copy https/ssh link (https://github.com/tanmoy069/Weather-App.git / git@github.com:tanmoy069/Weather-App.git)
+3. Add a clone repository on your inteliji / eclipse
+4. Then import your git repository to local (it will take time to download dependencies)
+5. Create a mysql database (db name can be anything)
+6. Change the db name in application.properties
+7. Run the project as Spring Boot App
+8. Table will be created automatically.
+9. Download the city list csv file from : https://simplemaps.com/data/world-cities
+10. Import your csv file in your local db. Then execute the following query, 
+* insert into cities (city_name, latitude, longitude, country_name)
+  select city, lat, lng, country from worldcities w; // here worldcitites table name is your imported table name.
 
-## What to do
-* Fork the repository
-* After work is done, make a pull request and notify me by email
+### Project Description
 
-## Task description
-You need to use the Weather API provided here https://open-meteo.com/en to make the weather application. 
-1. Call the API to get the locations by city name. Make the paging available with 10 items per page and a filter to filter by location name.
-2. When clicked on the location it should show the weather forecast for the location with the temperature, surface wind and rain hourly. The interface should let you first see the daily forecast and when clicked it then should show the forecast hourly for the day you selected.
-3. If you UI contains a chart it is a bonus. The interface should be convenient for user and rely on best usability and design practises
-4. Only logged on users should be able to see the weather forecasts.
-5. User should be able to mark the location favourite and have the favourite location list for quick access.
+#### A project of weather api integration from https://open-meteo.com/
+1. First login to the system using username: admin/user and password same as username.
+2. After successful login you find a combo box of location list on top of the page under main layout.
+3. To see location wise weather information select a location from combo box or find a location in combo box.
+4. Then select your prefered location and see location and current weather details.
+5. To see hourly basis details of selected location select "Show hourl details" button.
+6. To hide the hourly basis details select "Hide details" button.
 
-All the other specific requirements are up to you
+###### N.B : Due to my lack of experience in frontend technologies, I unable to  fullfill the frontend requirements. Hopefully I can overcome my limitations on frontend.
+###### To see commits please visit following link: https://github.com/tanmoy069/Weather-App/commits/main (I forgot to fork the project first)
 
-## Technical requirements
-* Use  Vaadin (https://vaadin.com/) framework for the frontend. For chart you may use some different framework
-* For backend use Java EE
-* Use any database (Postgres, Oracle, etc.)
-* Make a Maven project
-
-## Main points
-* Structure your code
-* Use best practises
-* Use naming conventions
-* Show understanding of software development concepts
+# 
+#### Thank you
+##### Tanmoy Tushar
+###### If you have any suggestion, give me feedback.
