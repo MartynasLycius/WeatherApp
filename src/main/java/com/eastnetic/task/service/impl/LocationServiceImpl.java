@@ -24,15 +24,20 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public LocationDTO getLocations(String cityName) {
+        LocationDTO locationList;
         String url = this.locationUrl + cityName;
-        LocationDTO locationList = this.webClient
-                .get()
-                .uri(url)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .bodyToMono(LocationDTO.class)
-                .block();
-        log.info(locationList.toString());
+        try{
+            locationList = this.webClient
+                    .get()
+                    .uri(url)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(LocationDTO.class)
+                    .block();
+            log.info(locationList.toString());
+        } catch (Exception e) {
+            locationList = new LocationDTO();
+        }
         return locationList;
     }
 }
