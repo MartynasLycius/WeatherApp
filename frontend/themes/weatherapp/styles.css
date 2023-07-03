@@ -1,0 +1,18 @@
+vaadin-grid-cell-content:hover {
+    background-color : aliceblue;
+    cursor: pointer;
+    color: blue;
+}
+
+.current-temp-style {
+    font-size: 48px;
+}
+
+.daily-details-style {
+    line-height: 80%;
+    padding: 0;
+}
+
+.hourly-details-style {
+    line-height: 80%;
+}

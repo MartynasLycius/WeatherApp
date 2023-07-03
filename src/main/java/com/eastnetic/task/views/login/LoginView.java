@@ -1,6 +1,7 @@
 package com.eastnetic.task.views.login;
 
-import com.vaadin.flow.component.login.LoginForm;
+import com.eastnetic.task.service.UsersService;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -9,7 +10,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.internal.RouteUtil;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import com.vaadin.flow.spring.security.AuthenticationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -18,11 +18,11 @@ import org.springframework.beans.factory.annotation.Value;
 @AnonymousAllowed
 public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 
-    AuthenticationContext authContext;
+    @Autowired
+    UsersService usersService;
 
     @Autowired
-    public LoginView(AuthenticationContext authContext, @Value("${app.name}") String appName){
-        this.authContext = authContext;
+    public LoginView(@Value("${app.name}") String appName){
         setTitle(appName);
         setDescription("Built with ♥ by Vaadin");
         setForgotPasswordButtonVisible(false);
@@ -39,10 +39,17 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
             setError(true);
         }
 
-        if (authContext.isAuthenticated()) {
+        if (usersService.isUserLoggedIn()) {
             // Already logged in
             setOpened(false);
             beforeEnterEvent.forwardTo("");
         }
+    }
+
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        usersService.addUser("admin", "admin", "ADMIN", "John Doe Admin");
+        usersService.addUser("user", "user", "USER", "Jane Doe User");
+        super.onAttach(attachEvent);
     }
 }
