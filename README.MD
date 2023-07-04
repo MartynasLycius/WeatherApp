@@ -12,6 +12,12 @@ This app will produce an UI for checking weather forecast with daily and hourly 
   * Hourly weather details for specific day
   * Favorite location save and delete
 
+## Technologies Used
+* Spring boot
+* Maven
+* Vaadin
+* MySQL
+
 ## Build and Run
 
 ### Prerequisites
@@ -23,11 +29,11 @@ This app will produce an UI for checking weather forecast with daily and hourly 
 1. Start MySQL and create a database for the application.
 
 2. Go to `src/main/resources` and open `application-dev.properties` file. Change following properties with your properties.
-
-   
+```
     spring.datasource.url = jdbc:mysql://host:port/db-name
     spring.datasource.username = root
     spring.datasource.password = password
+```
 
 > **INFO**
 >
@@ -36,15 +42,13 @@ This app will produce an UI for checking weather forecast with daily and hourly 
 > If we want to build in production mode, we need to update datasource url in `application-prod.properties` file as well.
 >
 3. Go to the project directory and run the following command:
-
-
+```
     mvnw spring-boot:run
-
+```
 4. Open the browser and put following URL:
-    
-
+```
     http://localhost:8080/WeatherApp
-
+```
 
 ## Default Users
 You will need users to login.
