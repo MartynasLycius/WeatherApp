@@ -16,9 +16,16 @@ public final class DateUtils {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm";
 
+    private static final String HOUR_24_FORMAT = "H";
+
     public static String getCurrentFullDateString() {
         Calendar currentCal = Calendar.getInstance();
         return new SimpleDateFormat(FULL_DATE_PATTERN).format(currentCal.getTime());
+    }
+
+    public static String getCurrentHourString() {
+        Calendar currentCal = Calendar.getInstance();
+        return new SimpleDateFormat(HOUR_24_FORMAT).format(currentCal.getTime());
     }
 
     public static String getDayFromDateToString(Date date) {

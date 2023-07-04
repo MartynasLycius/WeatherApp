@@ -30,4 +30,7 @@ public class HourlyUnits {
 
    @JsonProperty("precipitation_probability")
    String precipitationProbability;
+
+   @JsonProperty("weathercode")
+   String weathercode;
 }

@@ -41,4 +41,7 @@ public class Daily {
 
    @JsonProperty("windgusts_10m_max")
    List<Double> windgusts10mMax;
+
+   @JsonProperty("weathercode")
+   List<Integer> weathercode;
 }

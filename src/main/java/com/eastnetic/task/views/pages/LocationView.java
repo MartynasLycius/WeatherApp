@@ -214,7 +214,6 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
                         break;
                     }
                 }
-                log.info("timeindex=" + timeIndex);
 
                 HorizontalLayout currentTempLayout = new HorizontalLayout();
                 Span currentTemp = new Span(hourly.getTemperature2m().get(timeIndex).toString() + hourlyUnits.getTemperature2m());

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,4 +41,7 @@ public class DailyUnits {
 
    @JsonProperty("windgusts_10m_max")
    String windgusts10mMax;
+
+   @JsonProperty("weathercode")
+   String weathercode;
 }

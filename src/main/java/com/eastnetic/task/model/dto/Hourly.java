@@ -30,4 +30,7 @@ public class Hourly {
 
    @JsonProperty("precipitation_probability")
    List<Integer> precipitationProbability;
+
+   @JsonProperty("weathercode")
+   List<Integer> weathercode;
 }
