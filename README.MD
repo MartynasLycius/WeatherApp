@@ -1,6 +1,6 @@
 # Weather App
 
-This app will produce an UI for checking weather forecast with daily and hourly details for any specific location.
+This app will produce an UI for checking weather forecast with daily and hourly details for any specific location using [open-meteo](https://open-meteo.com/) free public APIs.
 
 ## Features
 * Login
@@ -10,7 +10,7 @@ This app will produce an UI for checking weather forecast with daily and hourly 
   * Current weather details
   * Next 7 days weather details
   * Hourly weather details for specific day
-  * Favorite location save and delete
+* Favorite locations save and delete
 
 ## Technologies Used
 * Spring boot
