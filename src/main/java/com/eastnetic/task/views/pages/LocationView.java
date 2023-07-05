@@ -263,6 +263,7 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
                         weatherCond);
                 weatherCodeLayout.setPadding(false);
                 weatherCodeLayout.setSpacing(false);
+                weatherCodeLayout.setAlignItems(Alignment.CENTER);
                 currentTempLayout.add(weatherCodeLayout, currentTemp);
                 currentTempLayout.addClassName("current-temp-style");
                 currentTempLayout.setAlignItems(Alignment.CENTER);
