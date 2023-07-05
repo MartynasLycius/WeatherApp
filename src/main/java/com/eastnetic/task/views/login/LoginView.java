@@ -21,6 +21,12 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
     @Autowired
     UsersService usersService;
 
+    /**
+     * Main login view layout create
+     * @param appName from properties
+     * @return
+     * @throws
+     */
     @Autowired
     public LoginView(@Value("${app.name}") String appName){
         setTitle(appName);
@@ -30,6 +36,12 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
         setAction(RouteUtil.getRoutePath(VaadinService.getCurrent().getContext(), getClass()));
     }
 
+    /**
+     * Before enter event action to check if user is already logged in or any error occurred
+     * @param beforeEnterEvent
+     * @return
+     * @throws
+     */
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         if(beforeEnterEvent.getLocation()
@@ -46,6 +58,12 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
         }
     }
 
+    /**
+     * Attach event to create default users on load
+     * @param attachEvent
+     * @return
+     * @throws
+     */
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         usersService.addUser("admin", "admin", "ADMIN", "John Doe Admin");

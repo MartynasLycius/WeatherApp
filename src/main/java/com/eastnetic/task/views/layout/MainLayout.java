@@ -27,6 +27,12 @@ public class MainLayout extends AppLayout {
     private final AccessAnnotationChecker accessChecker;
     private String appName;
 
+    /**
+     * Main layout for all views
+     * @param usersService, accessChecker
+     * @return
+     * @throws
+     */
     @Autowired
     public MainLayout(UsersService usersService, AccessAnnotationChecker accessChecker, @Value("${app.name}") String appName) {
         this.usersService = usersService;
@@ -38,7 +44,10 @@ public class MainLayout extends AppLayout {
     }
 
     /**
-     *
+     * Create header layout
+     * @param
+     * @return
+     * @throws
      */
     private void createHeader() {
         H3 appTitle = new H3(appName);
@@ -52,6 +61,12 @@ public class MainLayout extends AppLayout {
         addToNavbar(header);
     }
 
+    /**
+     * Create user menu in header layout
+     * @param
+     * @return
+     * @throws
+     */
     private Div userMenu() {
         Div layout = new Div();
 
@@ -72,6 +87,12 @@ public class MainLayout extends AppLayout {
         return layout;
     }
 
+    /**
+     * Create logout layout
+     * @param
+     * @return
+     * @throws
+     */
     private void logout(){
         ConfirmDialog dialog = new ConfirmDialog();
         dialog.setHeader("Logout");
@@ -84,6 +105,12 @@ public class MainLayout extends AppLayout {
         dialog.open();
     }
 
+    /**
+     * Create navigation sidebar
+     * @param
+     * @return
+     * @throws
+     */
     private void createNavBar(){
         Tabs tabs = new Tabs();
         if (accessChecker.hasAccess(DashboardView.class)) {
@@ -92,14 +119,16 @@ public class MainLayout extends AppLayout {
         if (accessChecker.hasAccess(LocationView.class)) {
             tabs.add(createTab(VaadinIcon.SEARCH_PLUS, "Weather Forecast", LocationView.class));
         }
-        if (accessChecker.hasAccess(MainLayout.class)) {
-            tabs.add(createTab(VaadinIcon.CHART, "Analytics", MainLayout.class));
-        }
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         addToDrawer(tabs);
     }
 
-
+    /**
+     * Create tabs for navbar
+     * @param
+     * @return
+     * @throws
+     */
     private Tab createTab(VaadinIcon viewIcon, String viewName, Class routeView) {
         Icon icon = viewIcon.create();
         icon.getStyle().set("box-sizing", "border-box")

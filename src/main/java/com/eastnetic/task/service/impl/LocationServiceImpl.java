@@ -58,7 +58,7 @@ public class LocationServiceImpl implements LocationService {
 
     /**
      * Save location data to favorites table
-     * @param LocationResults
+     * @param locationResults
      * @return
      * @throws
      */
@@ -107,7 +107,7 @@ public class LocationServiceImpl implements LocationService {
 
     /**
      * delete favorite data from table
-     * @param UserFavLocations
+     * @param userFavLocations
      * @return
      * @throws
      */

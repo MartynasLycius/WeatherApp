@@ -55,6 +55,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
     String favIdFromUrl;
     TextField searchByCityField;
 
+    /**
+     * Main forecast page view create
+     * @param locationService, usersService, forecastService
+     * @return
+     * @throws
+     */
     public LocationView(UsersService usersService, LocationService locationService, ForecastService forecastService) {
         this.usersService = usersService;
         this.locationService = locationService;
@@ -86,7 +92,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
             if (!cityName.isEmpty()) {
                 dialog.close();
                 dialog = new Dialog();
-                createGridLayout(cityName);
+                try{
+                    createGridLayout(cityName);
+                } catch (Exception e) {
+                    showErrorDialog();
+                }
+
                 dialog.add(gridLayout);
                 dialog.setHeaderTitle("Please select a city from search results: ");
                 Button closeButton = new Button(new Icon("lumo", "cross"),
@@ -105,6 +116,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         add(searchHorizontalLayout);
     }
 
+    /**
+     * grid layout create for location search data
+     * @param cityName
+     * @return
+     * @throws
+     */
     private void createGridLayout(String cityName){
         gridLayout = new VerticalLayout();
         Grid<LocationResults> grid = new Grid<>(LocationResults.class, false);
@@ -148,6 +165,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         }
     }
 
+    /**
+     * Get location search data
+     * @param cityName
+     * @return List<LocationResults>
+     * @throws
+     */
     private List<LocationResults> getLocations(String cityName){
         try {
             return  locationService.getLocations(cityName).getResults();
@@ -157,6 +180,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         }
     }
 
+    /**
+     * data renderer for location grid view
+     * @param
+     * @return Renderer
+     * @throws
+     */
     private static Renderer<LocationResults> createDataRenderer() {
         return LitRenderer.<LocationResults> of(
                 "<vaadin-vertical-layout style=\"line-height: var(--lumo-line-height-m);\">"
@@ -175,6 +204,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
                 .withProperty("timezone", LocationResults::getTimezone);
     }
 
+    /**
+     * forecast details layout create
+     * @param results
+     * @return
+     * @throws
+     */
     void callWeatherForecast(LocationResults results) {
         if(results != null){
             ForecastDTO forecastDTO = this.getForecast(results);
@@ -246,6 +281,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         }
     }
 
+    /**
+     * Get forecast data from service
+     * @param results
+     * @return ForecastDTO
+     * @throws
+     */
     private ForecastDTO getForecast(LocationResults results){
         try {
             return this.forecastService.getWeatherForecasts(results.getLatitude(), results.getLongitude(), results.getTimezone());
@@ -255,6 +296,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         }
     }
 
+    /**
+     * checks if location is saved to favorites list
+     * @param results
+     * @return boolean
+     * @throws
+     */
     private boolean isSavedLocation(LocationResults results){
         try {
             return locationService.isSavedLocation(results, this.usersService.getCurrentUser().getId());
@@ -264,12 +311,24 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         }
     }
 
+    /**
+     * Clear layout to main view
+     * @param
+     * @return
+     * @throws
+     */
     private void clearLayout() {
         removeAll();
         searchByCityField.clear();
         add(searchHorizontalLayout);
     }
 
+    /**
+     * Layout create for current forecast
+     * @param forecastDTO
+     * @return Component
+     * @throws
+     */
     private VerticalLayout showCurrentForecastDetails(ForecastDTO forecastDTO, int timeIndex) {
         VerticalLayout detailsLayout = new VerticalLayout();
         Hourly hourly = forecastDTO.getHourly();
@@ -291,6 +350,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         return detailsLayout;
     }
 
+    /**
+     * Layout create for current day forecast
+     * @param forecastDTO
+     * @return Component
+     * @throws
+     */
     private HorizontalLayout showAllDayForecastDetails(ForecastDTO forecastDTO) {
         TabSheet tabs = new TabSheet();
         HorizontalLayout horizontalLayout = new HorizontalLayout();
@@ -309,6 +374,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         return horizontalLayout;
     }
 
+    /**
+     * Layout create for daily forecast
+     * @param forecastDTO
+     * @return Component
+     * @throws
+     */
     private VerticalLayout showDailyForecastDetails(ForecastDTO forecastDTO, int dateIndex) {
         VerticalLayout detailsLayout = new VerticalLayout();
         Daily daily = forecastDTO.getDaily();
@@ -350,6 +421,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         return detailsLayout;
     }
 
+    /**
+     * Layout create for hourly forecast
+     * @param forecastDTO, Date
+     * @return Component
+     * @throws
+     */
     private Component getHourlyData(ForecastDTO forecastDTO, Date dateDaily) {
 
         Hourly hourly = forecastDTO.getHourly();
@@ -401,6 +478,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         return horizontalLayout;
     }
 
+    /**
+     * Add to favorites list through service
+     * @param results
+     * @return
+     * @throws
+     */
     private void addToFavorites(LocationResults results) {
         Notification notification;
         try{
@@ -418,6 +501,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         }
     }
 
+    /**
+     * Match data for grid filtering
+     * @param value, searchTerm
+     * @return boolean
+     * @throws
+     */
     boolean matchesTerm(String value, String searchTerm) {
         if(value!= null && !value.isEmpty()){
             return value.toLowerCase().contains(searchTerm.toLowerCase());
@@ -425,6 +514,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         return false;
     }
 
+    /**
+     * Get query param using before enter event for favorite location's forecast show
+     * @param event, id
+     * @return
+     * @throws
+     */
     @Override // HasUrlParameter interface
     public void setParameter(BeforeEvent event,
                              @OptionalParameter Integer id) {
@@ -446,13 +541,50 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
                     locationResults.setLongitude(Double.parseDouble(favResults.getLongitude()));
                     locationResults.setTimezone(favResults.getTimezone());
                     clearLayout();
-                    callWeatherForecast(locationResults);
+                    try{
+                        callWeatherForecast(locationResults);
+                    } catch (Exception e) {
+                        showErrorDialog();
+                    }
                 }
             } else {
                 add(searchHorizontalLayout);
             }
 
         }
+    }
+
+
+    public void showErrorDialog() {
+        Dialog dialog = new Dialog();
+        dialog.getElement().setAttribute("aria-label",
+                "System Error");
+
+        VerticalLayout dialogLayout = createErrorDialogLayout(dialog);
+        dialog.add(dialogLayout);
+        dialog.open();
+        add(dialog);
+    }
+
+    private static VerticalLayout createErrorDialogLayout(Dialog dialog) {
+        H2 headline = new H2("Error");
+        headline.getStyle().set("margin", "var(--lumo-space-m) 0")
+                .set("font-size", "1.5em").set("font-weight", "bold");
+
+        Paragraph paragraph = new Paragraph(
+                "Service not responding. Please check your internet connection or contact administrator.");
+
+        Button closeButton = new Button("Close");
+        closeButton.addClickListener(e -> dialog.close());
+
+        VerticalLayout dialogLayout = new VerticalLayout(headline, paragraph,
+                closeButton);
+        dialogLayout.setPadding(false);
+        dialogLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
+        dialogLayout.getStyle().set("width", "300px").set("max-width", "100%");
+        dialogLayout.setAlignSelf(FlexComponent.Alignment.END, closeButton);
+
+        return dialogLayout;
     }
 
 }

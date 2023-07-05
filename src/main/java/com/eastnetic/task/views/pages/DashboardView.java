@@ -42,6 +42,12 @@ public class DashboardView extends VerticalLayout {
     GridListDataView<UserFavLocations> dataView;
     H2 title;
 
+    /**
+     * Main dashboard view create
+     * @param locationService, usersService
+     * @return
+     * @throws
+     */
     public DashboardView(UsersService usersService, LocationService locationService) {
 
         this.usersService = usersService;
@@ -52,6 +58,12 @@ public class DashboardView extends VerticalLayout {
         add(title, favGridLayout);
     }
 
+    /**
+     * Favorites list grid create
+     * @param
+     * @return
+     * @throws
+     */
     private void setFavGridLayout() {
         favGridLayout = new VerticalLayout();
         grid = new Grid<>(UserFavLocations.class, false);
@@ -104,6 +116,12 @@ public class DashboardView extends VerticalLayout {
         }
     }
 
+    /**
+     * Match data for filtering grid
+     * @param value, searchTerm
+     * @return boolean
+     * @throws
+     */
     boolean matchesTerm(String value, String searchTerm) {
         if(value!= null && !value.isEmpty()){
             return value.toLowerCase().contains(searchTerm.toLowerCase());
@@ -111,6 +129,12 @@ public class DashboardView extends VerticalLayout {
         return false;
     }
 
+    /**
+     * Delete data from favorites list
+     * @param userFavLocations
+     * @return
+     * @throws
+     */
     private void deleteFavorites(UserFavLocations userFavLocations) {
         Notification notification;
         if(locationService.deleteFavorites(userFavLocations)){
@@ -122,6 +146,12 @@ public class DashboardView extends VerticalLayout {
         notification.setPosition(Notification.Position.MIDDLE);
     }
 
+    /**
+     * Data renderer for grid view
+     * @param
+     * @return Renderer
+     * @throws
+     */
     private static Renderer<UserFavLocations> createFavDataRenderer() {
         return LitRenderer.<UserFavLocations> of(
                         "<vaadin-vertical-layout style=\"line-height: var(--lumo-line-height-m);\">"
@@ -139,6 +169,12 @@ public class DashboardView extends VerticalLayout {
                 .withProperty("timezone", UserFavLocations::getTimezone);
     }
 
+    /**
+     * Layout clear to main view
+     * @param
+     * @return
+     * @throws
+     */
     private void clearLayout(){
         removeAll();
         setFavGridLayout();

@@ -55,7 +55,7 @@ public class UsersServiceImpl implements UsersService {
 
     /**
      * Add user to table
-     * @param User data
+     * @param username, password, roles, name
      * @return
      * @throws
      */
