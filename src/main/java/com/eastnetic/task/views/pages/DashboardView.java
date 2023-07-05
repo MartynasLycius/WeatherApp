@@ -105,7 +105,10 @@ public class DashboardView extends VerticalLayout {
     }
 
     boolean matchesTerm(String value, String searchTerm) {
-        return value.toLowerCase().contains(searchTerm.toLowerCase());
+        if(value!= null && !value.isEmpty()){
+            return value.toLowerCase().contains(searchTerm.toLowerCase());
+        }
+        return false;
     }
 
     private void deleteFavorites(UserFavLocations userFavLocations) {

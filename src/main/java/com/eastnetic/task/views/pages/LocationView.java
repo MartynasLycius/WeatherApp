@@ -6,8 +6,10 @@ import com.eastnetic.task.service.ForecastService;
 import com.eastnetic.task.service.LocationService;
 import com.eastnetic.task.service.UsersService;
 import com.eastnetic.task.utils.DateUtils;
+import com.eastnetic.task.utils.WeatherCodeMappingUtils;
 import com.eastnetic.task.views.layout.MainLayout;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -122,7 +124,7 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
             GridListDataView<LocationResults> dataView = grid.setItems(locations);
 
             TextField searchField = new TextField();
-            searchField.setWidth("50%");
+            searchField.setWidth("60%");
             searchField.setPlaceholder("Filter by Name, Region or Country");
             searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
             searchField.setValueChangeMode(ValueChangeMode.EAGER);
@@ -199,7 +201,9 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
                 Span currentTimeSpan = new Span(DateUtils.getCurrentFullDateString());
                 VerticalLayout currentTimeVerticalLayout = new VerticalLayout(currentTimeSpan);
                 currentTimeVerticalLayout.setPadding(false);
-                VerticalLayout currentTextVerticalLayout = new VerticalLayout(new H4("Current Weather"));
+                H4 currentMsg = new H4("Current Weather");
+                currentMsg.getElement().getThemeList().add("badge contrast");
+                VerticalLayout currentTextVerticalLayout = new VerticalLayout(currentMsg);
                 currentTextVerticalLayout.setPadding(false);
                 currentTimeLayout.add(currentTimeVerticalLayout, currentTextVerticalLayout);
                 Hourly hourly = forecastDTO.getHourly();
@@ -217,13 +221,21 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
 
                 HorizontalLayout currentTempLayout = new HorizontalLayout();
                 Span currentTemp = new Span(hourly.getTemperature2m().get(timeIndex).toString() + hourlyUnits.getTemperature2m());
-                currentTempLayout.add(new Icon(VaadinIcon.CLOUD_O), currentTemp);
+                VerticalLayout weatherCodeLayout = new VerticalLayout();
+                H5 weatherCond = new H5(WeatherCodeMappingUtils.getCurrentWeatherCodeDescription(hourly.getWeathercode().get(timeIndex)));
+                weatherCond.getElement().getThemeList().add("badge");
+                weatherCodeLayout.add(new Html("<img src=\"" + WeatherCodeMappingUtils.getCurrentWeatherCodeImage(hourly.getWeathercode().get(timeIndex)) + "\" alt=\"\">"),
+                        weatherCond);
+                weatherCodeLayout.setPadding(false);
+                weatherCodeLayout.setSpacing(false);
+                currentTempLayout.add(weatherCodeLayout, currentTemp);
                 currentTempLayout.addClassName("current-temp-style");
-                VerticalLayout dailyForecastDetailsLayout = showCurrentForecastDetails(forecastDTO, timeIndex);
-                dailyForecastDetailsLayout.setPadding(false);
+                currentTempLayout.setAlignItems(Alignment.CENTER);
                 forecastVerticalLayout.add(currentTempLayout);
                 forecastVerticalLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
                 forecastVerticalLayout.setPadding(false);
+                VerticalLayout dailyForecastDetailsLayout = showCurrentForecastDetails(forecastDTO, timeIndex);
+                dailyForecastDetailsLayout.setPadding(false);
                 forecastHorizontalLayout.add(forecastVerticalLayout, dailyForecastDetailsLayout);
                 forecastHorizontalLayout.setWidth("60%");
                 forecastHorizontalLayout.setPadding(false);
@@ -302,8 +314,8 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         Daily daily = forecastDTO.getDaily();
         DailyUnits dailyUnits = forecastDTO.getDailyUnits();
         VerticalLayout labelLayout = new VerticalLayout();
-        labelLayout.add(new Span("Max Temperature"),
-                new Span("Min Temperature"),
+        labelLayout.add(new Span("Condition"),
+                new Span("Temperature (Max/Min)"),
                 new Span("Rain"),
                 new Span("Max Precipitation")
                 );
@@ -315,8 +327,12 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
                 new Span("Sunset")
         );
         VerticalLayout valueLayout = new VerticalLayout();
-        valueLayout.add(new Span(daily.getTemperature2mMax().get(dateIndex).toString() + dailyUnits.getTemperature2mMax()),
-                new Span(daily.getTemperature2mMin().get(dateIndex).toString() + dailyUnits.getTemperature2mMin()),
+        Span weatherCond = new Span(new Span(WeatherCodeMappingUtils.getDailyWeatherCodeDescription(daily.getWeathercode().get(dateIndex))));
+        weatherCond.getElement().getThemeList().add("badge");
+        weatherCond.getStyle().set("margin-bottom", "-10px");
+        valueLayout.add(weatherCond,
+                new Span(daily.getTemperature2mMax().get(dateIndex).toString() + dailyUnits.getTemperature2mMax() + " / "
+                        + daily.getTemperature2mMin().get(dateIndex).toString() + dailyUnits.getTemperature2mMin()),
                 new Span(daily.getRainSum().get(dateIndex).toString() + " " + dailyUnits.getRainSum()),
                 new Span(daily.getPrecipitationProbabilityMax().get(dateIndex).toString() + dailyUnits.getPrecipitationProbabilityMax())
         );
@@ -341,8 +357,10 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setWidth("1100px");
         VerticalLayout hourlyLabelLayout = new VerticalLayout();
-        hourlyLabelLayout.add(new Span("Time"), new Span("Temp"), new Span("Rain"), new Span("Wind"));
-        hourlyLabelLayout.setWidth("60px");
+        Span imageLabel = new Span("");
+        imageLabel.setHeight("110px");
+        hourlyLabelLayout.add(new Span("Time"), imageLabel, new Span("Temp"), new Span("Rain"), new Span("Wind"));
+        hourlyLabelLayout.setWidth("70px");
         hourlyLabelLayout.addClassName("hourly-details-style");
         horizontalLayout.add(hourlyLabelLayout);
         horizontalLayout.getStyle().set("border", "1px solid");
@@ -356,16 +374,22 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
                 if(dateDailyStr.equals(dateHourlyStr)){
                     Span timeSpan = new Span(DateUtils.getHourFromDateToString(time));
                     timeSpan.setWidth("60px");
+                    timeSpan.getElement().getThemeList().add("badge contrast");
 
                     VerticalLayout hourlyDataLayout = new VerticalLayout();
                     hourlyDataLayout.addClassName("hourly-details-style");
+
+                    //Span condSpan = new Span(WeatherCodeMappingUtils.getWeatherCodeDescription(hourly.getWeathercode().get(index), DateUtils.getHour24FromStringToInt(time)));
+                    Span imageSpan = new Span(new Html("<img src=\"" + WeatherCodeMappingUtils.getWeatherCodeImage(hourly.getWeathercode().get(index), DateUtils.getHour24FromStringToInt(time)) + "\" alt=\"\">"));
+                    imageSpan.setWidth("60px");
+                    imageSpan.getStyle().set("margin-left","-25px");
                     Span tempSpan = new Span(hourly.getTemperature2m().get(index).toString() + hourlyUnits.getTemperature2m());
                     tempSpan.setWidth("60px");
                     Span rainSpan = new Span(hourly.getRain().get(index).toString() + " " + hourlyUnits.getRain());
                     rainSpan.setWidth("60px");
                     Span windpan = new Span(hourly.getWindspeed10m().get(index).toString() + " " + hourlyUnits.getWindspeed10m());
                     windpan.setWidth("60px");
-                    hourlyDataLayout.add(timeSpan, tempSpan, rainSpan, windpan);
+                    hourlyDataLayout.add(timeSpan, imageSpan, tempSpan, rainSpan, windpan);
                     hourlyHorizontalLayout.add(hourlyDataLayout);
                 }
                 index++;
@@ -395,7 +419,10 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
     }
 
     boolean matchesTerm(String value, String searchTerm) {
-        return value.toLowerCase().contains(searchTerm.toLowerCase());
+        if(value!= null && !value.isEmpty()){
+            return value.toLowerCase().contains(searchTerm.toLowerCase());
+        }
+        return false;
     }
 
     @Override // HasUrlParameter interface

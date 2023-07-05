@@ -97,6 +97,10 @@ public class WeatherCodeMappingUtils {
 
     }
 
+    public static String getDailyWeatherCodeDescription(int code){
+        return weatherMap.get(code).getDay().getDescription();
+    }
+
     public static String getWeatherCodeDescription(int code, int hour){
         if(hour >= 6 && hour <= 18){
             return weatherMap.get(code).getDay().getDescription();
@@ -113,7 +117,7 @@ public class WeatherCodeMappingUtils {
         }
     }
 
-    public static String getCurrentWeatherCodeDescription(int code, int hour){
+    public static String getCurrentWeatherCodeDescription(int code){
         int currentHour = Integer.parseInt(DateUtils.getCurrentHourString());
         if(currentHour >= 6 && currentHour <= 18){
             return weatherMap.get(code).getDay().getDescription();

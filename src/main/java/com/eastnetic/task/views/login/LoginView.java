@@ -24,7 +24,7 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
     @Autowired
     public LoginView(@Value("${app.name}") String appName){
         setTitle(appName);
-        setDescription("Built with ♥ by Vaadin");
+        setDescription("Get Weather Forecast in a Minute");
         setForgotPasswordButtonVisible(false);
         setOpened(true);
         setAction(RouteUtil.getRoutePath(VaadinService.getCurrent().getContext(), getClass()));

@@ -48,6 +48,12 @@ public final class DateUtils {
         return new SimpleDateFormat(HOUR_FORMAT).format(date);
     }
 
+    public static int getHour24FromStringToInt(String time) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT);
+        Date date = sdf.parse(time);
+        return Integer.parseInt(new SimpleDateFormat(HOUR_24_FORMAT).format(date));
+    }
+
     public static String convertDateToString(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         return sdf.format(date);
