@@ -38,7 +38,7 @@ public class WeatherForecastServiceImpl implements ForecastService {
                     .retrieve()
                     .bodyToMono(ForecastDTO.class)
                     .block();
-            log.info(forecastDTO.toString());
+            log.debug(forecastDTO.toString());
         } catch (Exception e) {
             forecastDTO = new ForecastDTO();
         }

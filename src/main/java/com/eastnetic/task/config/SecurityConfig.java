@@ -15,7 +15,7 @@ public class SecurityConfig extends VaadinWebSecurity {
 
     /**
      * Web security config for spring security
-     * @param HttpSecurity
+     * @param http
      * @return
      * @throws Exception
      */

@@ -48,7 +48,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         }
 
         if (encoder.matches(password, user.get().getPassword())) {
-            log.info("Successfully Authenticated the user");
+            log.debug("Successfully Authenticated the user");
             SecurityContextHolder.getContext().setAuthentication(authentication);
             return new UsernamePasswordAuthenticationToken(username, password, getRoles(user.get().getRole()));
         } else {
@@ -65,7 +65,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
         String[] roles = roleList.split(",");
         for (String role : roles) {
-            log.info("Role: " + role);
+            log.debug("Role: " + role);
             grantedAuthorityList.add(new SimpleGrantedAuthority(role.replaceAll("\\s+", "")));
         }
 

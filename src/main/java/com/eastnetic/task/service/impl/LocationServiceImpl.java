@@ -47,7 +47,7 @@ public class LocationServiceImpl implements LocationService {
                     .retrieve()
                     .bodyToMono(LocationDTO.class)
                     .block();
-            log.info(locationList.toString());
+            log.debug(locationList.toString());
         } catch (Exception e) {
             locationList = new LocationDTO();
         }
