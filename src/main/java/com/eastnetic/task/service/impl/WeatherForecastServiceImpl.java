@@ -1,7 +1,6 @@
 package com.eastnetic.task.service.impl;
 
 import com.eastnetic.task.model.dto.ForecastDTO;
-import com.eastnetic.task.model.dto.LocationDTO;
 import com.eastnetic.task.service.ForecastService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

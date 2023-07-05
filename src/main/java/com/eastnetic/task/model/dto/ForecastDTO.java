@@ -1,8 +1,6 @@
 package com.eastnetic.task.model.dto;
 
 
-import com.eastnetic.task.model.dto.Hourly;
-import com.eastnetic.task.model.dto.HourlyUnits;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;

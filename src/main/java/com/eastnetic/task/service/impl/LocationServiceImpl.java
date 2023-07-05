@@ -1,6 +1,6 @@
 package com.eastnetic.task.service.impl;
 
-import com.eastnetic.task.model.dao.UserFavLocations;
+import com.eastnetic.task.model.entity.UserFavLocations;
 import com.eastnetic.task.model.dto.LocationDTO;
 import com.eastnetic.task.model.dto.LocationResults;
 import com.eastnetic.task.repository.UserFavLocationsRepo;
@@ -10,13 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j

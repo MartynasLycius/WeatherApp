@@ -1,6 +1,6 @@
 package com.eastnetic.task.views.pages;
 
-import com.eastnetic.task.model.dao.UserFavLocations;
+import com.eastnetic.task.model.entity.UserFavLocations;
 import com.eastnetic.task.service.LocationService;
 import com.eastnetic.task.service.UsersService;
 import com.eastnetic.task.views.layout.MainLayout;

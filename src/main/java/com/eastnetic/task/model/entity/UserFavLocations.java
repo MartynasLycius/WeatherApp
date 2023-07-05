@@ -1,4 +1,4 @@
-package com.eastnetic.task.model.dao;
+package com.eastnetic.task.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

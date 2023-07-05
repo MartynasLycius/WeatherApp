@@ -1,6 +1,6 @@
 package com.eastnetic.task.repository;
 
-import com.eastnetic.task.model.dao.Users;
+import com.eastnetic.task.model.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

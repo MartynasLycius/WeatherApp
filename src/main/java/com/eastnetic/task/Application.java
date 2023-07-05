@@ -1,14 +1,8 @@
 package com.eastnetic.task;
 
-import com.eastnetic.task.model.dto.LocationDTO;
-import com.eastnetic.task.service.LocationService;
-import com.eastnetic.task.service.impl.LocationServiceImpl;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.theme.Theme;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**

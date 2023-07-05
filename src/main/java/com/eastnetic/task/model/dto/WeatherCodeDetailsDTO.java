@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WeatherCodeDetails {
+public class WeatherCodeDetailsDTO {
 
    @JsonProperty("day")
    Day day;

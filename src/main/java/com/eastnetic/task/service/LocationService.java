@@ -1,6 +1,6 @@
 package com.eastnetic.task.service;
 
-import com.eastnetic.task.model.dao.UserFavLocations;
+import com.eastnetic.task.model.entity.UserFavLocations;
 import com.eastnetic.task.model.dto.LocationDTO;
 import com.eastnetic.task.model.dto.LocationResults;
 

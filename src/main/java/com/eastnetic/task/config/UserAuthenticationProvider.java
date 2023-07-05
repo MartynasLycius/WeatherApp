@@ -1,6 +1,6 @@
 package com.eastnetic.task.config;
 
-import com.eastnetic.task.model.dao.Users;
+import com.eastnetic.task.model.entity.Users;
 import com.eastnetic.task.repository.UsersRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;

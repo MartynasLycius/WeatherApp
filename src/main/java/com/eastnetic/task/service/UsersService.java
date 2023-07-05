@@ -1,6 +1,6 @@
 package com.eastnetic.task.service;
 
-import com.eastnetic.task.model.dao.Users;
+import com.eastnetic.task.model.entity.Users;
 
 public interface UsersService {
 
