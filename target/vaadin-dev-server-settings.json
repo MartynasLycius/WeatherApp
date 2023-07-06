@@ -1,0 +1,17 @@
+{
+  "frontendFolder": "/Users/waheduzzaman/Documents/workspace/javaEE/WeatherApp/./frontend",
+  "themeFolder": "themes",
+  "themeResourceFolder": "/Users/waheduzzaman/Documents/workspace/javaEE/WeatherApp/./frontend/generated/jar-resources",
+  "staticOutput": "/Users/waheduzzaman/Documents/workspace/javaEE/WeatherApp/target/classes/META-INF/VAADIN/webapp/VAADIN/static",
+  "generatedFolder": "generated",
+  "statsOutput": "/Users/waheduzzaman/Documents/workspace/javaEE/WeatherApp/target/classes/META-INF/VAADIN/config",
+  "frontendBundleOutput": "/Users/waheduzzaman/Documents/workspace/javaEE/WeatherApp/target/classes/META-INF/VAADIN/webapp",
+  "devBundleOutput": "/Users/waheduzzaman/Documents/workspace/javaEE/WeatherApp/src/main/dev-bundle/webapp",
+  "devBundleStatsOutput": "/Users/waheduzzaman/Documents/workspace/javaEE/WeatherApp/src/main/dev-bundle/config",
+  "jarResourcesFolder": "/Users/waheduzzaman/Documents/workspace/javaEE/WeatherApp/./frontend/generated/jar-resources",
+  "themeName": "meteoweather",
+  "clientServiceWorkerSource": "/Users/waheduzzaman/Documents/workspace/javaEE/WeatherApp/target/sw.ts",
+  "pwaEnabled": true,
+  "offlineEnabled": true,
+  "offlinePath": "'offline.html'"
+}

@@ -1,0 +1,7 @@
+com/waheduzzaman/MeteoWeather/dto/location/Location.class
+com/waheduzzaman/MeteoWeather/dto/weather/Weather.class
+com/waheduzzaman/MeteoWeather/dto/weather/DailyUnits.class
+com/waheduzzaman/MeteoWeather/dto/weather/Hourly.class
+com/waheduzzaman/MeteoWeather/dto/weather/HourlyUnits.class
+com/waheduzzaman/MeteoWeather/MeteoWeatherApplication.class
+com/waheduzzaman/MeteoWeather/dto/weather/Daily.class

@@ -1,0 +1,59 @@
+a[highlight] {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.home-button {
+    background: #456BD9;
+    border: 2px solid transparent;
+    border-radius: 99em;
+    color: white;
+    display: inline-block;
+    font: inherit;
+    height: auto;
+    line-height: 1;
+    transition: 0.2s ease;
+    padding: 0 1em;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+}
+
+.weather-details-view {
+    width: 80%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    white-space: nowrap;
+}
+
+.weekdays-scroller {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.separator-band{
+    min-height: 15px;
+    background: rgba(147, 159, 171, 0.43);
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.day-selected{
+    border: 3px solid rgba(0, 177, 255, 0.51);
+    border-radius: 8px;
+}
+
+.week-day-card {
+    display: inline-block;
+    margin: 5px;
+    width: 200px;
+}
+
+vaadin-drawer-toggle {
+    display: none;
+}
