@@ -1,29 +1,89 @@
-# Weather Application
+# Weather Application (Meteo Weather Application)
 
-This is the job interview task for software developer position
+An excellent & modern weather application built with **Vaadin** and **Spring Boot** using
+[Open Meteo](https://open-meteo.com/en) API. Features, dashboard style weather forecasting, Authentication control and more.
 
-## What to do
-* Fork the repository
-* After work is done, make a pull request and notify me by email
+[![meteo-weather-app-preview]()]
 
-## Task description
-You need to use the Weather API provided here https://open-meteo.com/en to make the weather application. 
-1. Call the API to get the locations by city name. Make the paging available with 10 items per page and a filter to filter by location name.
-2. When clicked on the location it should show the weather forecast for the location with the temperature, surface wind and rain hourly. The interface should let you first see the daily forecast and when clicked it then should show the forecast hourly for the day you selected.
-3. If you UI contains a chart it is a bonus. The interface should be convenient for user and rely on best usability and design practises
-4. Only logged on users should be able to see the weather forecasts.
-5. User should be able to mark the location favourite and have the favourite location list for quick access.
+### Built with
 
-All the other specific requirements are up to you
+* java 17 [Open JDK](https://openjdk.org/projects/jdk/17/)
+  or [intelliJ IDEA jdk Guide](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk)
+* Vaadin 24.1.0
+* Spring Boot 3.1.0
+* PostgreSQL 14
+* and ❤️
 
-## Technical requirements
-* Use  Vaadin (https://vaadin.com/) framework for the frontend. For chart you may use some different framework
-* For backend use Java EE
-* Use any database (Postgres, Oracle, etc.)
-* Make a Maven project
+### Features
 
-## Main points
-* Structure your code
-* Use best practises
-* Use naming conventions
-* Show understanding of software development concepts
+1. Location search and filter
+2. Login/Logout (username: user and password: 123123123)
+3. Multiple User support
+4. Save/Bookmark Location
+5. Show weather details of selected Location (from search result / bookmark)
+6. Current location weather (**requires Location Permission**)
+7. **Beautiful Weather Dashboard with Tiles/Widgets for weather specific information. (Check screenshot)**
+8. Weekly weather overview
+9. Daily weather breakdown (with 24hrs forecasting)
+10. Responsive layout design **(3/2/1 column design)** (Not mobile first)
+11. PWA enabled
+12. Rest you need to find out (if any 😜)
+
+### Run
+
+1. Import this project to your favourite IDE (I prefer intelliJ IDEA).
+2. Sync Maven Repositories
+3. Check properties file for postgresql Database Name, Database User name and password.(change if required)
+
+ ```sh
+WeatherApp/src/resources/application.properties
+```
+
+4. create a user/login role with name -> **root** and password -> **password** (if you have skiped step 3)
+5. create a database and name it **weather-db** and select **root** as owner from the dropdown. (if you have skiped step
+   3)
+6. Make sure you have **Java 17**
+7. Enable Lombok plugin. If required, install.
+7. Start PostgreSQL server, Run MeteoWeatherApplication and enjoy.
+
+### Common FAQ
+
+```sh
+Question: Can not start application. Getting exception 
+org.postgresql.util.PSQLException: Connection to localhost:5432 refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+```
+
+Solution: Please start postgreSQL server.
+
+```sh
+Question: Getting java.lang.UnsupportedClassVersionError
+```
+
+Answer: This app requires JAVA 17
+
+```sh 
+Question: Getting java.lang.UnsupportedOperationException
+```
+
+Answer: Please check you are connected to internet. This app requirest Internet connection to run.
+
+```sh 
+Question: How do I login? / Username password?
+```
+
+Answer: **username: wahed** and **password:123123123** or<br>
+**username: user** and  **password:123123123**
+
+```sh 
+Question: Something not covered here or a bug?
+```
+Answer: Please create an **issue**
+## License
+
+MIT License
+
+## Author
+
+Md. Waheduzzaman ([website 🌐])
+
+[website 🌐]:https://waheduzzaman.com

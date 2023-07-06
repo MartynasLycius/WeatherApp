@@ -1,0 +1,1 @@
+-- INSERT INTO USERS (id, name, role, password) VALUES (1, 'user', 'USER', '123123123');
