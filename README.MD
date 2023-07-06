@@ -3,7 +3,7 @@
 An excellent & modern weather application built with **Vaadin** and **Spring Boot** using
 [Open Meteo](https://open-meteo.com/en) API. Features, dashboard style weather forecasting, Authentication control and more.
 
-[![meteo-weather-app-preview]()]
+![meteo-weather-app-preview](https://aflion.com/meteo-banner.webp)
 
 ### Built with
 
