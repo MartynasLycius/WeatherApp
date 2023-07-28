@@ -61,7 +61,7 @@ public class LocationServiceImpl implements LocationService {
      * @throws
      */
     @Override
-    public void saveFavorites(LocationResults locationResults) {
+    public void saveFavorites(LocationResults locationResults, String description) {
         UserFavLocations favLocations = new UserFavLocations();
         favLocations.setName(locationResults.getName());
         favLocations.setLatitude(String.valueOf(locationResults.getLatitude()));
@@ -71,6 +71,7 @@ public class LocationServiceImpl implements LocationService {
         favLocations.setTimezone(locationResults.getTimezone());
         favLocations.setRawData(locationResults.toString());
         favLocations.setUserId(usersService.getCurrentUser().getId());
+        favLocations.setDescription(description);
 
         userFavLocationsRepo.save(favLocations);
     }

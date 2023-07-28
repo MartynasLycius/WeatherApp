@@ -26,6 +26,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.renderer.Renderer;
@@ -253,6 +254,7 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
                         break;
                     }
                 }
+
 
                 HorizontalLayout currentTempLayout = new HorizontalLayout();
                 Span currentTemp = new Span(hourly.getTemperature2m().get(timeIndex).toString() + hourlyUnits.getTemperature2m());
@@ -486,20 +488,10 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
      * @throws
      */
     private void addToFavorites(LocationResults results) {
-        Notification notification;
-        try{
-            locationService.saveFavorites(results);
-            favButton.setEnabled(false);
-            notification = Notification.show("Added to Favorites list.");
-            notification.setPosition(Notification.Position.MIDDLE);
-        } catch (Exception e){
-            if(locationService.isSavedLocation(results, this.usersService.getCurrentUser().getId())){
-                notification = Notification.show("Already added to Favorites list.");
-            } else {
-                notification = Notification.show("Failed to add to Favorites list. Please try again.");
-            }
-            notification.setPosition(Notification.Position.MIDDLE);
-        }
+
+
+        showDescriptionDialog(results);
+
     }
 
     /**
@@ -555,6 +547,40 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         }
     }
 
+
+    public void showDescriptionDialog(LocationResults results) {
+
+        Dialog dialog = new Dialog();
+        dialog.setHeaderTitle("Enter Description");
+        VerticalLayout dialogLayout = new VerticalLayout();
+        TextArea desc = new TextArea();
+        Button saveDesc = new Button("Save");
+        saveDesc.addClickListener(e-> {
+            this.saveNotificationShow(results, desc.getValue());
+            dialog.close();
+        });
+        dialogLayout.add(desc, saveDesc);
+        dialog.add(dialogLayout);
+        dialog.open();
+        add(dialog);
+    }
+
+    private void saveNotificationShow(LocationResults results, String desc){
+        Notification notification;
+        try{
+            locationService.saveFavorites(results, desc);
+            favButton.setEnabled(false);
+            notification = Notification.show("Added to Favorites list.");
+            notification.setPosition(Notification.Position.MIDDLE);
+        } catch (Exception e){
+            if(locationService.isSavedLocation(results, this.usersService.getCurrentUser().getId())){
+                notification = Notification.show("Already added to Favorites list.");
+            } else {
+                notification = Notification.show("Failed to add to Favorites list. Please try again.");
+            }
+            notification.setPosition(Notification.Position.MIDDLE);
+        }
+    }
 
     public void showErrorDialog() {
         Dialog dialog = new Dialog();

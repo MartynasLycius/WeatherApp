@@ -9,7 +9,8 @@ import java.util.List;
 public interface LocationService {
 
     LocationDTO getLocations(String cityName);
-    void saveFavorites(LocationResults locationResults);
+    void saveFavorites(LocationResults locationResults, String description);
+
     List<UserFavLocations> getFavorites(int userId);
     boolean isSavedLocation(LocationResults locationResults, int userId);
     boolean deleteFavorites(UserFavLocations userFavLocations);

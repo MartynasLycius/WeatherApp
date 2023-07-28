@@ -66,4 +66,6 @@ public class LocationResults {
 
     @JsonProperty("admin4")
     String admin4;
+
+    String description;
 }

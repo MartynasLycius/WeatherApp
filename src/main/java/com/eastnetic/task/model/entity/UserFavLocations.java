@@ -35,4 +35,7 @@ public class UserFavLocations {
 
     @Column(name = "raw_data_from_api", length = 65535)
     private String rawData;
+
+    @Column(name = "description")
+    private String description;
 }
