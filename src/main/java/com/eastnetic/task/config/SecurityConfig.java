@@ -23,7 +23,7 @@ public class SecurityConfig extends VaadinWebSecurity {
     protected void configure(HttpSecurity http) throws Exception {
 
         // http.rememberMe().alwaysRemember(false);
-
+        http.csrf().disable();
         http.authorizeHttpRequests().requestMatchers(new AntPathRequestMatcher("/public/**"))
                 .permitAll();
 

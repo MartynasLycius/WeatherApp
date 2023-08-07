@@ -8,10 +8,7 @@ import com.eastnetic.task.service.UsersService;
 import com.eastnetic.task.utils.DateUtils;
 import com.eastnetic.task.utils.WeatherCodeMappingUtils;
 import com.eastnetic.task.views.layout.MainLayout;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Html;
-import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -34,6 +31,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.*;
 import jakarta.annotation.security.PermitAll;
 import lombok.extern.slf4j.Slf4j;
+import org.vaadin.elmot.flow.sensors.GeoLocation;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -55,7 +53,7 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
     Button clearButton;
     String favIdFromUrl;
     TextField searchByCityField;
-
+    GeoLocation geoLocation;
     /**
      * Main forecast page view create
      * @param locationService, usersService, forecastService
@@ -69,6 +67,11 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         searchHorizontalLayout = new HorizontalLayout();
 
         createSearchLayout();
+
+        geoLocation = new GeoLocation();
+        geoLocation.setWatch(true);
+        geoLocation.setHighAccuracy(true);
+        add(geoLocation);
     }
 
     private void createSearchLayout() {
@@ -113,7 +116,14 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
             }
         });
 
-        searchHorizontalLayout.add(searchByCityField, button);
+        Button currentLocationBtn = new Button("Get weather of your location");
+        currentLocationBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SUCCESS);
+        currentLocationBtn.setIcon(new Icon(VaadinIcon.LOCATION_ARROW_CIRCLE));
+        currentLocationBtn.addClickListener(clickEvent -> {
+            this.setWeatherOfYourLocation();
+        });
+
+        searchHorizontalLayout.add(searchByCityField, button, currentLocationBtn);
         add(searchHorizontalLayout);
     }
 
@@ -217,7 +227,13 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
             if (forecastDTO != null) {
                 VerticalLayout forecastVerticalLayout = new VerticalLayout();
                 HorizontalLayout forecastHorizontalLayout = new HorizontalLayout();
-                H3 selectedCitySpan = new H3(results.getName() + ", " + results.getCountry());
+                String locationName = "";
+                if(results.getName() != null && results.getCountry() != null){
+                    locationName = results.getName() + ", " + results.getCountry();
+                } else {
+                    locationName = "Current Location";
+                }
+                H3 selectedCitySpan = new H3(locationName);
                 favButton = new Button("Mark as Favorite", new Icon(VaadinIcon.HEART));
                 favButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
                 favButton.addClickListener(e -> this.addToFavorites(results));
@@ -489,9 +505,7 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
      */
     private void addToFavorites(LocationResults results) {
 
-
         showDescriptionDialog(results);
-
     }
 
     /**
@@ -612,6 +626,16 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
         dialogLayout.setAlignSelf(FlexComponent.Alignment.END, closeButton);
 
         return dialogLayout;
+    }
+
+    void setWeatherOfYourLocation(){
+
+        LocationResults locationResults = new LocationResults();
+        locationResults.setLatitude(geoLocation.getValue().getLatitude());
+        locationResults.setLongitude(geoLocation.getValue().getLongitude());
+        locationResults.setTimezone("auto");
+        callWeatherForecast(locationResults);
+
     }
 
 }
