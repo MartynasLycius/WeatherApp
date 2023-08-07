@@ -629,6 +629,7 @@ public class LocationView extends VerticalLayout implements HasUrlParameter<Inte
     }
 
     void setWeatherOfYourLocation(){
+        clearLayout();
 
         LocationResults locationResults = new LocationResults();
         locationResults.setLatitude(geoLocation.getValue().getLatitude());
