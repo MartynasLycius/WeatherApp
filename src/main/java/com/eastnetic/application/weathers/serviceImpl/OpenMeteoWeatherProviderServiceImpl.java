@@ -16,16 +16,16 @@ import java.time.format.DateTimeFormatter;
 
 @Service
 @CacheConfig(cacheNames = "weatherDataCache")
-public class OpenMeteoWeatherAdapter implements WeatherProviderService {
+public class OpenMeteoWeatherProviderServiceImpl implements WeatherProviderService {
 
-    private static final Logger LOGGER = LogManager.getLogger(OpenMeteoWeatherAdapter.class);
+    private static final Logger LOGGER = LogManager.getLogger(OpenMeteoWeatherProviderServiceImpl.class);
 
     private static final String API_BASE_URL = "https://api.open-meteo.com/v1/forecast?";
 
     private final RestTemplate restTemplate;
 
     @Autowired
-    public OpenMeteoWeatherAdapter(RestTemplate restTemplate) {
+    public OpenMeteoWeatherProviderServiceImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
