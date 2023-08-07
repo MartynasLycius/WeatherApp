@@ -4,20 +4,22 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-import java.util.List;
-
 public class Forecast extends VerticalLayout {
 
-    Button save = new Button("Favourite");
+    Icon favoriteIcon = VaadinIcon.HEART.create();
+    Button save = new Button(favoriteIcon);
 
     public Forecast(){
         addClassName("forecast-view");
 
-        H1 forecastHead = new H1("Daily Forecast");
+        Span forecastHead = new Span("Daily Forecast");
+        forecastHead.addClassNames("text-xl", "mt-m");
 
         add(
            createButtonLayout(),
