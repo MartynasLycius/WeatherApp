@@ -1,6 +1,5 @@
 package com.example.application.http.client;
 
-import com.example.application.dto.GeoCode;
 import com.example.application.dto.GeoCodeResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +14,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static com.example.application.http.client.JavaHttpClientTimeout.getHttpClientWithTimeout;
+import static com.example.application.http.client.HttpClientTimeout.getHttpClientWithTimeout;
 
 public class HttpClientTest {
 

@@ -43,6 +43,9 @@ public class GeoCode {
     @JsonProperty("population")
     private Long population;
 
+    @JsonProperty("postcodes")
+    private String[] postcodes;
+
     @JsonProperty("country_id")
     private Long countryId;
 

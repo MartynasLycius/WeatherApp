@@ -1,7 +1,7 @@
 package com.example.application.views.list;
 
-import com.example.application.data.entity.GeoLocation;
 import com.example.application.data.service.WaService;
+import com.example.application.dto.GeoCode;
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
@@ -17,7 +17,7 @@ import jakarta.annotation.security.PermitAll;
 @Route(value = "", layout = MainLayout.class)
 @PermitAll
 public class ListView extends VerticalLayout {
-    Grid<GeoLocation> grid = new Grid<>(GeoLocation.class);
+    Grid<GeoCode> grid = new Grid<>(GeoCode.class);
     TextField filterText = new TextField();
     Forecast forecast;
     private WaService waService;
@@ -28,19 +28,20 @@ public class ListView extends VerticalLayout {
         setSizeFull();
 
         configureGrid();
-        configureForm();
+        configureForeCast();
 
         add(
            getToolbar(),
            getContent()
         );
         
-//        updateList();
+        updateList();
     }
 
-//    private void updateList() {
-//        grid.setItems(waService.findAllContacts(filterText.getValue()));
-//    }
+    private void updateList() {
+        GeoCode[] result = waService.getGeoCodeResult(filterText.getValue());
+        grid.setItems(result);
+    }
 
     private Component getContent() {
         HorizontalLayout content = new HorizontalLayout(grid, forecast);
@@ -51,7 +52,7 @@ public class ListView extends VerticalLayout {
         return content;
     }
 
-    private void configureForm() {
+    private void configureForeCast() {
         forecast = new Forecast();
     }
 
@@ -59,7 +60,7 @@ public class ListView extends VerticalLayout {
         filterText.setPlaceholder("Filter by city ...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
-//        filterText.addValueChangeListener(e -> updateList());
+        filterText.addValueChangeListener(e -> updateList());
 
         HorizontalLayout toolBar = new HorizontalLayout(filterText);
         toolBar.addClassName("toolbar");
@@ -72,11 +73,17 @@ public class ListView extends VerticalLayout {
         grid.setColumns("name", "latitude", "longitude", "country", "id");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
-        grid.asSingleSelect().addValueChangeListener(e -> editContact(e.getValue()));
+        grid.asSingleSelect().addValueChangeListener(e -> viewForeCast(e.getValue()));
     }
 
-    private void editContact(Object forecast) {
-
+    private void viewForeCast(GeoCode geoCode) {
+        if(geoCode == null){
+            // Clear
+        } else {
+            forecast.setGeoCode(geoCode);
+            forecast.setVisible(true);
+            addClassName("editing");
+        }
     }
 
 }
