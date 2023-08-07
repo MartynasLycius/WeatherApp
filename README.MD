@@ -2,6 +2,10 @@
 
 This is the job interview task for software developer position
 
+## Login Credential
+* username: user
+* password: password
+
 ## What to do
 * Fork the repository
 * After work is done, make a pull request and notify me by email
