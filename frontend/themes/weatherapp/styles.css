@@ -1,1 +1,8 @@
 @import url('./main-layout.css');
+
+.blue-span {
+    color: #0074D9;
+    font-size: 25px;
+}
+
+
