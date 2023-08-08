@@ -11,7 +11,7 @@ public class GeoCode {
     private String name;
 
     @JsonProperty("latitude")
-    private Long latitude;
+    private Double latitude;
 
     @JsonProperty("longitude")
     private Double longitude;
@@ -80,11 +80,11 @@ public class GeoCode {
         this.name = name;
     }
 
-    public Long getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Long latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
@@ -94,6 +94,14 @@ public class GeoCode {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public String[] getPostcodes() {
+        return postcodes;
+    }
+
+    public void setPostcodes(String[] postcodes) {
+        this.postcodes = postcodes;
     }
 
     public Long getElevation() {

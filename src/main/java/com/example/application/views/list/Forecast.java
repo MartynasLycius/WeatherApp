@@ -1,9 +1,11 @@
 package com.example.application.views.list;
 
+import com.example.application.dto.DailyForecast;
 import com.example.application.dto.GeoCode;
+import com.example.application.dto.HourlyForecast;
+import com.example.application.views.DailyForecastView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Span;
@@ -19,31 +21,32 @@ public class Forecast extends VerticalLayout {
 
     private GeoCode geoCode;
 
-    Span forecastHead;
+    private HourlyForecast hourlyForecast;
+
+//    Span forecastHead;
 
     Span longLag;
+
+    Span foreCastData;
+    DailyForecastView dailyForecastView;
 
     public Forecast(){
         addClassName("forecast-view");
 
-        forecastHead = new Span(" Daily Forecast");
-        forecastHead.addClassNames("text-xl", "mt-m");
-
-        longLag = new Span();
-        longLag.addClassNames("text-xl", "mt-m");
+        dailyForecastView = new DailyForecastView();
 
         add(
            createButtonLayout(),
-           forecastHead,
-           longLag
+           dailyForecastView
         );
 
     }
 
-    public void setGeoCode(GeoCode geoCode) {
+    public void setGeoCode(GeoCode geoCode, DailyForecast dailyForecast) {
         this.geoCode = geoCode;
-        forecastHead.setText(geoCode.getName() + " | " + geoCode.getCountry()  + ": Daily Forecast");
-        longLag.setText(geoCode.getLongitude() + " : " + geoCode.getLatitude());
+//        forecastHead.setText(geoCode.getName() + " | " + geoCode.getCountry()  + ": Daily Forecast");
+        dailyForecastView.setDailyForecastData(geoCode.getName(), geoCode.getCountry(), dailyForecast);
+        dailyForecastView.initDemo();
     }
 
     private Component createButtonLayout() {

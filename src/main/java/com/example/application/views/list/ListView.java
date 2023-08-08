@@ -1,7 +1,9 @@
 package com.example.application.views.list;
 
 import com.example.application.data.service.WaService;
+import com.example.application.dto.DailyForecast;
 import com.example.application.dto.GeoCode;
+import com.example.application.dto.HourlyForecast;
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
@@ -80,7 +82,8 @@ public class ListView extends VerticalLayout {
         if(geoCode == null){
             // Clear
         } else {
-            forecast.setGeoCode(geoCode);
+            DailyForecast dailyForecast = waService.getDailyForecast(geoCode.getLatitude(), geoCode.getLongitude());
+            forecast.setGeoCode(geoCode, dailyForecast);
             forecast.setVisible(true);
             addClassName("editing");
         }
