@@ -1,29 +1,67 @@
-# Weather Application
+# Weather App
 
-This is the job interview task for software developer position
+This app will produce an UI for checking weather forecast with daily and hourly details for any specific location using [open-meteo](https://open-meteo.com/) free public APIs.
 
-## What to do
-* Fork the repository
-* After work is done, make a pull request and notify me by email
+## Features
+* Login
+* Dashboard
+* Search location with filter
+* Weather details
+  * Current weather details
+  * Next 7 days weather details
+  * Hourly weather details for specific day
+* Favorite locations save and delete
 
-## Task description
-You need to use the Weather API provided here https://open-meteo.com/en to make the weather application. 
-1. Call the API to get the locations by city name. Make the paging available with 10 items per page and a filter to filter by location name.
-2. When clicked on the location it should show the weather forecast for the location with the temperature, surface wind and rain hourly. The interface should let you first see the daily forecast and when clicked it then should show the forecast hourly for the day you selected.
-3. If you UI contains a chart it is a bonus. The interface should be convenient for user and rely on best usability and design practises
-4. Only logged on users should be able to see the weather forecasts.
-5. User should be able to mark the location favourite and have the favourite location list for quick access.
+## Technologies Used
+* Spring boot
+* Maven
+* Vaadin
+* MySQL
 
-All the other specific requirements are up to you
+## Build and Run
 
-## Technical requirements
-* Use  Vaadin (https://vaadin.com/) framework for the frontend. For chart you may use some different framework
-* For backend use Java EE
-* Use any database (Postgres, Oracle, etc.)
-* Make a Maven project
+### Prerequisites
+* Java 17 or later
+* Maven 3.6+
+* MySQL database
 
-## Main points
-* Structure your code
-* Use best practises
-* Use naming conventions
-* Show understanding of software development concepts
+### Run
+1. Start MySQL and create a database for the application.
+
+2. Go to `src/main/resources` and open `application-dev.properties` file. Change following properties with your properties.
+```
+    spring.datasource.url = jdbc:mysql://host:port/db-name
+    spring.datasource.username = root
+    spring.datasource.password = password
+```
+
+> **INFO**
+>
+>
+> We will run the application only in development mode for demo as Vaadin needs license for production build. 
+> If we want to build in production mode, we need to update datasource url in `application-prod.properties` file as well.
+>
+3. Go to the project directory and run the following command:
+```
+    mvnw spring-boot:run
+```
+4. Open the browser and put following URL:
+```
+    http://localhost:8080/WeatherApp
+```
+
+## Default Users
+You will need users to login.
+
+2 default users will be created when the application runs.
+
+* User 1 (ADMIN role):
+  * username: admin
+  * password: admin
+  
+
+* User 2 (USER role):
+    * username: user
+    * password: user
+
+
