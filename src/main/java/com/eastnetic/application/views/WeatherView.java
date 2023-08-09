@@ -1,6 +1,7 @@
 package com.eastnetic.application.views;
 
 import com.eastnetic.application.locations.entity.LocationDetails;
+import com.eastnetic.application.weathers.entity.DailyWeather;
 import com.eastnetic.application.weathers.entity.WeatherData;
 import com.eastnetic.application.weathers.service.WeatherProviderService;
 import com.vaadin.flow.component.UI;
@@ -55,5 +56,24 @@ public class WeatherView extends VerticalLayout implements BeforeEnterObserver {
         );
 
         add(weatherCard);
+
+        DailyWeather dailyWeather = weatherData.getDailyWeather();
+
+        int dayCount = dailyWeather.getTime().size();
+
+        for (int i=0; i<dayCount; i++) {
+
+            DailyWeatherCard dailyWeatherCard = new DailyWeatherCard(
+                    dailyWeather.getTime().get(i),
+                    dailyWeather.getMaxTemperature().get(i),
+                    dailyWeather.getMinTemperature().get(i),
+                    dailyWeather.getSunrise().get(i),
+                    dailyWeather.getSunset().get(i),
+                    dailyWeather.getRainSum().get(i),
+                    dailyWeather.getMaxWindSpeed().get(i)
+            );
+
+            add(dailyWeatherCard);
+        }
     }
 }
