@@ -1,6 +1,7 @@
 package com.eastnetic.application.views;
 
 import com.eastnetic.application.locations.entity.LocationDetails;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -19,11 +20,24 @@ public class LocationListComponent extends VerticalLayout implements PaginationC
 
     public LocationListComponent() {
 
-        locationGrid.setColumns("name", "country", "latitude", "longitude", "elevation", "timezone");
+        configureLocationGrid();
+        configurePaginationComponent();
+    }
+
+    private void configureLocationGrid() {
+
         locationGrid.setVisible(false);
+        locationGrid.getColumns().forEach(col -> col.setAutoWidth(true));
+        locationGrid.setColumns("name", "country", "latitude", "longitude", "elevation", "timezone");
+        locationGrid.asSingleSelect().addValueChangeListener(event -> showWeatherDate(event.getValue()));
+
         add(locationGrid);
+    }
+
+    private void configurePaginationComponent() {
 
         paginationComponent = new PaginationComponent(this);
+
         add(paginationComponent);
     }
 
@@ -36,6 +50,12 @@ public class LocationListComponent extends VerticalLayout implements PaginationC
         int totalPages = (int) Math.ceil((double) locationList.size() / paginationComponent.getPageSize());
 
         paginationComponent.setTotalPages(totalPages);
+    }
+
+    private void showWeatherDate(LocationDetails selectedLocation) {
+
+        UI.getCurrent().getSession().setAttribute("selectedLocation", selectedLocation);
+        UI.getCurrent().navigate(WeatherView.class);
     }
 
     @Override
