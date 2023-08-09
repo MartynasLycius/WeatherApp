@@ -25,11 +25,16 @@ public class WaService {
     }
 
     public GeoCode[] getGeoCodeResult(String cityName){
+        GeoCode[] result;
         if(cityName == null || cityName.isEmpty()){
-            GeoCode[] result = new GeoCode[0];
+            result = new GeoCode[0];
             return result;
         } else {
-            return httpGeoDataRequest.getGeoCodeResult(cityName).getResults();
+            result = httpGeoDataRequest.getGeoCodeResult(cityName).getResults();
+            if(result == null){
+                result = new GeoCode[0];
+            }
+            return result;
         }
     }
 

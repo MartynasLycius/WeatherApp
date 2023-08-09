@@ -30,7 +30,7 @@ public class HttpClientTest {
         geoDataUrl = String.format(geoDataUrl, "Dhaka", 10+"");
         httpClient = getHttpClientWithTimeout(3);
         httpClient.connectTimeout().map(Duration::toSeconds)
-                .ifPresent(sec -> System.out.println("Timeout in seconds: " + sec));
+                .ifPresent(sec -> System.out.println(sec));
 
         httpGetGeoDataRequest = HttpRequest.newBuilder()
                         .uri(URI.create(geoDataUrl))

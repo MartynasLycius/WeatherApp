@@ -17,8 +17,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class Forecast extends VerticalLayout {
 
-    Icon favoriteIcon = VaadinIcon.HEART.create();
-    Button save = new Button(favoriteIcon);
+//    Icon favoriteIcon = VaadinIcon.HEART.create();
+//    Button save = new Button(favoriteIcon);
 
     private GeoCode geoCode;
 
@@ -37,7 +37,7 @@ public class Forecast extends VerticalLayout {
         dailyForecastView = new DailyForecastView();
 
         add(
-           createButtonLayout(),
+//           createButtonLayout(),
            dailyForecastView
         );
 
@@ -48,12 +48,12 @@ public class Forecast extends VerticalLayout {
         dailyForecastView.setDailyForecastData(geoCode, dailyForecast, waService);
     }
 
-    private Component createButtonLayout() {
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        save.addClickShortcut(Key.ENTER);
-
-        return new HorizontalLayout(save);
-    }
+//    private Component createButtonLayout() {
+//        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+//        save.addClickShortcut(Key.ENTER);
+//
+//        return new HorizontalLayout(save);
+//    }
 
 
 }

@@ -6,6 +6,8 @@ import com.example.application.dto.GeoCode;
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -60,6 +62,7 @@ public class ListView extends VerticalLayout {
     private Component getToolbar() {
         filterText.setPlaceholder("Filter by city ...");
         filterText.setClearButtonVisible(true);
+        filterText.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
         filterText.addValueChangeListener(e -> updateList());
 
@@ -70,9 +73,11 @@ public class ListView extends VerticalLayout {
 
     private void configureGrid() {
         grid.addClassName("contact-grid");
-        grid.setSizeFull();
+        grid.setWidthFull();
+//        grid.setSizeFull();
         grid.setColumns("name", "latitude", "longitude", "country", "id");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
+        grid.setPageSize(10);
 
         grid.asSingleSelect().addValueChangeListener(e -> viewForeCast(e.getValue()));
     }

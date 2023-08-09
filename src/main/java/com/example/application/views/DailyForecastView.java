@@ -126,7 +126,7 @@ public class DailyForecastView extends AbstractChartExample {
         Dialog dialog = new Dialog();
 
         VerticalLayout dialogLayout = new VerticalLayout();
-        String chartTitle = "Hourly Weather forecast for City: %s, Country: %s and Date: %s";
+        String chartTitle = "Hourly Weather forecast for City : %s, Country : %s and Date : %s";
         Span contentLabel = new Span(String.format(chartTitle, geoCode.getName(), geoCode.getCountry(), date));
         contentLabel.addClassNames("text-xl", "mt-m");
         contentLabel.setWidthFull();

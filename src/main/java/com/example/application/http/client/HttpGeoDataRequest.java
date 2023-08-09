@@ -6,12 +6,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.yaml.snakeyaml.util.UriEncoder;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 import static com.example.application.http.client.HttpClientTimeout.getHttpClientWithTimeout;
@@ -23,7 +27,9 @@ public class HttpGeoDataRequest {
     private HttpClient httpClient;
     private HttpRequest httpGetGeoDataRequest;
 
-    private int geoCodeSize = 10;
+    private int geoCodeSize = 100;
+
+
 
     public GeoCodeResult getGeoCodeResult(String cityName){
         GeoCodeResult results = new GeoCodeResult();
@@ -31,7 +37,8 @@ public class HttpGeoDataRequest {
             if(cityName == null || Strings.isBlank(cityName)){
                 return results;
             }
-            String geoDataUrl = String.format(geoDataUrlTemplate, cityName, 10+"");
+            String encodedCityName = URLEncoder.encode(cityName, StandardCharsets.UTF_8.toString());
+            String geoDataUrl = String.format(geoDataUrlTemplate, encodedCityName, geoCodeSize+"");
             httpClient = getHttpClientWithTimeout(3);
             httpClient.connectTimeout().map(Duration::toSeconds)
                     .ifPresent(sec -> System.out.println("Timeout in seconds: " + sec));
