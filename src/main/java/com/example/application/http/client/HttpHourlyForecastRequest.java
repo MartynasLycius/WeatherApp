@@ -16,20 +16,20 @@ import static com.example.application.http.client.HttpClientTimeout.getHttpClien
 @Component
 public class HttpHourlyForecastRequest {
 
-    private String hourlyForecastDataUrlTemplate = "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&hourly=temperature_2m,rain,windspeed_10m";
+    private String hourlyForecastDataUrlTemplate = "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&hourly=temperature_2m,rain,windspeed_10m&start_date=%s&end_date=%s";
     private HttpClient httpClient;
     private HttpRequest httpHourlyForecastDataRequest;
 
 //    private Double latitude = 23.7104;
 //    private Double longitude = 90.407;
 
-    public HourlyForecast getHourlyForecast(Double latitude, Double longitude ){
+    public HourlyForecast getHourlyForecast(Double latitude, Double longitude, String startDate, String endDate ){
         HourlyForecast hourlyForecast = new HourlyForecast();
         try {
             if(latitude == null || longitude == null){
                 return hourlyForecast;
             }
-            String hourlyForecastDataUrl = String.format(hourlyForecastDataUrlTemplate, latitude +"", longitude +"");
+            String hourlyForecastDataUrl = String.format(hourlyForecastDataUrlTemplate, latitude +"", longitude +"", startDate, endDate);
             httpClient = getHttpClientWithTimeout(3);
             httpClient.connectTimeout().map(Duration::toSeconds)
                     .ifPresent(sec -> System.out.println("Timeout in seconds: " + sec));

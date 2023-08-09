@@ -1,5 +1,6 @@
 package com.example.application.views.list;
 
+import com.example.application.data.service.WaService;
 import com.example.application.dto.DailyForecast;
 import com.example.application.dto.GeoCode;
 import com.example.application.dto.HourlyForecast;
@@ -42,11 +43,9 @@ public class Forecast extends VerticalLayout {
 
     }
 
-    public void setGeoCode(GeoCode geoCode, DailyForecast dailyForecast) {
+    public void setGeoCode(GeoCode geoCode, DailyForecast dailyForecast, WaService waService) {
         this.geoCode = geoCode;
-//        forecastHead.setText(geoCode.getName() + " | " + geoCode.getCountry()  + ": Daily Forecast");
-        dailyForecastView.setDailyForecastData(geoCode.getName(), geoCode.getCountry(), dailyForecast);
-        dailyForecastView.initDemo();
+        dailyForecastView.setDailyForecastData(geoCode, dailyForecast, waService);
     }
 
     private Component createButtonLayout() {

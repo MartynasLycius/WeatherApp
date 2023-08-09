@@ -33,11 +33,11 @@ public class WaService {
         }
     }
 
-    public HourlyForecast getHourlyForecast(Double latitude, Double longitude){
+    public HourlyForecast getHourlyForecast(Double latitude, Double longitude, String startDate, String endDate){
         if(latitude == null || longitude == null){
             return new HourlyForecast();
         } else {
-            return  httpHourlyForecastRequest.getHourlyForecast(latitude, longitude);
+            return  httpHourlyForecastRequest.getHourlyForecast(latitude, longitude, startDate, endDate);
         }
     }
 
