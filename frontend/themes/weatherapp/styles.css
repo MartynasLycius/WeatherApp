@@ -31,8 +31,26 @@
 }
 
 .location {
-    font-size: 18px;
+    font-size: 24px;
     font-weight: bold;
+    border: none !important;
+    box-shadow: none !important;
+    background: none !important;
+    padding: 0 !important;
+    outline: none !important;
+    appearance: none;
+}
+
+.current-weather {
+    font-size: 24px;
+    font-weight: bold;
+    border: none !important;
+    box-shadow: none !important;
+    background: none !important;
+    padding: 0 !important;
+    outline: none !important;
+    appearance: none;
+    margin-bottom: 50px;
 }
 
 .temperature, .wind-speed, .date-time {
