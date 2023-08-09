@@ -62,7 +62,7 @@ public class LocationSearchView extends VerticalLayout {
 
         if (cityName != null && !cityName.isEmpty()) {
 
-            List<LocationDetails> locations = locationProviderService.getLocationDetails(cityName);
+            List<LocationDetails> locations = locationProviderService.getLocationDetails(cityName, 50);
 
             locationListComponent.showLocationList(locations);
 

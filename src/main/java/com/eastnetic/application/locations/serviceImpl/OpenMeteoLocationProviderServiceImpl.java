@@ -29,11 +29,11 @@ public class OpenMeteoLocationProviderServiceImpl implements LocationProviderSer
 
     @Override
     @Cacheable(key = "#cityName", unless = "#result == null")
-    public List<LocationDetails> getLocationDetails(String cityName) {
+    public List<LocationDetails> getLocationDetails(String cityName, int count) {
 
         LOGGER.info("Fetching location details from open-meteo api: City Name={}: START", cityName);
 
-        String apiUrl = API_BASE_URL + cityName;
+        String apiUrl = API_BASE_URL + cityName + "&count=" + count;
 
         try {
             OpenMeteoLocationApiResponse response = restTemplate.getForObject(apiUrl, OpenMeteoLocationApiResponse.class);

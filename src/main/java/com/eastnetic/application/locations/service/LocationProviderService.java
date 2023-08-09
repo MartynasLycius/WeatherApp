@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface LocationProviderService {
 
-    List<LocationDetails> getLocationDetails(String cityName);
+    List<LocationDetails> getLocationDetails(String cityName, int count);
 
 }
