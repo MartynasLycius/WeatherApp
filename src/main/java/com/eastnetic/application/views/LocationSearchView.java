@@ -1,10 +1,12 @@
 package com.eastnetic.application.views;
 
 import com.eastnetic.application.locations.entity.LocationDetails;
+import com.eastnetic.application.locations.exceptions.LocationProviderException;
 import com.eastnetic.application.locations.service.LocationProviderService;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
@@ -62,10 +64,19 @@ public class LocationSearchView extends VerticalLayout {
 
         if (cityName != null && !cityName.isEmpty()) {
 
-            List<LocationDetails> locations = locationProviderService.getLocationDetails(cityName, 50);
+            try {
 
-            locationListComponent.showLocationList(locations);
+                List<LocationDetails> locations = locationProviderService.getLocationDetails(cityName, 50);
 
+                locationListComponent.showLocationList(locations);
+
+            } catch (LocationProviderException ex) {
+
+                locationListComponent.setVisible(false);
+
+                Notification.show(ex.getMessage(), 3000, Notification.Position.MIDDLE);
+
+            }
         }
     }
 
