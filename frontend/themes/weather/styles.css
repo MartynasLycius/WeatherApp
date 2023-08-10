@@ -1,0 +1,66 @@
+vaadin-drawer-toggle {
+    display: none;
+}
+
+a[highlight] {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.common-button {
+    background: #456BD9;
+    border: 2px solid transparent;
+    color: white;
+    display: inline-block;
+    font: inherit;
+    height: auto;
+    line-height: 1;
+    transition: 0.2s ease;
+    padding: 0 1em;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+}
+
+.warm {
+    color: hsla(3, 100%, 60%, 0.9);
+}
+
+.cold {
+    color: hsla(214, 90%, 52%, 0.9);
+}
+
+.week-forecast-view {
+    width: 80%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    white-space: nowrap;
+}
+
+.week-days-scroller {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.bar {
+    min-height: 15px;
+    background: rgba(166, 184, 201, 0.43);
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.selected-day {
+    border: 3px solid rgba(115, 201, 241, 0.51);
+    border-radius: 8px;
+}
+
+.day-card {
+    display: inline-block;
+    margin: 5px;
+    width: 200px;
+}
