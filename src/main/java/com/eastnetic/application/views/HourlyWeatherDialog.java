@@ -1,16 +1,17 @@
 package com.eastnetic.application.views;
 
 import com.eastnetic.application.locations.entity.LocationDetails;
+import com.eastnetic.application.weathers.entity.HourlyWeather;
 import com.eastnetic.application.weathers.entity.WeatherData;
 import com.eastnetic.application.weathers.service.WeatherProviderService;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.grid.Grid;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HourlyWeatherDialog extends Dialog {
 
@@ -22,12 +23,13 @@ public class HourlyWeatherDialog extends Dialog {
 
         this.weatherProviderService = weatherProviderService;
 
+        setWidth("50%");
         setCloseOnEsc(true);
         setCloseOnOutsideClick(true);
 
         WeatherData weatherData = getHourlyWeatherData(day, location);
 
-        setHourlyData(weatherData);
+        setHourlyData(weatherData.getHourlyWeather());
     }
 
     private WeatherData getHourlyWeatherData(String day, LocationDetails locationDetails) {
@@ -40,28 +42,80 @@ public class HourlyWeatherDialog extends Dialog {
 
     }
 
-    private void setHourlyData(WeatherData weatherData) {
+    private void setHourlyData(HourlyWeather hourlyWeather) {
 
-        VerticalLayout hourlyWeatherLayout = new VerticalLayout();
-        hourlyWeatherLayout.setSpacing(true);
+        List<HourlyWeatherGridData> hourlyWeatherGridDataList = new ArrayList<>();
 
-        int dataSize = weatherData.getHourlyWeather().getTime().size();
-
+        int dataSize = hourlyWeather.getTime().size();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
 
         for (int i=0; i<dataSize; i++) {
 
-            String date = weatherData.getHourlyWeather().getTime().get(i);
+            String date = hourlyWeather.getTime().get(i);
             LocalDateTime dateTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
 
-            Div entryDiv = new Div();
-            entryDiv.add(new Text("Time: " + dateTime.format(formatter) + " - "));
-            entryDiv.add(new Text("Temperature: " + weatherData.getHourlyWeather().getTemperature().get(i) + " °C, "));
-            entryDiv.add(new Text("Rain: " + weatherData.getHourlyWeather().getRain().get(i) + " mm, "));
-            entryDiv.add(new Text("Wind Speed: " + weatherData.getHourlyWeather().getWindSpeed().get(i) + " km/h"));
-            hourlyWeatherLayout.add(entryDiv);
+            hourlyWeatherGridDataList.add(
+                    new HourlyWeatherGridData(
+                            dateTime.format(formatter),
+                            hourlyWeather.getRain().get(i) + " mm",
+                            hourlyWeather.getWindSpeed().get(i) + " km/h",
+                            hourlyWeather.getTemperature().get(i) + " °C"
+                    ));
         }
 
-        add(hourlyWeatherLayout);
+        Grid<HourlyWeatherGridData> hourlyWeatherGrid = new Grid<>(HourlyWeatherGridData.class);
+        hourlyWeatherGrid.setItems(hourlyWeatherGridDataList);
+
+        add(hourlyWeatherGrid);
+    }
+
+    public static class HourlyWeatherGridData {
+
+        public String time;
+
+        private String rain;
+
+        private String windSpeed;
+
+        private String temperature;
+
+        public HourlyWeatherGridData(String time, String rain, String windSpeed, String temperature) {
+            this.time = time;
+            this.rain = rain;
+            this.windSpeed = windSpeed;
+            this.temperature = temperature;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        public void setTime(String time) {
+            this.time = time;
+        }
+
+        public String getRain() {
+            return rain;
+        }
+
+        public void setRain(String rain) {
+            this.rain = rain;
+        }
+
+        public String getWindSpeed() {
+            return windSpeed;
+        }
+
+        public void setWindSpeed(String windSpeed) {
+            this.windSpeed = windSpeed;
+        }
+
+        public String getTemperature() {
+            return temperature;
+        }
+
+        public void setTemperature(String temperature) {
+            this.temperature = temperature;
+        }
     }
 }
