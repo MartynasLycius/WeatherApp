@@ -1,53 +1,50 @@
 package com.eastnetic.application.views;
 
+import com.eastnetic.application.weathers.entity.CurrentWeather;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H5;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Component
+@UIScope
 public class CurrentWeatherCard extends Div {
 
-    public CurrentWeatherCard(double temperature, double windSpeed, String location, String dateTime) {
+    private final H5 currentWeatherText = new H5("Current Weather");
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
-        LocalDateTime localDateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME);
+    private final TextField windSpeedField = new TextField("Wind Speed");
 
-        addClassName("weather-card");
+    private final TextField temperatureField = new TextField("Temperature");
 
-        FlexLayout infoContainer = new FlexLayout();
-        infoContainer.addClassName("info-container");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
 
-        H3 locationText = new H3(location);
-        locationText.addClassName("location");
+    public CurrentWeatherCard() {
 
-        H5 currentWeatherText = new H5("Current Weather");
-        locationText.addClassName("current-weather");
-
-        FlexLayout dataContainer = new FlexLayout();
-        dataContainer.addClassName("data-container");
-
-        TextField temperatureField = new TextField("Temperature");
-        temperatureField.setValue(temperature + " °C");
-        temperatureField.setReadOnly(true);
-        temperatureField.addClassName("temperature");
-
-        TextField windSpeedField = new TextField("Wind Speed");
-        windSpeedField.setValue(windSpeed + " m/s");
         windSpeedField.setReadOnly(true);
-        windSpeedField.addClassName("wind-speed");
+        temperatureField.setReadOnly(true);
 
-        TextField dateTimeField = new TextField("Date and Time");
-        dateTimeField.setValue(localDateTime.format(formatter));
-        dateTimeField.setReadOnly(true);
-        dateTimeField.addClassName("date-time");
+        HorizontalLayout dataContainer = new HorizontalLayout();
+        dataContainer.add(temperatureField, windSpeedField);
 
-        dataContainer.add(temperatureField, windSpeedField, dateTimeField);
+        VerticalLayout infoContainer = new VerticalLayout();
+        addClassName("info-container");
+        infoContainer.add(currentWeatherText, dataContainer);
 
-        infoContainer.add(locationText, currentWeatherText, dataContainer);
         add(infoContainer);
+    }
+
+    public void showCurrentWeather(CurrentWeather currentWeather) {
+
+        LocalDateTime localDateTime = LocalDateTime.parse(currentWeather.getTime(), DateTimeFormatter.ISO_DATE_TIME);
+
+        windSpeedField.setValue(currentWeather.getWindSpeed() + " m/s");
+        temperatureField.setValue(currentWeather.getTemperature() + " °C");
+        currentWeatherText.setText("Current Weather at " + localDateTime.format(formatter));
     }
 }

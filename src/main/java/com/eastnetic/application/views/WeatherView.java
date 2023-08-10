@@ -5,6 +5,7 @@ import com.eastnetic.application.weathers.entity.DailyWeather;
 import com.eastnetic.application.weathers.entity.WeatherData;
 import com.eastnetic.application.weathers.service.WeatherProviderService;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -21,13 +22,19 @@ public class WeatherView extends VerticalLayout implements BeforeEnterObserver {
 
     private LocationDetails location;
 
+    private final H3 locationName = new H3();
+
+    private final CurrentWeatherCard currentWeatherCard;
+
     private final WeatherProviderService weatherProviderService;
 
-    public WeatherView(WeatherProviderService weatherProviderService) {
+    public WeatherView(CurrentWeatherCard currentWeatherCard,
+                       WeatherProviderService weatherProviderService) {
 
-        addClassName("weather-view");
-
+        this.currentWeatherCard = currentWeatherCard;
         this.weatherProviderService = weatherProviderService;
+
+        add(locationName, currentWeatherCard);
     }
 
     @Override
@@ -48,14 +55,9 @@ public class WeatherView extends VerticalLayout implements BeforeEnterObserver {
                 location.getLatitude(), location.getLongitude(), location.getTimezone()
         );
 
-        CurrentWeatherCard weatherCard = new CurrentWeatherCard(
-                weatherData.getCurrentWeather().getTemperature(),
-                weatherData.getCurrentWeather().getWindSpeed(),
-                location.locationFullName(),
-                weatherData.getCurrentWeather().getTime()
-        );
+        locationName.setText(location.locationFullName());
 
-        add(weatherCard);
+        currentWeatherCard.showCurrentWeather(weatherData.getCurrentWeather());
 
         DailyWeather dailyWeather = weatherData.getDailyWeather();
 
