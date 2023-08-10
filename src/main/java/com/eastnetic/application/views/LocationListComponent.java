@@ -29,7 +29,7 @@ public class LocationListComponent extends VerticalLayout implements PaginationC
         locationGrid.setVisible(false);
         locationGrid.getColumns().forEach(col -> col.setAutoWidth(true));
         locationGrid.setColumns("name", "country", "latitude", "longitude", "elevation", "timezone");
-        locationGrid.asSingleSelect().addValueChangeListener(event -> showWeatherDate(event.getValue()));
+        locationGrid.addItemClickListener(event -> showWeatherDate(event.getItem()));
 
         add(locationGrid);
     }
