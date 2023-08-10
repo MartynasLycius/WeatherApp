@@ -3,9 +3,13 @@ package com.eastnetic.application.views;
 import com.eastnetic.application.locations.entity.LocationDetails;
 import com.eastnetic.application.weathers.entity.HourlyWeather;
 import com.eastnetic.application.weathers.entity.WeatherData;
+import com.eastnetic.application.weathers.exceptions.WeatherDataException;
 import com.eastnetic.application.weathers.service.WeatherProviderService;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.notification.Notification;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HourlyWeatherDialog extends Dialog {
+
+    private static final Logger LOGGER = LogManager.getLogger(HourlyWeatherDialog.class);
 
     private final WeatherProviderService weatherProviderService;
 
@@ -44,29 +50,44 @@ public class HourlyWeatherDialog extends Dialog {
 
     private void setHourlyData(HourlyWeather hourlyWeather) {
 
-        List<HourlyWeatherGridData> hourlyWeatherGridDataList = new ArrayList<>();
+        try {
 
-        int dataSize = hourlyWeather.getTime().size();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+            List<HourlyWeatherGridData> hourlyWeatherGridDataList = new ArrayList<>();
 
-        for (int i=0; i<dataSize; i++) {
+            int dataSize = hourlyWeather.getTime().size();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
 
-            String date = hourlyWeather.getTime().get(i);
-            LocalDateTime dateTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
+            for (int i = 0; i < dataSize; i++) {
 
-            hourlyWeatherGridDataList.add(
-                    new HourlyWeatherGridData(
-                            dateTime.format(formatter),
-                            hourlyWeather.getRain().get(i) + " mm",
-                            hourlyWeather.getWindSpeed().get(i) + " km/h",
-                            hourlyWeather.getTemperature().get(i) + " °C"
-                    ));
+                String date = hourlyWeather.getTime().get(i);
+                LocalDateTime dateTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
+
+                hourlyWeatherGridDataList.add(
+                        new HourlyWeatherGridData(
+                                dateTime.format(formatter),
+                                hourlyWeather.getRain().get(i) + " mm",
+                                hourlyWeather.getWindSpeed().get(i) + " km/h",
+                                hourlyWeather.getTemperature().get(i) + " °C"
+                        ));
+            }
+
+            Grid<HourlyWeatherGridData> hourlyWeatherGrid = new Grid<>(HourlyWeatherGridData.class);
+            hourlyWeatherGrid.setItems(hourlyWeatherGridDataList);
+
+            add(hourlyWeatherGrid);
+
+        } catch (WeatherDataException ex) {
+
+            LOGGER.error("Error setting hourly data: {}", ex.getMessage(), ex);
+
+            Notification.show(ex.getMessage(), 3000, Notification.Position.MIDDLE);
+
+        } catch (Exception ex) {
+
+            LOGGER.error("Error setting hourly data: {}", ex.getMessage(), ex);
+
+            Notification.show("Error loading hourly weather data. Please try again later.", 3000, Notification.Position.MIDDLE);
         }
-
-        Grid<HourlyWeatherGridData> hourlyWeatherGrid = new Grid<>(HourlyWeatherGridData.class);
-        hourlyWeatherGrid.setItems(hourlyWeatherGridDataList);
-
-        add(hourlyWeatherGrid);
     }
 
     public static class HourlyWeatherGridData {

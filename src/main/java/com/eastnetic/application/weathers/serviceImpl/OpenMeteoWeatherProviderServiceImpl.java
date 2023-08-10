@@ -1,6 +1,7 @@
 package com.eastnetic.application.weathers.serviceImpl;
 
 import com.eastnetic.application.weathers.entity.WeatherData;
+import com.eastnetic.application.weathers.exceptions.WeatherDataException;
 import com.eastnetic.application.weathers.service.WeatherProviderService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,6 +55,10 @@ public class OpenMeteoWeatherProviderServiceImpl implements WeatherProviderServi
 
             WeatherData weatherData = restTemplate.getForObject(apiUrl, WeatherData.class);
 
+            if (weatherData == null) {
+                throw new WeatherDataException("Daily weather data not found from open-meteo api.");
+            }
+
             LOGGER.info("Fetching daily weather data from open-meteo api: latitude={}, longitude={}, timezone={}: SUCCESS",
                     latitude, longitude, timezone);
 
@@ -63,9 +68,9 @@ public class OpenMeteoWeatherProviderServiceImpl implements WeatherProviderServi
 
             LOGGER.error("Fetching daily weather data from open-meteo api: latitude={}, longitude={}, timezone={}: Error",
                     latitude, longitude, timezone, ex);
-        }
 
-        return null;
+            throw new WeatherDataException("Error fetching daily weather from open-meteo api.", ex);
+        }
     }
 
     @Override
@@ -84,6 +89,10 @@ public class OpenMeteoWeatherProviderServiceImpl implements WeatherProviderServi
 
             WeatherData weatherData = restTemplate.getForObject(apiUrl, WeatherData.class);
 
+            if (weatherData == null) {
+                throw new WeatherDataException("Hourly weather data not found for date ." + dateString);
+            }
+
             LOGGER.info("Fetching hourly weather data from open-meteo api: latitude={}, longitude={}, timezone={},  date={}: SUCCESS",
                     latitude, longitude, timezone, date);
 
@@ -93,8 +102,8 @@ public class OpenMeteoWeatherProviderServiceImpl implements WeatherProviderServi
 
             LOGGER.error("Fetching hourly weather data from open-meteo api: latitude={}, longitude={}, timezone={}, date={}: Error",
                     latitude, longitude, timezone, date, ex);
-        }
 
-        return null;
+            throw new WeatherDataException("Error fetching daily weather from open-meteo api.", ex);
+        }
     }
 }
