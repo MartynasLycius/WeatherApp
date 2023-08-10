@@ -4,10 +4,10 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
 #Mac pc dot file
 .DS_Store
 info.txt
+frontend/generated
 
 ### STS ###
 .apt_generated
