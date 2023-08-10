@@ -70,7 +70,9 @@ public class WeatherView extends VerticalLayout implements BeforeEnterObserver {
                     dailyWeather.getSunrise().get(i),
                     dailyWeather.getSunset().get(i),
                     dailyWeather.getRainSum().get(i),
-                    dailyWeather.getMaxWindSpeed().get(i)
+                    dailyWeather.getMaxWindSpeed().get(i),
+                    location,
+                    weatherProviderService
             );
 
             add(dailyWeatherCard);

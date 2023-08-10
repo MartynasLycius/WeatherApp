@@ -1,6 +1,12 @@
 package com.eastnetic.application.views;
 
+import com.eastnetic.application.locations.entity.LocationDetails;
+import com.eastnetic.application.weathers.service.WeatherProviderService;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 
@@ -9,7 +15,15 @@ import java.time.format.DateTimeFormatter;
 
 public class DailyWeatherCard extends Div {
 
-    public DailyWeatherCard(String day, double maxTemperature, double minTemperature, String sunrise, String sunset, double rainSum, double maxWindSpeed) {
+    public DailyWeatherCard(String day,
+                            double maxTemperature,
+                            double minTemperature,
+                            String sunrise,
+                            String sunset,
+                            double rainSum,
+                            double maxWindSpeed,
+                            LocationDetails location,
+                            WeatherProviderService weatherProviderService) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
         LocalDateTime sunriseDateTime = LocalDateTime.parse(sunrise, DateTimeFormatter.ISO_DATE_TIME);
@@ -56,5 +70,29 @@ public class DailyWeatherCard extends Div {
         infoLayout.add(dayField, maxTemperatureField, minTemperatureField, sunriseField, sunsetField, rainField, maxWindSpeedField);
 
         add(infoLayout);
+
+        configureHourlyWeatherButton(day, location, weatherProviderService, infoLayout);
+    }
+
+    private void configureHourlyWeatherButton(String day,
+                                              LocationDetails location,
+                                              WeatherProviderService weatherProviderService,
+                                              HorizontalLayout infoLayout) {
+
+        Button showHourlyButton = new Button("Show Hourly Weather");
+        showHourlyButton.setIcon(new Icon(VaadinIcon.ARROW_DOWN));
+
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+        buttonLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        buttonLayout.add(showHourlyButton);
+
+        showHourlyButton.addClickListener(event -> showHourlyWeatherDialog(day, location, weatherProviderService));
+
+        add(infoLayout, buttonLayout);
+    }
+
+    private void showHourlyWeatherDialog(String selectedDay, LocationDetails location, WeatherProviderService weatherProviderService) {
+        HourlyWeatherDialog dialog = new HourlyWeatherDialog(selectedDay, location, weatherProviderService);
+        dialog.open();
     }
 }
