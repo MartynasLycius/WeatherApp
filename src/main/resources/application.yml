@@ -1,0 +1,29 @@
+server:
+  port: 8080
+vaadin:
+  launch-browser: true
+  whitelisted-packages: com.vaadin,org.vaadin,dev.hilla,org.weather.app
+spring:
+  jpa:
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+  profiles:
+    active: dev
+
+weather:
+  name: Weather Forecast
+  api:
+    location-search: https://geocoding-api.open-meteo.com/v1/
+    location-search-path: search
+    daily-forecast: https://api.open-meteo.com/v1/
+    daily-forecast-path: forecast
+  wmo-codes-file-path: static/wmo_weather_interpretation_codes_ww.json
+
+notification:
+  message:
+    item-added: Favourite location added
+    item-deleted: Favourite location deleted
+    item-not-matched: No matched location found
+    item-null: Unporcessable item
