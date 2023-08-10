@@ -8,6 +8,7 @@ import com.eastnetic.application.weathers.service.WeatherProviderService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -40,7 +41,11 @@ public class WeatherView extends VerticalLayout implements BeforeEnterObserver {
         this.currentWeatherCard = currentWeatherCard;
         this.weatherProviderService = weatherProviderService;
 
-        add(locationName, currentWeatherCard);
+        HorizontalLayout markLocation = new HorizontalLayout();
+        FavoriteIconButton favoriteIcon = new FavoriteIconButton();
+        markLocation.add(locationName, favoriteIcon);
+
+        add(markLocation, currentWeatherCard);
     }
 
     @Override
