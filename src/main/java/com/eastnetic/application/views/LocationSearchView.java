@@ -1,7 +1,7 @@
 package com.eastnetic.application.views;
 
 import com.eastnetic.application.locations.entity.LocationDetails;
-import com.eastnetic.application.locations.exceptions.LocationProviderException;
+import com.eastnetic.application.locations.exceptions.LocationDataException;
 import com.eastnetic.application.locations.service.LocationProviderService;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
@@ -13,6 +13,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.spring.annotation.UIScope;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,6 +25,8 @@ import java.util.List;
 @RouteAlias(value = "", layout = MainLayout.class)
 @PageTitle("Locations")
 public class LocationSearchView extends VerticalLayout {
+
+    private static final Logger LOGGER = LogManager.getLogger(WeatherView.class);
 
     private TextField searchField = new TextField();
 
@@ -70,12 +74,17 @@ public class LocationSearchView extends VerticalLayout {
 
                 locationListComponent.showLocationList(locations);
 
-            } catch (LocationProviderException ex) {
+            } catch (LocationDataException ex) {
 
                 locationListComponent.setVisible(false);
 
                 Notification.show(ex.getMessage(), 3000, Notification.Position.MIDDLE);
 
+            } catch (Exception ex) {
+
+                LOGGER.error("Error fetching location data: {}", ex.getMessage(), ex);
+
+                Notification.show("Error fetching location data. Please try again later.", 3000, Notification.Position.MIDDLE);
             }
         }
     }

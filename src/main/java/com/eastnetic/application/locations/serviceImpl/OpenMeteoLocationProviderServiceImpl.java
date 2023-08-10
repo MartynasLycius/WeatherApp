@@ -2,8 +2,7 @@ package com.eastnetic.application.locations.serviceImpl;
 
 
 import com.eastnetic.application.locations.entity.LocationDetails;
-import com.eastnetic.application.locations.exceptions.LocationNotFoundException;
-import com.eastnetic.application.locations.exceptions.LocationProviderException;
+import com.eastnetic.application.locations.exceptions.LocationDataException;
 import com.eastnetic.application.locations.response.OpenMeteoLocationApiResponse;
 import com.eastnetic.application.locations.service.LocationProviderService;
 import org.apache.logging.log4j.LogManager;
@@ -47,13 +46,13 @@ public class OpenMeteoLocationProviderServiceImpl implements LocationProviderSer
                 return response.getResults();
             }
 
-            throw new LocationNotFoundException("Location not found for city: " + cityName);
+            throw new LocationDataException("Location not found for city: " + cityName);
 
         } catch (Exception ex) {
 
             LOGGER.error("Fetching location details from open-meteo api: City Name={}: Error", cityName, ex);
 
-            throw new LocationProviderException("Error fetching location details from open-meteo api.", ex);
+            throw new LocationDataException("Error fetching location details from open-meteo api.", ex);
         }
     }
 }
