@@ -6,6 +6,11 @@ This is the job interview task for software developer position
 * username: user
 * password: password
 
+## User Guidelines
+
+### Login
+![00_login](https://github.com/thekowsar/bidding-system/assets/8324420/b550ff60-0123-45ea-8025-7dd3f975cec3)
+
 ## What to do
 * Fork the repository
 * After work is done, make a pull request and notify me by email
