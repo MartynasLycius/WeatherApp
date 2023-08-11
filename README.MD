@@ -9,7 +9,7 @@ This is the job interview task for software developer position
 ## User Guidelines
 
 ### Login
-![00_login](https://github.com/thekowsar/bidding-system/assets/8324420/8ae3be10-cde7-4ee1-99a4-7966d68d087c)
+![00_login](https://github.com/thekowsar/bidding-system/assets/8324420/fbe6e010-11a2-44de-a216-9e606aeee6b4)
 ### Search Location
 ![01_search_location](https://github.com/thekowsar/bidding-system/assets/8324420/df540821-6283-4b40-a38b-c9e80c59e4a6)
 ### Daily Chart
