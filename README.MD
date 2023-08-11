@@ -11,6 +11,15 @@ This is the job interview task for software developer position
 ### Login
 ![00_login](https://github.com/thekowsar/bidding-system/assets/8324420/b550ff60-0123-45ea-8025-7dd3f975cec3)
 
+### Search Location
+![01_search_location](https://github.com/thekowsar/bidding-system/assets/8324420/58707748-d117-491f-9a1b-f545df760bd4)
+
+### Daily Chart
+![02_show_daly_chart](https://github.com/thekowsar/bidding-system/assets/8324420/74b021b7-db53-4a08-ada3-aeee44fbccca)
+
+### Hourly Chart
+![03_show_hourly_chart](https://github.com/thekowsar/bidding-system/assets/8324420/06d2698c-8532-40fa-b4ee-53162d28d58d)
+
 ## What to do
 * Fork the repository
 * After work is done, make a pull request and notify me by email
