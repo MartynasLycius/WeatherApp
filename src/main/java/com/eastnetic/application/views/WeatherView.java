@@ -33,19 +33,22 @@ public class WeatherView extends VerticalLayout implements BeforeEnterObserver {
 
     private final H3 locationName = new H3();
 
+    private final FavoriteIconButton favoriteIconButton;
+
     private final CurrentWeatherCard currentWeatherCard;
 
     private final WeatherProviderService weatherProviderService;
 
-    public WeatherView(CurrentWeatherCard currentWeatherCard,
+    public WeatherView(FavoriteIconButton favoriteIconButton,
+                       CurrentWeatherCard currentWeatherCard,
                        WeatherProviderService weatherProviderService) {
 
+        this.favoriteIconButton = favoriteIconButton;
         this.currentWeatherCard = currentWeatherCard;
         this.weatherProviderService = weatherProviderService;
 
         HorizontalLayout markLocation = new HorizontalLayout();
-        FavoriteIconButton favoriteIcon = new FavoriteIconButton();
-        markLocation.add(locationName, favoriteIcon);
+        markLocation.add(locationName, favoriteIconButton);
 
         add(markLocation, currentWeatherCard);
     }
@@ -59,6 +62,8 @@ public class WeatherView extends VerticalLayout implements BeforeEnterObserver {
         if (location != null) {
 
             updateWeatherData();
+
+            favoriteIconButton.setFavourite();
         }
     }
 
