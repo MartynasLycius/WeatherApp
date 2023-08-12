@@ -1,30 +1,48 @@
 package com.example.application.views;
 
 
+import com.example.application.data.entity.Favourites;
+import com.example.application.data.service.FavouritesService;
 import com.example.application.data.service.WaService;
 import com.example.application.dto.DailyForecast;
 import com.example.application.dto.GeoCode;
 import com.example.application.dto.HourlyForecast;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.charts.events.PointClickEvent;
 import com.vaadin.flow.component.charts.model.*;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @CssImport(value="./styles/MultipleAxes.css", themeFor = "vaadin-chart", include = "vaadin-chart-default-theme")
-public class DailyForecastView extends AbstractChartExample {
+public class DailyForecastView extends VerticalLayout {
 
     Chart chart;
     GeoCode geoCode;
     WaService waService;
     String userId;
+    private FavouritesService favouritesService;
+    private HorizontalLayout buttonLayout;
+
+    private int isFavourite;
+    private Long favouriteLocationId;
+
+    private String makeFavouriteText = "Make as favourite";
+    private String removeFavouriteText = "Remove from favourites";
+
+    public DailyForecastView(FavouritesService favouritesService){
+        this.favouritesService = favouritesService;
+    }
 
 
     public void setDailyForecastData(GeoCode geoCode, DailyForecast dailyForecast, WaService waService){
@@ -32,6 +50,9 @@ public class DailyForecastView extends AbstractChartExample {
         this.waService = waService;
         if(chart != null){
             remove(chart);
+        }
+        if(this.geoCode != null && this.geoCode.getId() != null){
+            setFavouriteFlag(this.geoCode.getId());
         }
         chart = new Chart();
         Configuration conf = chart.getConfiguration();
@@ -113,7 +134,18 @@ public class DailyForecastView extends AbstractChartExample {
 
         chart.addPointClickListener(this::chartClicked);
 
-        add(chart);
+        add(chart, createButtonLayout());
+    }
+
+    private void setFavouriteFlag(Long id) {
+        Favourites favourites = favouritesService.getFavouriteByUserIdAndGeoCodeId(id);
+        if(favourites == null){
+            this.isFavourite = 0;
+        }
+        else {
+            this.isFavourite = favourites.getIsFavourite();
+            this.favouriteLocationId = favourites.getId();
+        }
     }
 
 
@@ -233,8 +265,61 @@ public class DailyForecastView extends AbstractChartExample {
 
         return hourlyChart;
     }
+    private Component createButtonLayout() {
+        String buttonText = "";
+        if(buttonLayout != null){
+            remove(buttonLayout);
+        }
+        buttonLayout = new HorizontalLayout();
+        buttonLayout.setAlignItems(Alignment.CENTER);
+        Icon favoriteIcon = VaadinIcon.HEART.create();
+        Button makeFavouriteButton = new Button(favoriteIcon);
+        if (this.isFavourite == 1) {
+            makeFavouriteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+            buttonText = removeFavouriteText;
+        } else {
+            makeFavouriteButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+            buttonText = makeFavouriteText;
+        }
 
-    @Override
-    public void initDemo() {
+        Span spanButtonText = new Span(buttonText);
+        makeFavouriteButton.getStyle().set("margin-left", "auto");
+        makeFavouriteButton.addClickListener(e -> {
+            makeLocationFavourite(geoCode);
+        });
+        buttonLayout.add(makeFavouriteButton, spanButtonText);
+        return buttonLayout;
+    }
+
+    private void makeLocationFavourite(GeoCode geoCode){
+        String buttonText = "";
+        if(buttonLayout != null){
+            remove(buttonLayout);
+        }
+        buttonLayout = new HorizontalLayout();
+        buttonLayout.setAlignItems(Alignment.CENTER);
+        Icon favoriteIcon = VaadinIcon.HEART.create();
+        Button makeFavouriteButton = new Button(favoriteIcon);
+        makeFavouriteButton.getStyle().set("margin-left", "auto");
+        makeFavouriteButton.addClickListener(e -> {
+            makeLocationFavourite(geoCode);
+        });
+        if(this.isFavourite == 1){
+            favouritesService.removeFavourites(this.favouriteLocationId);
+            makeFavouriteButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+            this.isFavourite = 0;
+            buttonText = makeFavouriteText;
+        }else {
+            Favourites favourites = favouritesService.makeFavorites(geoCode);
+            if(favourites != null){
+                this.favouriteLocationId = favourites.getId();
+            }
+            makeFavouriteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+            this.isFavourite = 1;
+            buttonText = removeFavouriteText;
+        }
+        Span spanButtonText = new Span(buttonText);
+        buttonLayout.add(makeFavouriteButton, spanButtonText);
+        add(buttonLayout);
     }
 }

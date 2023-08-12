@@ -1,5 +1,6 @@
 package com.example.application.views.list;
 
+import com.example.application.data.service.FavouritesService;
 import com.example.application.data.service.WaService;
 import com.example.application.dto.DailyForecast;
 import com.example.application.dto.GeoCode;
@@ -24,9 +25,11 @@ public class ListView extends VerticalLayout {
     TextField filterText = new TextField();
     Forecast forecast;
     private WaService waService;
+    private FavouritesService favouritesService;
 
-    public ListView(WaService waService) {
+    public ListView(WaService waService, FavouritesService favouritesService) {
         this.waService = waService;
+        this.favouritesService = favouritesService;
         addClassName("list-view");
         setSizeFull();
 
@@ -56,7 +59,7 @@ public class ListView extends VerticalLayout {
     }
 
     private void configureForeCast() {
-        forecast = new Forecast();
+        forecast = new Forecast(favouritesService);
     }
 
     private Component getToolbar() {
@@ -74,7 +77,6 @@ public class ListView extends VerticalLayout {
     private void configureGrid() {
         grid.addClassName("contact-grid");
         grid.setWidthFull();
-//        grid.setSizeFull();
         grid.setColumns("name", "latitude", "longitude", "country", "id");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.setPageSize(10);
