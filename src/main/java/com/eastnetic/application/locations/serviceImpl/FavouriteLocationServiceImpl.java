@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FavouriteLocationServiceImpl implements FavouriteLocationService {
@@ -129,7 +130,25 @@ public class FavouriteLocationServiceImpl implements FavouriteLocationService {
 
     @Override
     public List<LocationDetails> getFavouriteLocations(String username) {
-        return null;
+
+        LOGGER.info("Get favourite locations: username={}: START", username);
+
+        User user = userService.findUserByUsername(username);
+
+        if (user == null) {
+            throw new FavouriteLocationException("User not found.");
+        }
+
+        List<FavouriteLocation> favouriteLocations = favouriteLocationRepository.findAllByUser(user);
+
+        List<LocationDetails> locationDetails = favouriteLocations.stream()
+                .map(FavouriteLocation::getLocation)
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+
+        LOGGER.info("Get favourite locations: username={}: SUCCESS", username);
+
+        return locationDetails;
     }
 
     @Override
@@ -167,5 +186,21 @@ public class FavouriteLocationServiceImpl implements FavouriteLocationService {
 
             locationService.deleteLocation(location);
         }
+    }
+
+    private LocationDetails convertEntityToDto(Location locationDetails) {
+
+        return new LocationDetails(
+                locationDetails.getName(),
+                locationDetails.getLatitude(),
+                locationDetails.getLongitude(),
+                locationDetails.getElevation(),
+                locationDetails.getCountryCode(),
+                locationDetails.getTimezone(),
+                locationDetails.getCountry(),
+                locationDetails.getAdmin1(),
+                locationDetails.getReferenceId(),
+                locationDetails.getReferenceSource()
+        );
     }
 }

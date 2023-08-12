@@ -34,6 +34,29 @@ public class LocationDetails {
 
     private String referenceSource;
 
+    public LocationDetails(String name,
+                           double latitude,
+                           double longitude,
+                           double elevation,
+                           String countryCode,
+                           String timezone,
+                           String country,
+                           String admin1,
+                           String referenceId,
+                           String referenceSource) {
+
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.elevation = elevation;
+        this.countryCode = countryCode;
+        this.timezone = timezone;
+        this.country = country;
+        this.admin1 = admin1;
+        this.referenceId = referenceId;
+        this.referenceSource = referenceSource;
+    }
+
     public String getReferenceId() {
         return referenceId;
     }
