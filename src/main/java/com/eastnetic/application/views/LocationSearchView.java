@@ -11,7 +11,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,14 +19,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@AnonymousAllowed
 @UIScope
 @Component
 @Route(value = "locations", layout = MainLayout.class)
-@RouteAlias(value = "", layout = MainLayout.class)
 @PageTitle("Locations")
 public class LocationSearchView extends VerticalLayout {
 
-    private static final Logger LOGGER = LogManager.getLogger(WeatherView.class);
+    private static final Logger LOGGER = LogManager.getLogger(LocationSearchView.class);
 
     private TextField searchField = new TextField();
 
