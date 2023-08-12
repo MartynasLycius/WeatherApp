@@ -25,7 +25,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public void addLocation(LocationDetails locationDetails) {
+    public Location addLocation(LocationDetails locationDetails) {
 
         Location location = getLocationByReferenceIdAndSource(
                 locationDetails.getReferenceId(),
@@ -33,14 +33,16 @@ public class LocationServiceImpl implements LocationService {
         );
 
         if (location != null) {
-            return;
+            return null;
         }
 
         location = convertDtoToEntity(locationDetails);
 
         try {
 
-            locationRepository.save(location);
+            location = locationRepository.save(location);
+
+            return location;
 
         } catch (Exception e) {
 
@@ -53,16 +55,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public void deleteLocation(LocationDetails locationDetails) {
-
-        Location location = getLocationByReferenceIdAndSource(
-                locationDetails.getReferenceId(),
-                locationDetails.getReferenceSource()
-        );
-
-        if (location == null) {
-            return;
-        }
+    public void deleteLocation(Location location) {
 
         try {
 
@@ -71,7 +64,7 @@ public class LocationServiceImpl implements LocationService {
         } catch (Exception e) {
 
             LOGGER.error("Delete location failed. Reference ID={}, Reference Source={}",
-                    locationDetails.getReferenceId(), locationDetails.getReferenceSource(), e
+                    location.getReferenceId(), location.getReferenceSource(), e
             );
         }
     }
@@ -85,7 +78,7 @@ public class LocationServiceImpl implements LocationService {
 
         return new Location(
                 locationDetails.getReferenceId(),
-                locationDetails.getName(),
+                locationDetails.getReferenceSource(),
                 locationDetails.getName(),
                 locationDetails.getLatitude(),
                 locationDetails.getLongitude(),

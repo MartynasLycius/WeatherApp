@@ -7,9 +7,9 @@ public interface LocationService {
 
     Location getLocationById(long id);
 
-    void addLocation(LocationDetails locationDetails);
+    Location addLocation(LocationDetails locationDetails);
 
-    void deleteLocation(LocationDetails locationDetails);
+    void deleteLocation(Location location);
 
     Location getLocationByReferenceIdAndSource(String id, String source);
 }
