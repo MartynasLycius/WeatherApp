@@ -14,16 +14,17 @@ import com.vaadin.flow.component.notification.Notification;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @CssImport(value="./styles/MultipleAxes.css", themeFor = "vaadin-chart", include = "vaadin-chart-default-theme")
 public class DailyForecastView extends AbstractChartExample {
 
     Chart chart;
     GeoCode geoCode;
-
     WaService waService;
+    String userId;
 
 
     public void setDailyForecastData(GeoCode geoCode, DailyForecast dailyForecast, WaService waService){
@@ -118,8 +119,14 @@ public class DailyForecastView extends AbstractChartExample {
 
     public void chartClicked(PointClickEvent event) {
         HourlyForecast hourlyForecast = waService.getHourlyForecast(geoCode.getLatitude(), geoCode.getLongitude(), event.getCategory(), event.getCategory());
-//        Notification.show("Clicked on category: " + event.getCategory() + " : " + hourlyForecast.toString());
         openPopupHourlyForecast(hourlyForecast, event.getCategory());
+    }
+
+    private void setUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            this.userId = authentication.getName();
+        }
     }
 
     private void openPopupHourlyForecast(HourlyForecast hourlyForecast, String date) {
@@ -229,6 +236,5 @@ public class DailyForecastView extends AbstractChartExample {
 
     @Override
     public void initDemo() {
-//        waService = new WaService();
     }
 }
