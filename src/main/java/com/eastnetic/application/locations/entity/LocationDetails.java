@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class LocationDetails {
 
     @JsonProperty("id")
-    private long id;
+    private String referenceId;
 
     @JsonProperty("name")
     private String name;
@@ -32,12 +32,14 @@ public class LocationDetails {
     @JsonProperty("admin1")
     private String admin1;
 
-    public long getId() {
-        return id;
+    private String referenceSource;
+
+    public String getReferenceId() {
+        return referenceId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setReferenceId(String referenceId) {
+        this.referenceId = referenceId;
     }
 
     public String getName() {
@@ -102,6 +104,14 @@ public class LocationDetails {
 
     public void setAdmin1(String admin1) {
         this.admin1 = admin1;
+    }
+
+    public String getReferenceSource() {
+        return referenceSource;
+    }
+
+    public void setReferenceSource(String referenceSource) {
+        this.referenceSource = referenceSource;
     }
 
     public String locationFullName() {

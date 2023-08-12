@@ -13,12 +13,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @CacheConfig(cacheNames = "locationDetailsCache")
 public class OpenMeteoLocationProviderServiceImpl implements LocationProviderService {
 
     private static final Logger LOGGER = LogManager.getLogger(OpenMeteoLocationProviderServiceImpl.class);
+
+    private static final String SOURCE_NAME = "open-meteo";
 
     private static final String API_BASE_URL = "https://geocoding-api.open-meteo.com/v1/search?name=";
 
@@ -43,7 +46,9 @@ public class OpenMeteoLocationProviderServiceImpl implements LocationProviderSer
 
                 LOGGER.info("Fetching location details from open-meteo api: City Name={}: SUCCESS", cityName);
 
-                return response.getResults();
+                return response.getResults().stream()
+                        .peek(locationDetail -> locationDetail.setReferenceSource(SOURCE_NAME))
+                        .collect(Collectors.toList());
             }
 
             throw new LocationDataException("Location not found for city: " + cityName);
