@@ -10,6 +10,9 @@ This is the job interview task for software developer position
 * username: admin
 * password: password
 
+## Database Used
+* H2 Database (in-memory)
+
 ## User Guidelines
 
 ### Login
