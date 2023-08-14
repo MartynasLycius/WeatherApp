@@ -4,7 +4,7 @@ This is the job interview task for software developer position
 
 ## Technology Used
 * Vaadin 24 
-* Vaadin Chart (Need licence)
+* Vaadin Chart (Use Trial licence)
 * Java 17
 * Spring Boot 3
 * Maven 3
