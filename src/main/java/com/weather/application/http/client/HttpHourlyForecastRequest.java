@@ -2,6 +2,7 @@ package com.weather.application.http.client;
 
 import com.weather.application.data.dto.HourlyForecast;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -19,8 +20,8 @@ import static com.weather.application.http.client.HttpClientTimeout.getHttpClien
 public class HttpHourlyForecastRequest {
 
     private static final Logger LOGGER = Logger.getLogger(HttpHourlyForecastRequest.class.getName());
-
-    private String hourlyForecastDataUrlTemplate = "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&hourly=temperature_2m,rain,windspeed_10m&start_date=%s&end_date=%s";
+    @Value("${weather.hourly.forecast.url.template}")
+    private String hourlyForecastDataUrlTemplate;
 
     public HourlyForecast getHourlyForecast(Double latitude, Double longitude, String startDate, String endDate ){
         LOGGER.log(Level.INFO, "Get HourlyForecast request start with latitude {0}, longitude {1}, startDate {2} " +
@@ -50,10 +51,9 @@ public class HttpHourlyForecastRequest {
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error occurred while get hourlyForecast with message {0}", e.getMessage());
-            throw new RuntimeException(e);
         } catch (InterruptedException e) {
             LOGGER.log(Level.SEVERE, "Error occurred while get hourlyForecast with message {0}", e.getMessage());
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
         }
         LOGGER.log(Level.INFO, "Get hourlyForecast request end with dailyForecast {0}", new Object[]{hourlyForecast});
         return hourlyForecast;

@@ -21,6 +21,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.weather.application.util.Constants;
 
 import java.util.logging.Logger;
 
@@ -36,12 +37,6 @@ public class DailyForecastView extends VerticalLayout {
     private HorizontalLayout buttonLayout;
     private int isFavourite;
     private Long favouriteLocationId;
-    private String makeFavouriteText = "Make as favourite";
-    private String removeFavouriteText = "Remove from favourites";
-    private String marginLeftText = "margin-left";
-    private String temperatureText = "Temperature";
-    private String windSpeed = "Wind Speed";
-    private String rainfallText = "Rainfall";
     public DailyForecastView(FavouritesService favouritesService){
         LOGGER.info("Initiate Daily Forecast View");
         this.favouritesService = favouritesService;
@@ -72,7 +67,7 @@ public class DailyForecastView extends VerticalLayout {
 
         YAxis y1 = new YAxis();
         y1.setShowEmpty(false);
-        y1.setTitle(new AxisTitle(temperatureText));
+        y1.setTitle(new AxisTitle(Constants.TEMPERATURE_TEXT));
         Labels labels = new Labels();
         labels.setFormatter("return this.value +' "+dailyForecast.getDailyUnits().getTemperature2m()+"'");
         y1.setLabels(labels);
@@ -82,7 +77,7 @@ public class DailyForecastView extends VerticalLayout {
 
         YAxis y2 = new YAxis();
         y2.setShowEmpty(false);
-        y2.setTitle(new AxisTitle(rainfallText));
+        y2.setTitle(new AxisTitle(Constants.RAIN_FALL_TEXT));
         labels = new Labels();
         labels.setFormatter("return this.value +' "+dailyForecast.getDailyUnits().getRain()+"'");
         y2.setLabels(labels);
@@ -91,7 +86,7 @@ public class DailyForecastView extends VerticalLayout {
 
         YAxis y3 = new YAxis();
         y3.setShowEmpty(false);
-        y3.setTitle(new AxisTitle(windSpeed));
+        y3.setTitle(new AxisTitle(Constants.WIND_SPEED));
         labels = new Labels();
         labels.setFormatter("return this.value +' "+dailyForecast.getDailyUnits().getWindspeed10m()+"'");
         y3.setLabels(labels);
@@ -117,7 +112,7 @@ public class DailyForecastView extends VerticalLayout {
         DataSeries series = new DataSeries();
         PlotOptionsColumn plotOptionsColumn = new PlotOptionsColumn();
         series.setPlotOptions(plotOptionsColumn);
-        series.setName(rainfallText);
+        series.setName(Constants.RAIN_FALL_TEXT);
         series.setyAxis(1);
         series.setData(dailyForecast.getDaily().getRain());
         conf.addSeries(series);
@@ -125,14 +120,14 @@ public class DailyForecastView extends VerticalLayout {
         series = new DataSeries();
         PlotOptionsSpline plotOptionsSpline = new PlotOptionsSpline();
         series.setPlotOptions(plotOptionsSpline);
-        series.setName(temperatureText);
+        series.setName(Constants.TEMPERATURE_TEXT);
         series.setData(dailyForecast.getDaily().getTemperature2m());
         conf.addSeries(series);
 
         series = new DataSeries();
         plotOptionsSpline = new PlotOptionsSpline();
         series.setPlotOptions(plotOptionsSpline);
-        series.setName(windSpeed);
+        series.setName(Constants.WIND_SPEED);
         series.setyAxis(2);
         series.setData(dailyForecast.getDaily().getWindspeed10m());
         conf.addSeries(series);
@@ -171,7 +166,7 @@ public class DailyForecastView extends VerticalLayout {
         Chart hourlyChart = getHourlyForecastChart(hourlyForecast);
 
         Button closeButton = new Button("Close", e -> dialog.close());
-        closeButton.getStyle().set(marginLeftText, "auto");
+        closeButton.getStyle().set(Constants.MARGIN_LEFT_TEXT, "auto");
 
         dialogLayout.add(contentLabel, hourlyChart, closeButton);
         dialogLayout.setWidthFull();
@@ -194,7 +189,7 @@ public class DailyForecastView extends VerticalLayout {
 
         YAxis y1 = new YAxis();
         y1.setShowEmpty(false);
-        y1.setTitle(new AxisTitle(temperatureText));
+        y1.setTitle(new AxisTitle(Constants.TEMPERATURE_TEXT));
         Labels labels = new Labels();
         labels.setFormatter("return this.value +' "+hourlyForecast.getHourlyUnits().getTemperature2m()+"'");
         y1.setLabels(labels);
@@ -204,7 +199,7 @@ public class DailyForecastView extends VerticalLayout {
 
         YAxis y2 = new YAxis();
         y2.setShowEmpty(false);
-        y2.setTitle(new AxisTitle(rainfallText));
+        y2.setTitle(new AxisTitle(Constants.RAIN_FALL_TEXT));
         labels = new Labels();
         labels.setFormatter("return this.value +' "+hourlyForecast.getHourlyUnits().getRain()+"'");
         y2.setLabels(labels);
@@ -213,7 +208,7 @@ public class DailyForecastView extends VerticalLayout {
 
         YAxis y3 = new YAxis();
         y3.setShowEmpty(false);
-        y3.setTitle(new AxisTitle(windSpeed));
+        y3.setTitle(new AxisTitle(Constants.WIND_SPEED));
         labels = new Labels();
         labels.setFormatter("return this.value +' "+hourlyForecast.getHourlyUnits().getWindspeed10m()+"'");
         y3.setLabels(labels);
@@ -242,7 +237,7 @@ public class DailyForecastView extends VerticalLayout {
         DataSeries series = new DataSeries();
         PlotOptionsColumn plotOptionsColumn = new PlotOptionsColumn();
         series.setPlotOptions(plotOptionsColumn);
-        series.setName(rainfallText);
+        series.setName(Constants.RAIN_FALL_TEXT);
         series.setyAxis(1);
         series.setData(hourlyForecast.getHourly().getRain());
         hourlyConf.addSeries(series);
@@ -250,14 +245,14 @@ public class DailyForecastView extends VerticalLayout {
         series = new DataSeries();
         PlotOptionsSpline plotOptionsSpline = new PlotOptionsSpline();
         series.setPlotOptions(plotOptionsSpline);
-        series.setName(temperatureText);
+        series.setName(Constants.TEMPERATURE_TEXT);
         series.setData(hourlyForecast.getHourly().getTemperature2m());
         hourlyConf.addSeries(series);
 
         series = new DataSeries();
         plotOptionsSpline = new PlotOptionsSpline();
         series.setPlotOptions(plotOptionsSpline);
-        series.setName(windSpeed);
+        series.setName(Constants.WIND_SPEED);
         series.setyAxis(2);
         series.setData(hourlyForecast.getHourly().getWindspeed10m());
         hourlyConf.addSeries(series);
@@ -275,14 +270,14 @@ public class DailyForecastView extends VerticalLayout {
         Button makeFavouriteButton = new Button(favoriteIcon);
         if (this.isFavourite == 1) {
             makeFavouriteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-            buttonText = removeFavouriteText;
+            buttonText = Constants.REMOVE_FAVOURITE_TEXT;
         } else {
             makeFavouriteButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-            buttonText = makeFavouriteText;
+            buttonText = Constants.MAKE_FAVOURITE_TEXT;
         }
 
         Span spanButtonText = new Span(buttonText);
-        makeFavouriteButton.getStyle().set(marginLeftText, "auto");
+        makeFavouriteButton.getStyle().set(Constants.MARGIN_LEFT_TEXT, "auto");
         makeFavouriteButton.addClickListener(e ->  makeLocationFavourite(geoCode));
         buttonLayout.add(makeFavouriteButton, spanButtonText);
         return buttonLayout;
@@ -298,13 +293,13 @@ public class DailyForecastView extends VerticalLayout {
         buttonLayout.setAlignItems(Alignment.CENTER);
         Icon favoriteIcon = VaadinIcon.HEART.create();
         Button makeFavouriteButton = new Button(favoriteIcon);
-        makeFavouriteButton.getStyle().set(marginLeftText, "auto");
+        makeFavouriteButton.getStyle().set(Constants.MARGIN_LEFT_TEXT, "auto");
         makeFavouriteButton.addClickListener(e ->  makeLocationFavourite(geoCode));
         if(this.isFavourite == 1){
             favouritesService.removeFavourites(this.favouriteLocationId);
             makeFavouriteButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
             this.isFavourite = 0;
-            buttonText = makeFavouriteText;
+            buttonText = Constants.MAKE_FAVOURITE_TEXT;
         }else {
             Favourites favourites = favouritesService.makeFavorites(geoCode);
             if(favourites != null){
@@ -312,7 +307,7 @@ public class DailyForecastView extends VerticalLayout {
             }
             makeFavouriteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
             this.isFavourite = 1;
-            buttonText = removeFavouriteText;
+            buttonText = Constants.REMOVE_FAVOURITE_TEXT;
         }
         Span spanButtonText = new Span(buttonText);
         buttonLayout.add(makeFavouriteButton, spanButtonText);

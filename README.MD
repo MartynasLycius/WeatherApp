@@ -6,6 +6,10 @@ This is the job interview task for software developer position
 * username: user
 * password: password
 
+
+* username: admin
+* password: password
+
 ## User Guidelines
 
 ### Login

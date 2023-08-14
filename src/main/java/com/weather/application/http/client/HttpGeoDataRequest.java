@@ -3,6 +3,7 @@ package com.weather.application.http.client;
 import com.weather.application.data.dto.GeoCodeResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -22,9 +23,8 @@ import static com.weather.application.http.client.HttpClientTimeout.getHttpClien
 public class HttpGeoDataRequest {
 
     private static final Logger LOGGER = Logger.getLogger(HttpGeoDataRequest.class.getName());
-
-    private String geoDataUrlTemplate = "https://geocoding-api.open-meteo.com/v1/search?name=%s&count=%s&language=en&format=json";
-
+    @Value("${weather.geo.code.url.template}")
+    private String geoDataUrlTemplate;
     private int geoCodeSize = 100;
 
     public GeoCodeResult getGeoCodeResult(String cityName){
@@ -55,10 +55,9 @@ public class HttpGeoDataRequest {
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error occurred while get geo code with message {0}", e.getMessage());
-            throw new RuntimeException(e);
         } catch (InterruptedException e) {
             LOGGER.log(Level.SEVERE, "Error occurred while get geo code with message {0}", e.getMessage());
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
         }
         LOGGER.log(Level.INFO, "Get geo code request end with GeoCodeResult {0}", new Object[]{results});
         return results;

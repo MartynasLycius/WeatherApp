@@ -2,6 +2,7 @@ package com.weather.application.http.client;
 
 import com.weather.application.data.dto.DailyForecast;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,8 +18,8 @@ import java.util.logging.Logger;
 public class HttpDailyForecastRequest {
 
     private static final Logger LOGGER = Logger.getLogger(HttpDailyForecastRequest.class.getName());
-
-    private String dailyForecastDataUrlTemplate = "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&daily=temperature_2m_max,rain_sum,windspeed_10m_max&timezone=GMT";
+    @Value("${weather.daily.forecast.url.template}")
+    private String dailyForecastDataUrlTemplate;
 
     public DailyForecast getDailyForecast(Double latitude, Double longitude ){
         LOGGER.log(Level.INFO, "Get DailyForecast request start with latitude {0} and longitude {1}", new Object[]{latitude, longitude});
@@ -47,10 +48,9 @@ public class HttpDailyForecastRequest {
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error occurred while get dailyForecast with message {0}", e.getMessage());
-            throw new RuntimeException(e);
         } catch (InterruptedException e) {
             LOGGER.log(Level.SEVERE, "Error occurred while get dailyForecast with message {0}", e.getMessage());
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
         }
         LOGGER.log(Level.INFO, "Get DailyForecast request end with dailyForecast {0}", new Object[]{dailyForecast});
         return dailyForecast;
