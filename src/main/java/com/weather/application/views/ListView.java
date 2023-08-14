@@ -3,9 +3,11 @@ package com.weather.application.views;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.router.*;
 import com.weather.application.data.entity.Favourites;
-import com.weather.application.data.service.FavouritesService;
-import com.weather.application.data.service.WaService;
+import com.weather.application.exception.CustomErrorHandler;
+import com.weather.application.service.FavouritesService;
+import com.weather.application.service.WaService;
 import com.weather.application.data.dto.DailyForecast;
 import com.weather.application.data.dto.GeoCode;
 import com.vaadin.flow.component.Component;
@@ -16,9 +18,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.logging.Logger;
 @PageTitle("Contacts | WeatherApp")
 @Route(value = "", layout = MainLayout.class)
 @PermitAll
-public class ListView extends VerticalLayout {
+public class ListView extends VerticalLayout{
 
     private static final Logger LOGGER = Logger.getLogger(ListView.class.getName());
 
@@ -37,6 +38,9 @@ public class ListView extends VerticalLayout {
     private WaService waService;
     private FavouritesService favouritesService;
     private Dialog favouriteDialog;
+
+    @Autowired
+    private CustomErrorHandler customErrorHandler;
 
     public ListView(WaService waService, FavouritesService favouritesService) {
         LOGGER.info("Initiate List View");

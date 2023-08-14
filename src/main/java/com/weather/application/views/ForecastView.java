@@ -1,7 +1,7 @@
 package com.weather.application.views;
 
-import com.weather.application.data.service.FavouritesService;
-import com.weather.application.data.service.WaService;
+import com.weather.application.service.FavouritesService;
+import com.weather.application.service.WaService;
 import com.weather.application.data.dto.DailyForecast;
 import com.weather.application.data.dto.GeoCode;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

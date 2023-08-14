@@ -1,7 +1,9 @@
 package com.weather.application.http.client;
 
+import com.vaadin.flow.server.VaadinSession;
 import com.weather.application.data.dto.GeoCodeResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.weather.application.exception.CustomErrorHandler;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
