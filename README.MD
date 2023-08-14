@@ -2,6 +2,17 @@
 
 This is the job interview task for software developer position
 
+## Technology Used
+* Vaadin 24 
+* Vaadin Chart (Need licence)
+* Java 17
+* Spring Boot 3
+* Maven 3
+* Git 2
+
+## Database Used
+* H2 Database (in-memory)
+
 ## Login Credential
 * username: user
 * password: password
@@ -9,9 +20,6 @@ This is the job interview task for software developer position
 
 * username: admin
 * password: password
-
-## Database Used
-* H2 Database (in-memory)
 
 ## User Guidelines
 
