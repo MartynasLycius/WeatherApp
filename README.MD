@@ -1,29 +1,39 @@
 # Weather Application
 
-This is the job interview task for software developer position
+Welcome to the Weather App! This application provides weather information based on location details.
 
-## What to do
-* Fork the repository
-* After work is done, make a pull request and notify me by email
+## Getting Started
 
-## Task description
-You need to use the Weather API provided here https://open-meteo.com/en to make the weather application. 
-1. Call the API to get the locations by city name. Make the paging available with 10 items per page and a filter to filter by location name.
-2. When clicked on the location it should show the weather forecast for the location with the temperature, surface wind and rain hourly. The interface should let you first see the daily forecast and when clicked it then should show the forecast hourly for the day you selected.
-3. If you UI contains a chart it is a bonus. The interface should be convenient for user and rely on best usability and design practises
-4. Only logged on users should be able to see the weather forecasts.
-5. User should be able to mark the location favourite and have the favourite location list for quick access.
+Follow these instructions to set up and run the Weather App using Docker.
 
-All the other specific requirements are up to you
+### Prerequisites
 
-## Technical requirements
-* Use  Vaadin (https://vaadin.com/) framework for the frontend. For chart you may use some different framework
-* For backend use Java EE
-* Use any database (Postgres, Oracle, etc.)
-* Make a Maven project
+- [Docker](https://www.docker.com/get-started)
 
-## Main points
-* Structure your code
-* Use best practises
-* Use naming conventions
-* Show understanding of software development concepts
+### Running the App
+
+1. Clone this repository to your local machine:
+
+   ```bash
+   git clone https://github.com/your-username/weather-app.git
+
+2. Navigate to the project directory:
+    ```bash
+   cd weather-app
+
+3. Run the following command to start the application using Docker Compose:
+    ```bash
+   docker-compose up
+
+4. Access the application in your browser:   
+   Open your browser and go to http://localhost:8080
+
+   
+## Note
+
+* This application was developed with a focus on backend functionality, and the UI may not have an extensive design or visual appeal.
+
+* The application leverages Vaadin for the user interface, and the UI design might be minimalistic due to the developer's backend-focused expertise.
+
+## Authors
+* Tanmoy Ghosh 

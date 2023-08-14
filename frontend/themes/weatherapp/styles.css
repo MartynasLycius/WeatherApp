@@ -1,0 +1,86 @@
+@import url('./main-layout.css');
+
+.blue-span {
+    color: #0074D9;
+    font-size: 25px;
+}
+
+.weather-card {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    color: white;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column; /* Display items vertically */
+    align-items: flex-start; /* Align items to the left */
+}
+
+.data-container {
+    width: 100%; /* Take up full width */
+    display: flex;
+    justify-content: space-between; /* Space out the elements */
+    align-items: center; /* Center vertically */
+}
+
+.location {
+    font-size: 24px;
+    font-weight: bold;
+    border: none !important;
+    box-shadow: none !important;
+    background: none !important;
+    padding: 0 !important;
+    outline: none !important;
+    appearance: none;
+}
+
+.current-weather {
+    font-size: 24px;
+    font-weight: bold;
+    border: none !important;
+    box-shadow: none !important;
+    background: none !important;
+    padding: 0 !important;
+    outline: none !important;
+    appearance: none;
+    margin-bottom: 50px;
+}
+
+.temperature, .wind-speed, .date-time {
+    font-size: 14px;
+    flex: 1; /* Distribute available space equally */
+    margin: 5px;
+}
+
+
+.daily-weather-card {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    color: black;
+    margin-top: 10px;
+}
+
+.info-layout {
+    display: flex;
+    flex-direction: row; /* Display items horizontally */
+    align-items: center; /* Center items vertically */
+    gap: 10px; /* Add some space between items */
+}
+
+.max-temperature, .min-temperature, .sunrise, .sunset, .rain, max-wind-speed {
+    font-size: 14px;
+    flex: 1; /* Distribute available space equally */
+}
