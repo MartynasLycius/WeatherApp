@@ -9,13 +9,18 @@ import com.vaadin.flow.router.BeforeEnterListener;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.util.logging.Logger;
+
 @Route("login")
 @PageTitle("Login | WeatherApp")
 public class LoginView extends VerticalLayout implements BeforeEnterListener {
 
+    private static final Logger LOGGER = Logger.getLogger(LoginView.class.getName());
+
     private LoginForm login = new LoginForm();
 
     public LoginView() {
+        LOGGER.info("Initiate Login View");
         Image logoImage = new Image("images/logo.png", "Weather App");
         logoImage.setWidth("100px");
         logoImage.setHeight("100px");

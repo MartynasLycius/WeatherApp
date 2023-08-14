@@ -12,10 +12,15 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
 
+import java.util.logging.Logger;
+
 public class MainLayout extends AppLayout{
+
+    private static final Logger LOGGER = Logger.getLogger(MainLayout.class.getName());
     private SecurityService securityService;
 
     public MainLayout(SecurityService securityService){
+        LOGGER.info("Initiate Main Layout");
         this.securityService = securityService;
         createHeader();
         createDrawre();

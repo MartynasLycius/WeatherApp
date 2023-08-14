@@ -22,11 +22,15 @@ import jakarta.annotation.security.PermitAll;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Logger;
 
 @PageTitle("Contacts | WeatherApp")
 @Route(value = "", layout = MainLayout.class)
 @PermitAll
 public class ListView extends VerticalLayout {
+
+    private static final Logger LOGGER = Logger.getLogger(ListView.class.getName());
+
     Grid<GeoCode> grid = new Grid<>(GeoCode.class);
     TextField filterText = new TextField();
     ForecastView forecast;
@@ -35,6 +39,7 @@ public class ListView extends VerticalLayout {
     private Dialog favouriteDialog;
 
     public ListView(WaService waService, FavouritesService favouritesService) {
+        LOGGER.info("Initiate List View");
         this.waService = waService;
         this.favouritesService = favouritesService;
         addClassName("list-view");
@@ -52,8 +57,10 @@ public class ListView extends VerticalLayout {
     }
 
     private void updateList() {
+        LOGGER.info("Update list view start");
         GeoCode[] result = waService.getGeoCodeResult(filterText.getValue());
         grid.setItems(result);
+        LOGGER.info("Update list view end");
     }
 
     private Component getContent() {
@@ -95,14 +102,11 @@ public class ListView extends VerticalLayout {
         grid.setColumns("name", "latitude", "longitude", "country", "id");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.setPageSize(10);
-
         grid.asSingleSelect().addValueChangeListener(e -> viewForeCast(e.getValue()));
     }
 
     private void viewForeCast(GeoCode geoCode) {
-        if(geoCode == null){
-            // Clear
-        } else {
+        if(geoCode != null){
             DailyForecast dailyForecast = waService.getDailyForecast(geoCode.getLatitude(), geoCode.getLongitude());
             forecast.setGeoCode(geoCode, dailyForecast, waService);
             forecast.setVisible(true);
@@ -110,9 +114,7 @@ public class ListView extends VerticalLayout {
         }
     }
     private void viewForeCastByFavourite(Favourites favourites) {
-        if(favourites == null){
-            // Clear
-        } else {
+        if(favourites != null){
             GeoCode geoCode = new GeoCode();
             geoCode.setId(favourites.getGeoCodeId());
             geoCode.setLatitude(favourites.getLatitude());
@@ -128,6 +130,7 @@ public class ListView extends VerticalLayout {
     }
 
     private void openPopupFavourites(List<Favourites> favourites) {
+        LOGGER.info("Get favourites start");
         favouriteDialog = new Dialog();
 
         VerticalLayout dialogLayout = new VerticalLayout();
@@ -153,6 +156,7 @@ public class ListView extends VerticalLayout {
         dialogLayout.setWidthFull();
         favouriteDialog.add(dialogLayout);
         favouriteDialog.open();
+        LOGGER.info("Get favourites end");
     }
 
 }

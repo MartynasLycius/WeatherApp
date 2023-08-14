@@ -10,13 +10,18 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class HttpDailyForecastRequest {
 
+    private static final Logger LOGGER = Logger.getLogger(HttpDailyForecastRequest.class.getName());
+
     private String dailyForecastDataUrlTemplate = "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&daily=temperature_2m_max,rain_sum,windspeed_10m_max&timezone=GMT";
 
     public DailyForecast getDailyForecast(Double latitude, Double longitude ){
+        LOGGER.log(Level.INFO, "Get DailyForecast request start with latitude {0} and longitude {1}", new Object[]{latitude, longitude});
         DailyForecast dailyForecast = new DailyForecast();
         try {
             if(latitude == null || longitude == null){
@@ -25,14 +30,14 @@ public class HttpDailyForecastRequest {
             String dailyForecastDataUrl = String.format(dailyForecastDataUrlTemplate, latitude +"", longitude +"");
             HttpClient httpClient = HttpClientTimeout.getHttpClientWithTimeout(3);
             httpClient.connectTimeout().map(Duration::toSeconds)
-                    .ifPresent(sec -> System.out.println("Timeout in seconds: " + sec));
+                    .ifPresent(sec -> LOGGER.info("Timeout in seconds: " + sec));
             HttpRequest httpDailyForecastDataRequest = HttpRequest.newBuilder()
                     .uri(URI.create(dailyForecastDataUrl))
                     .GET()
                     .build();
             HttpResponse<String> response = httpClient.send(httpDailyForecastDataRequest, HttpResponse.BodyHandlers.ofString());
             int statusCode = response.statusCode();
-            System.out.println("Status Code: " + statusCode);
+            LOGGER.log(Level.INFO, "Status Code: {0}", statusCode);
 
             if (statusCode == 200) {
                 String responseBody = response.body();
@@ -41,10 +46,13 @@ public class HttpDailyForecastRequest {
                 dailyForecast = objectMapper.readValue(responseBody, DailyForecast.class);
             }
         } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error occurred while get dailyForecast with message {0}", e.getMessage());
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
+            LOGGER.log(Level.SEVERE, "Error occurred while get dailyForecast with message {0}", e.getMessage());
             throw new RuntimeException(e);
         }
+        LOGGER.log(Level.INFO, "Get DailyForecast request end with dailyForecast {0}", new Object[]{dailyForecast});
         return dailyForecast;
     }
 }

@@ -22,8 +22,12 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
+import java.util.logging.Logger;
+
 @CssImport(value="./styles/MultipleAxes.css", themeFor = "vaadin-chart", include = "vaadin-chart-default-theme")
 public class DailyForecastView extends VerticalLayout {
+
+    private static final Logger LOGGER = Logger.getLogger(DailyForecastView.class.getName());
 
     Chart chart;
     GeoCode geoCode;
@@ -39,10 +43,12 @@ public class DailyForecastView extends VerticalLayout {
     private String windSpeed = "Wind Speed";
     private String rainfallText = "Rainfall";
     public DailyForecastView(FavouritesService favouritesService){
+        LOGGER.info("Initiate Daily Forecast View");
         this.favouritesService = favouritesService;
     }
 
     public void setDailyForecastData(GeoCode geoCode, DailyForecast dailyForecast, WaService waService){
+        LOGGER.info("Set Daily Forecast Data Start");
         this.geoCode = geoCode;
         this.waService = waService;
         if(chart != null){
@@ -133,6 +139,7 @@ public class DailyForecastView extends VerticalLayout {
 
         chart.addPointClickListener(this::chartClicked);
         add(chart, createButtonLayout());
+        LOGGER.info("Set Daily Forecast Data End");
     }
 
     private void setFavouriteFlag(Long id) {
@@ -153,6 +160,7 @@ public class DailyForecastView extends VerticalLayout {
     }
 
     private void openPopupHourlyForecast(HourlyForecast hourlyForecast, String date) {
+        LOGGER.info("Set hourly forecast data start");
         Dialog dialog = new Dialog();
 
         VerticalLayout dialogLayout = new VerticalLayout();
@@ -169,10 +177,10 @@ public class DailyForecastView extends VerticalLayout {
         dialogLayout.setWidthFull();
         dialog.add(dialogLayout);
         dialog.open();
+        LOGGER.info("Set hourly forecast data end");
     }
 
     public Chart getHourlyForecastChart(HourlyForecast hourlyForecast){
-
         Chart hourlyChart = new Chart();
         Configuration hourlyConf = hourlyChart.getConfiguration();
 
@@ -281,6 +289,7 @@ public class DailyForecastView extends VerticalLayout {
     }
 
     private void makeLocationFavourite(GeoCode geoCode){
+        LOGGER.info("Make location favourite start");
         String buttonText = "";
         if(buttonLayout != null){
             remove(buttonLayout);
@@ -308,5 +317,6 @@ public class DailyForecastView extends VerticalLayout {
         Span spanButtonText = new Span(buttonText);
         buttonLayout.add(makeFavouriteButton, spanButtonText);
         add(buttonLayout);
+        LOGGER.info("Make location favourite end");
     }
 }
