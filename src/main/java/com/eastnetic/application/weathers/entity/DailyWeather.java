@@ -27,6 +27,8 @@ public class DailyWeather {
     @JsonProperty("windspeed_10m_max")
     private List<Double> maxWindSpeed;
 
+    public DailyWeather() {}
+
     public List<String> getTime() {
         return time;
     }

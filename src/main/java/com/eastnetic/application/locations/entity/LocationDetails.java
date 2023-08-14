@@ -34,6 +34,8 @@ public class LocationDetails {
 
     private String referenceSource;
 
+    public LocationDetails() {}
+
     public LocationDetails(String name,
                            double latitude,
                            double longitude,

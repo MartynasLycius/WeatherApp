@@ -13,6 +13,8 @@ public class WeatherData {
     @JsonProperty("current_weather")
     private CurrentWeather currentWeather;
 
+    public WeatherData() {}
+
     public DailyWeather getDailyWeather() {
         return dailyWeather;
     }

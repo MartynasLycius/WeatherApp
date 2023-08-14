@@ -19,6 +19,8 @@ public class CurrentWeather {
     @JsonProperty("time")
     private String time;
 
+    public CurrentWeather() {}
+
     public double getTemperature() {
         return temperature;
     }

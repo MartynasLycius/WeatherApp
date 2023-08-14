@@ -21,6 +21,8 @@ public class HourlyWeather {
     @JsonProperty("winddirection")
     private List<Integer> windDirection;
 
+    public HourlyWeather() {}
+
     public List<String> getTime() {
         return time;
     }
