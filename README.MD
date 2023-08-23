@@ -21,6 +21,9 @@ This is the job interview task for software developer position
 * username: admin
 * password: password
 
+## Demo
+* http://weatherapplication-env.eba-74pybecv.us-east-1.elasticbeanstalk.com/login
+
 ## User Guidelines
 
 ### Login
