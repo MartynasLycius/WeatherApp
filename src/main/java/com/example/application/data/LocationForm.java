@@ -160,7 +160,7 @@ public class LocationForm extends FormLayout implements TemperatureButtonClickLi
                 // creating separate spans for time and details in order to make time appear different
                 Span timeSpan = new Span(forecastTime.toLocalTime().toString());
                 timeSpan.addClassName("forecast-time");
-                System.out.println(hourlyForecast.getRain());
+//                System.out.println(hourlyForecast.getRain());
                 String detailsText = String.format("%s°C  Rain: %smm, Wind: %sm/s",
                         hourlyForecast.getTemperature(),
                         hourlyForecast.getRain(),

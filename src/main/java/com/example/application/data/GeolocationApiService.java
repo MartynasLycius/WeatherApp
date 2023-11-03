@@ -32,6 +32,7 @@ public class GeolocationApiService
         {
             JsonNode rootNode = Json.parse(responseBody); //parsing json response using my custom Json class
             JsonNode resultsNode = rootNode.get("results");
+
             if (resultsNode.isArray())
             {
                 System.out.println("jsonNode is an array");
@@ -46,6 +47,7 @@ public class GeolocationApiService
             }
         } catch (Exception e)
         {
+            System.out.println("testing for a bug in geolocationApiService");
             e.printStackTrace(); // i should handle the exception properly, maybe later
         }
         for (Location location : locationList)

@@ -38,6 +38,7 @@ public class ForecastApiService
 
         } catch (Exception e)
         {
+            System.out.println("testing for a bug in forecastApiService");
             e.printStackTrace(); // better to handle exception properly, log or throw
         }
     }

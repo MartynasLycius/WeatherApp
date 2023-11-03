@@ -86,9 +86,13 @@ public class ListView extends VerticalLayout implements FavoriteLocationUpdateLi
         searchButton.addClickListener(event ->
         {
             geolocationApiService.clearLocationList();
-            geolocationApiService.fetchDataAndStoreInList(filterText.getValue()); // fetch and store data from API
+            if (!filterText.isEmpty()) // if search text is empty, dont fetch locations, just clear the list and update grid
+            {
+                geolocationApiService.fetchDataAndStoreInList(filterText.getValue()); // fetch and store data from API
+            }
             List<Location> fetchedLocations = geolocationApiService.getLocationList();
             grid.setItems(fetchedLocations); // updating grid with fetched locations
+
         });
         searchButton.addClickShortcut(Key.ENTER);
         favoriteLocations = new FavoriteLocations(service);
