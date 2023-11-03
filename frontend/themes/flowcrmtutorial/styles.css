@@ -1,0 +1,115 @@
+@import '@vaadin/vaadin-lumo-styles/color.js';
+@import '@vaadin/vaadin-lumo-styles/typography.js';
+
+@media all and (max-width: 1100px) {
+    .list-view.editing .toolbar,
+    .list-view.editing .location-grid {
+        display: none;
+    }
+}
+
+
+.date-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.8em;
+    color: #666;
+}
+
+.hourly-forecast {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: var(--lumo-border-radius-m);
+}
+
+.temperature-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.75em;
+}
+
+.forecast-time {
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.forecast-details {
+    text-align: center;
+    font-size: 0.75em;
+}
+
+.custom-button:hover {
+    background-color: var(--lumo-primary-color-10pct);
+    color: var(--lumo-primary-color);
+}
+
+.custom-button {
+    min-width: 85px;
+    width: auto;
+    cursor: pointer;
+    border: 1px solid var(--lumo-contrast-50pct);
+    border-radius: var(--lumo-border-radius-m);
+    padding: var(--lumo-space-m);
+    background: var(--lumo-contrast-5pct);
+    box-shadow: var(--lumo-box-shadow-s);
+}
+
+
+.location-name {
+    /*max-width: 70%;*/
+    min-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.small-button {
+    font-size: 0.8em;
+    padding: 5px;
+    margin: 5px;
+}
+
+.location-name-layout {
+    min-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.location-name-and-buttons {
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.button-hover:hover {
+    background-color: var(--lumo-contrast-20pct);
+}
+
+
+.details-layout {
+    padding: 0;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+.regular-text {
+    margin-right: 0.3em;
+}
+
+
+
