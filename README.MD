@@ -2,6 +2,38 @@
 
 This is the job interview task for software developer position
 
+## Technology Used
+* Vaadin 24 
+* Vaadin Chart (Use Trial licence)
+* Java 17
+* Spring Boot 3
+* Maven 3
+* Git 2
+
+## Database Used
+* H2 Database (in-memory)
+
+## Login Credential
+* username: user
+* password: password
+
+
+* username: admin
+* password: password
+
+## Demo
+* http://weatherapplication-env.eba-74pybecv.us-east-1.elasticbeanstalk.com/login
+
+## User Guidelines
+
+### Login
+![00_login](https://github.com/thekowsar/bidding-system/assets/8324420/fbe6e010-11a2-44de-a216-9e606aeee6b4)
+### Search Location
+![01_search_location](https://github.com/thekowsar/bidding-system/assets/8324420/df540821-6283-4b40-a38b-c9e80c59e4a6)
+### Daily Chart
+![02_show_daly_chart](https://github.com/thekowsar/bidding-system/assets/8324420/74b021b7-db53-4a08-ada3-aeee44fbccca)
+### Hourly Chart
+![03_show_hourly_chart](https://github.com/thekowsar/bidding-system/assets/8324420/06d2698c-8532-40fa-b4ee-53162d28d58d)
 ## What to do
 * Fork the repository
 * After work is done, make a pull request and notify me by email
