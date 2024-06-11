@@ -1,0 +1,8 @@
+<tomee>
+    <Resource id="mysqlResource" type="DataSource">
+        JdbcDriver  com.mysql.jdbc.Driver
+        JdbcUrl jdbc:mysql://localhost/weather_app_db
+        UserName    root
+        Password
+    </Resource>
+</tomee>
