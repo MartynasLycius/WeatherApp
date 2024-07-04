@@ -1,0 +1,209 @@
+/*
+   CSS styling examples for the Vaadin app.
+
+   This is the style entrypoint for the theme and together with css in ./components/ included
+   automatically into the theme.
+
+   Visit https://vaadin.com/docs-beta/latest/theming/application-theme/ for more information.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Locations */
+.no-data-label {
+  font-family: 'Roboto Condensed';
+  font-weight: lighter;
+  font-size: 48px;
+}
+
+.landing-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 80vh;
+}
+
+.location-view {
+  background-color: #F5F5F5;
+  padding: 0px 60px 15px 60px;
+}
+
+.load-more-button {
+  width: 150px;
+  background-color: #2396F3;
+  color: #FFFFFF;
+}
+
+.action-button {
+  width: 50px;
+  background-color: #2396F3;
+  color: #FFFFFF;
+}
+
+.pagination-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #F5F5F5;
+}
+
+.custom-grid-header::part(header-cell) {
+  text-align:center;
+  font-size:large;
+  padding:5px;
+  background-color: #2396F3;
+  color: whitesmoke;
+}
+
+.custom-grid-header::part(body-row) {
+  text-align:center;
+  font-size:large;
+  margin-bottom: 30px;
+  background-color: #000000;
+}
+
+.custom-grid-header::part(body-cell) {
+  text-align:center;
+  font-size:large;
+  background-color: #FFFFFF;
+  padding: 10px 0px 10px 0px;
+}
+
+.custom-grid-header {
+  height: 700px;
+  font-family: 'Lato';
+}
+
+.search-form {
+  width: 100%;
+  background-color: #2396F3;
+}
+
+.search-form-input {
+  width: 600px;
+  background-color: #42A5F6;
+  position: absolute;
+}
+
+.search-form-button {
+  background-color: transparent;
+  position: relative;
+  margin-left: 558px;
+  color: #FFFFFF;
+
+}
+
+body {
+  background-color: #F5F5F5;
+}
+
+#search-form-input-id::part(input-field) {
+  background-color: #42A5F6;
+  color: #FFFFFF;
+}
+
+#search-form-input-id::part(input-field) ::placeholder {
+  color: #FFFFFF;
+}
+
+.top-layout {
+  padding: 15px 60px 15px 60px;
+  background-color: #2396F3;
+}
+
+.logo {
+  color: #FFFFFF;
+  font-family: 'Raleway';
+  font-weight: bold;
+  font-size:30px;
+}
+
+.app-logo {
+  width: 500px;
+  background-color: #2396F3;
+}
+
+.clickable-link-text {
+  align-items: center;
+  color: #3c91e6;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: -5px;
+  font-size: 18px;
+}
+
+.fav-layout {
+  font-family: 'Roboto Condensed';
+  padding: 10px 60px 10px 60px;
+  margin-left: 10px;
+}
+
+.fav-label {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* Weather Preview */
+.weather-container {
+  font-family: 'Roboto Condensed';
+}
+
+.daily-forcast-title {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.custom-hr {
+  color: black;
+  width: 1070px;
+}
+
+.daily-forcast-temparature {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.week-forecast {
+  margin-top: 20px;
+  overflow-y:hidden;
+  height: 100%;
+  width: 100%;
+}
+
+.temparature {
+  font-weight: bold;
+}
+
+.hourly-forecast {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/*Settings */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  width: 80%;
+  margin: 20px auto;
+  padding: 10px;
+}
+
+.grid-item {
+  padding: 10px;
+  text-align: center;
+}
+
+/* Chart */
+.chart-container-class {
+  height: 400px;
+}
+
+#chart-container {
+  width: 1065px;
+}
