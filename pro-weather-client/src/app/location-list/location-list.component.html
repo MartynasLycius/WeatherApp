@@ -1,0 +1,60 @@
+<app-location-search (search)="onSearch($event)"></app-location-search>
+
+<div class="container my-4">
+  <h2>Locations</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th>Elevation</th>
+        <th>Population</th>
+        <th>Admin1</th>
+        <th>Admin2</th>
+        <th>Admin3</th>
+        <th>Admin4</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let location of paginatedLocations">
+        <td>
+          <!-- <a (click)="locationDetails( location.latitude, location.longitude, false)" [routerLinkActive]="['router-is-active']" class="cursor-pointer">{{ location.name }}</a>
+        </td> -->
+        <a [routerLink]="['/location-detail', location.latitude, location.longitude, false]">
+          {{ location.name }}
+        </a>
+        <td>{{ location.latitude }}</td>
+        <td>{{ location.longitude }}</td>
+        <td>{{ location.elevation }}</td>
+        <td>{{ location.population }}</td>
+        <td>{{ location.admin1 }}</td>
+        <td>{{ location.admin2 }}</td>
+        <td>{{ location.admin3 }}</td>
+        <td>{{ location.admin4 }}</td>
+        <td>
+        
+            <button class="btn btn-primary btn-sm" (click)="toggleFavorite(location)">Add Favorite</button>
+          </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="container">
+  <!-- Pagination controls -->
+  <ul class="pagination">
+    <li class="page-item" [class.disabled]="currentPage === 1">
+      <a class="page-link" (click)="onPrev()">Prev</a>
+    </li>
+    <li class="page-item" *ngFor="let page of getPaginationNumbers()" [class.active]="page === currentPage" [class.disabled]="page === -1">
+      <a class="page-link" (click)="page !== -1 && onPageChange(page)">{{ page === -1 ? '...' : page }}</a>
+    </li>
+    <li class="page-item" [class.disabled]="currentPage === totalPages">
+      <a class="page-link" (click)="onNext()">Next</a>
+    </li>
+    <li class="page-item" [class.disabled]="currentPage === totalPages">
+      <a class="page-link" (click)="onLast()">Last</a>
+    </li>
+  </ul>
+</div>

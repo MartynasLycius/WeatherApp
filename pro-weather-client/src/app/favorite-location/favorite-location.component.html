@@ -1,0 +1,45 @@
+<!-- location.component.html -->
+<div class="container mt-4">
+    <h2>Locations</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>User Id</th>
+          <th>Latitude</th>
+          <th>Longitude</th>
+          <th>Elevation</th>
+          <th>Population</th>
+          <th>Admin1</th>
+          <th>Admin2</th>
+          <th>Admin3</th>
+          <th>Admin4</th>
+          <th>Feature Code</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let location of favoritelocations">
+          <td>
+            <a [routerLink]="['/location-detail', location.latitude, location.longitude, false]">
+              {{ location.name }}
+            </a>
+          </td>
+          <td>{{ location.userId }}</td>
+          <td>{{ location.latitude }}</td>
+          <td>{{ location.longitude }}</td>
+          <td>{{ location.elevation }}</td>
+          <td>{{ location.population }}</td>
+          <td>{{ location.admin1 }}</td>
+          <td>{{ location.admin2 }}</td>
+          <td>{{ location.admin3 }}</td>
+          <td>{{ location.admin4 }}</td>
+          <td>{{ location.featureCode }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="deleteLocation(location.id!)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
