@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="skeleton-starter-flow" version="3.0"
+         xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_3_0.xsd">
+
+    <servlet>
+        <servlet-name>VaadinServlet</servlet-name>
+        <servlet-class>com.vaadin.flow.server.VaadinServlet</servlet-class>
+        <init-param>
+            <param-name>ui</param-name>
+            <param-value>org.vaadin.example.view.Locations</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>VaadinServlet</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+</web-app>

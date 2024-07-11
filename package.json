@@ -1,0 +1,14 @@
+{
+  "name": "no-name",
+  "license": "UNLICENSED",
+  "type": "module",
+  "dependencies": {
+    "highcharts": "^11.4.6"
+  },
+  "overrides": {
+    "highcharts": "$highcharts"
+  },
+  "devDependencies": {
+    
+  }
+}
