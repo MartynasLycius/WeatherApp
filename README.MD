@@ -1,7 +1,43 @@
-# Weather Application
+# Weather Cast
 
 This is the job interview task for software developer position
 
+## Technology Used
+* Vaadin 24 
+* Vaadin Chart (Use Trial licence)
+* Java 17
+* Spring Boot 3
+* Maven 3
+* Git 2
+
+## Database Used
+* H2 Database (in-memory)
+* URL : http://localhost:8080/h2-console
+* JDBC URL : jdbc:h2:mem:testdb
+* User: sa
+* Password: password
+
+## Login Credential
+* username: user
+* password: password
+
+
+* username: admin
+* password: password
+
+## Demo
+* http://weatherapplication-env.eba-74pybecv.us-east-1.elasticbeanstalk.com/login
+
+## User Guidelines
+
+### Login
+![00_login](https://github.com/kowsar-rahman/WeatherApp/blob/main/src/main/resources/META-INF/resources/images/01-login.png?raw=true)
+### Search Location
+![01_search_location](https://github.com/kowsar-rahman/WeatherApp/blob/main/src/main/resources/META-INF/resources/images/02-cities.png?raw=true)
+### Daily Chart
+![02_show_daly_chart](https://github.com/kowsar-rahman/WeatherApp/blob/main/src/main/resources/META-INF/resources/images/03-daily-chart-view.png?raw=true)
+### Hourly Chart
+![03_show_hourly_chart](https://github.com/kowsar-rahman/WeatherApp/blob/main/src/main/resources/META-INF/resources/images/04-hourly-chart-view.png?raw=true)
 ## What to do
 * Fork the repository
 * After work is done, make a pull request and notify me by email
