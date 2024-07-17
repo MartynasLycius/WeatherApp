@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) ammap.com | SVG weather icons -->
+<svg
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        width="64"
+        height="64"
+        viewBox="0 -40 20 100">
+    <defs>
+        <filter id="blur" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+            <feOffset dx="0" dy="4" result="offsetblur"/>
+            <feComponentTransfer>
+                <feFuncA type="linear" slope="0.05"/>
+            </feComponentTransfer>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+    <g filter="url(#blur)" id="night" transform="scale(1.5)"> <!-- Applied scaling -->
+        <g transform="translate(-20,-20)"> <!-- Adjusted translation to center the scaled content -->
+            <g class="am-weather-moon-star-1">
+                <polygon fill="orange" points="6.6,3 8,5.4 10.4,6.6 8,8 6.6,10.4 5.4,8 3,6.6 5.4,5.4" stroke="none" stroke-miterlimit="10"/>
+            </g>
+            <g class="am-weather-moon-star-2">
+                <polygon fill="orange" points="6.6,3 8,5.4 10.4,6.6 8,8 6.6,10.4 5.4,8 3,6.6 5.4,5.4" stroke="none" stroke-miterlimit="10" transform="translate(40,20)"/>
+            </g>
+            <g class="am-weather-moon">
+                <path d="M29,26.4c0-7.4,4-13.8,10-17.4c-3-1.8-6.4-2.6-10-2.6c-11,0-20,9-20,20s9,20,20,20c3.6,0,7-0.9,10-2.6C33,40.2,29,34.8,29,26.4z" fill="orange" stroke="orange" stroke-linejoin="round" stroke-width="2"/>
+            </g>
+        </g>
+    </g>
+</svg>

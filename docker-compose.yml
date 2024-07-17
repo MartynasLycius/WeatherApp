@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0.33
+    container_name: mysql_db
+    environment:
+      MYSQL_DATABASE: weather-app
+      MYSQL_USER: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  wildfly:
+    image: jboss/wildfly:27.0.1.Final
+    container_name: wildfly_server
+    ports:
+      - "8080:8080"
+      - "9990:9990"
+    volumes:
+      - ./target/your_project.war:/opt/jboss/wildfly/standalone/deployments/weather-app-1.0-SNAPSHOT.war
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=weather-app
+      - DB_USER=root
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+volumes:
+  db_data:
+
+networks:
+  app-network:
+    driver: bridge

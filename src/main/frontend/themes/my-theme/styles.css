@@ -1,0 +1,112 @@
+/*
+   CSS styling examples for the Vaadin app.
+
+   This is the style entrypoint for the theme and together with css in ./components/ included
+   automatically into the theme.
+
+   Visit https://vaadin.com/docs-beta/latest/theming/application-theme/ for more information.
+*/
+
+/* Example: CSS class name to center align the content . */
+.centered-content {
+  margin: 0 auto;
+  max-width: 250px;
+}
+
+/* Example: the style is applied only to the textfields which have the `bordered` class name. */
+vaadin-text-field.bordered::part(input-field) {
+  box-shadow: inset 0 0 0 1px var(--lumo-contrast-30pct);
+  background-color: var(--lumo-base-color);
+}
+
+.temperature-text {
+  font-size: 30px;
+  color: #ea4c33; /* Example color */
+  font-weight: bold;
+}
+
+.temperature-feel-text {
+  font-size: 30px;
+  color: #713226; /* Example color */
+  font-weight: bold;
+}
+
+.current-location-text {
+  font-size: 20px;
+  color: #ffffff; /* Example color */
+  font-weight: bold;
+  margin-left: 20px;
+  margin-top: 20px;
+  /* Add other styles as needed */
+}
+
+.last-update-text {
+  font-size: 10px;
+  color: #ffffff; /* Example color */
+  font-weight: bold;
+  margin-left: 42px;
+  /* Add other styles as needed */
+}
+
+.other-info-text {
+  font-size: 15px;
+  color: #ffffff; /* Example color */
+  margin-left: 20px;
+  margin-top: 30px;
+}
+.default-text {
+  font-size: 15px;
+  color: #ffffff;
+}
+
+.default-text-daily {
+  font-size: 10px;
+  color: #ffffff;
+}
+
+.font-size-20 {
+  font-size: 20px;
+}
+
+.margin-left-20 {
+  margin-left: 20px;
+}
+
+.font-weight-bold {
+  font-weight: bold;
+}
+
+.color-orange {
+  color: #054857;
+  font-weight: bold;
+}
+
+.padding-20 {
+  padding: 10px;
+}
+
+.padding-top-10 {
+  padding-top: 10px;
+}
+vaadin-grid.styling::part(cell) {
+  background-color: var(--lumo-base-color);
+}
+
+.date-text-color {
+  color: #1a5ba2;
+}
+
+.welcome-text-style {
+  margin-top: 1%;
+  color: #ffff
+}
+
+.quick-access-style {
+  height: 32px;
+  width: 32px;
+  padding-right: 10px;
+  padding-top: 10px;
+}
+.padding-1{
+  padding: 1%;
+}
